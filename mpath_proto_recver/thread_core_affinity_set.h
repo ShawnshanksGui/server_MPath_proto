@@ -1,0 +1,1 @@
+void affinity_set(int num_core);
