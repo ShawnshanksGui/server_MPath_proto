@@ -6,4 +6,4 @@ void Fopen_for_write(FILE **fp, char *param);
 int Fread(char *dest, int len, FILE *fp_src);
 int Fwrite(char *src, int len, FILE *fp_dest);
 
-void *Malloc(size_t size);
+//void *Malloc(size_t size);

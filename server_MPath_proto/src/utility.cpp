@@ -44,7 +44,7 @@ int Fwrite(char *src, int len, FILE *fp_dest) {
         return num;
     }
 }
-
+/*
 void *Malloc(size_t size) {
 	void *p = NULL;
 	if((p = malloc(size)) == NULL) {
@@ -53,3 +53,4 @@ void *Malloc(size_t size) {
 	}
 	return p;
 }
+*/

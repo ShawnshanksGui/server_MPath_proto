@@ -18,7 +18,8 @@ void Udp_sock::Socket_for_udp() {
 
 void Udp_sock::Setsockopt(int sock_id, int level, int option_name,
                void *option_value, int option_len) {
-    if(-1 == setsockopt(sock_id, level, option_name, option_value, option_len)) {
+    if(-1 == setsockopt(sock_id, level, 
+    	option_name, option_value, option_len)) {
         perror("setsockopt failed!\n");
         exit(0);
     }
@@ -42,8 +43,8 @@ void Udp_sock::Bind(int sock_id, SA *addr_self, int len) const
 //}
 //
 
-void Udp_sock::udp_sock_client_new(char *addr_self, char *port_self, char *addr_dst, char *port_dst) {
-//	struct Socket *_socket = (struct Socket *)malloc(sizeof(struct Socket));
+void Udp_sock::udp_sock_client_new(char *addr_self, char *port_self, 
+	                               char *addr_dst, char *port_dst) {
 	memset(&(server_addr), 0, sizeof(server_addr));
 	memset(&(client_addr), 0, sizeof(client_addr));
 	
@@ -71,7 +72,8 @@ void Udp_sock::udp_sock_client_new(char *addr_self, char *port_self, char *addr_
 int Udp_sock::Send_udp(char *data, int len) {
 	int num_sent = 0;
 
-	if((num_sent = sendto(sock_id, data, len, 0, (SA *)&(server_addr), sizeof(SA))) < 0) {
+	if((num_sent = sendto(sock_id, data, len, 0, 
+		(SA *)&(server_addr), sizeof(SA))) < 0) {
 		printf("\n!!!send failed, send %d bytes!!!!!!\n", num_sent);
 		exit(0);
 	}
