@@ -1,5 +1,5 @@
-#include "common.h"
-#include "mySocket.h"
+#include "../include/common.h"
+#include "../include/mySocket.h"
 
 #define ON_REUSEADDR  1  //you can reuse the addr after binding addr without no waiting time 
 //#define OFF_REUSEADDR 0

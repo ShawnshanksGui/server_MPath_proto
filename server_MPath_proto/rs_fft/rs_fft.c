@@ -256,7 +256,7 @@ void *encode_FFT_RS(char *data_src, struct Para_Encd para_encd) {
 		for(int j = Size-para_encd.K; j < Size; j++) {
 			elem_procs[j] = data_src[(j-(Size-para_encd.K))*para_encd.S+i];
 		}
-		encodeH(&elem_procs[Size-para_encd.K], para_encd.K, &elem_procs, codeword);
+		encodeH(&elem_procs[Size-para_encd.K], para_encd.K, elem_procs, codeword);
 		memcpy(codeword, elem_procs, sizeof(GFSymbol)*Size);
 		for(int j = 0; j < Size; j++) {
 			data_dst[j*para_encd.S+i] = codeword[j];

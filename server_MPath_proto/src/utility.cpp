@@ -1,4 +1,4 @@
-#include  "common.h"
+#include  "../include/common.h"
 
 void Usage(int argc, int _cnt, char *prog_name) {
     if(argc != _cnt) {

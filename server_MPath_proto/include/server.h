@@ -8,10 +8,10 @@
 //the amount of command parameters required 
 #define NUM_PARA               6
 
+//finish reading one video file  
 #define END_FILE               0
 
 #define MAX_BUF               10 
-
 
 #define TEST_SECONDS           5
 
@@ -19,8 +19,6 @@
 
 #define CODELINE             100
 #define MAX_INPUT_SYMBOL_NUM  20
-
-
 
 /*
 struct Transmit{

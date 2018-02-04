@@ -1,13 +1,27 @@
 //#include "thread_core_affinity_set.h"
 #include <string>
+#include <thread>
+#include <mutex>
 
-#include    "sender.h"
-#include    "common.h"
-#include   "mySocket.h"
-#include   "utility.h"
+#include   "../include/sender.h"
+#include   "../include/common.h"
+#include "../include/mySocket.h"
+#include  "../include/utility.h"
 //#include   "pthread.h"
-using namespace std;
 
+
+
+
+int main() {
+
+
+	return 0;
+}
+
+
+
+
+/*
 int main(int argc, char *argv[]) {	
 	int num_sent = 0;
 	
@@ -34,3 +48,4 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
+*/
