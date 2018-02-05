@@ -13,7 +13,7 @@
 
 #define MAX_BUF               10 
 
-#define TEST_SECONDS           5
+#define TEST_SECONDS          10
 
 #define TOTAL_WORK_THREADS     1
 

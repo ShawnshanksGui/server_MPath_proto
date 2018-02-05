@@ -3,7 +3,7 @@
 #include <thread>
 #include <mutex>
 
-#include   "../include/sender.h"
+#include   "../include/server.h"
 #include   "../include/common.h"
 #include "../include/mySocket.h"
 #include  "../include/utility.h"
@@ -12,11 +12,6 @@
 
 
 
-int main() {
-
-
-	return 0;
-}
 
 
 

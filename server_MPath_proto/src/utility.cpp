@@ -7,14 +7,14 @@ void Usage(int argc, int _cnt, char *prog_name) {
     }
 }
 
-void Fopen_for_read(FILE **fp, char *param) {
+void Fopen_for_read(FILE **fp, const char *param) {
     if((*fp = fopen(param, "rt+")) == NULL) {
         perror("Open file failed!\n");
         exit(0);
     }
 }
 
-void Fopen_for_write(FILE **fp, char *param) {
+void Fopen_for_write(FILE **fp, const char *param) {
     if((*fp = fopen(param, "wt+")) == NULL) {
         perror("Open file failed!\n");
         exit(0);
