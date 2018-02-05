@@ -1,3 +1,4 @@
+#include "../include/thread_core_affinity_set.h"
 #include "../include/data_manager.h"
 
 #include <queue>
@@ -5,7 +6,6 @@
 #include "../include/server.h"
 #include "../include/common.h"
 #include "../include/utility.h"
-
 using namespace std;
 
 static std::mutex mtx;
@@ -23,6 +23,9 @@ void Data_Manager::data_gen_thread() {
 
 	auto startTime = std::chrono::high_resolution_clock::now();
 
+//set thread core affinity and bind core 1 to the current thread
+	affinity_set(0);
+//
 	while(1) {
 		//real memory allocation function for data generated 
 		data_type *data_tmp = MALLOC(char, CODELINE);
@@ -48,14 +51,16 @@ void Data_Manager::data_gen_thread() {
 //==========================================================================
 void Data_Manager::data_fetch_thread() {
 	data_type *data_str = nullptr;
+
 	auto startTime = std::chrono::high_resolution_clock::now();
 
+//set thread core affinity and bind core 1 to the current thread
+	affinity_set(1);  
+//
 	while(1) {
-//		data_str = nullptr;
-		//until fetch successfully
 		data_str = fetch();
 
-		//records the eclpsing time for TEST_SECONDS
+		//records the eclpsing time for calculating testing time
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>
         				(endTime - startTime ).count();
@@ -107,7 +112,7 @@ bool Data_Manager::Push(data_type *data_src) {
 		data_video.push(data_src);
 		buf_size += 1;
 //debug		
-		cout << "Push one time:" << buf_size << endl;
+//		cout << "Push one time:" << buf_size << endl;
 		return SUCS_PUSH;
 	}
 	//data buffer overflows, busy waiting for push at next time 
@@ -123,7 +128,7 @@ data_type *Data_Manager::Pop() {
 		data_video.pop();
 		buf_size -= 1;
 //debug
-		cout << "pop one time " << buf_size << endl;
+//		cout << "pop one time " << buf_size << endl;
 		return data_dst;
 	}
 	return nullptr;
@@ -155,13 +160,7 @@ Data_Manager::Data_Manager() {
 //test
 int main() {
 	Data_Manager dm = Data_Manager(100);
-/*
-	pthread_t threads[2];
 
-	pthread_create(&threads[0], NULL, dm.data_gen_thread, NULL);
-	pthread_create(&threads[1], NULL, dm.data_fetch_thread, NULL);	
-
-*/
 	std::thread worker_data_gen(&Data_Manager::data_gen_thread, &dm);
 	std::thread worker_fetch(&Data_Manager::data_fetch_thread,  &dm); 
 	worker_data_gen.join();

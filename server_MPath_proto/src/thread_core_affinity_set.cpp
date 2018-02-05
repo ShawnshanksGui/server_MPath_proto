@@ -1,4 +1,6 @@
-//////////////////////////////
+#ifndef _AFFINITY_H_
+#define _AFFINITY_H_
+
 //set cpu affinity for thread
 #define _GNU_SOURCE
 #include "sched.h"
@@ -8,7 +10,7 @@
 #include "sys/types.h"
 #include "sys/syscall.h"
 //////////////////////////////
-#include "common.h"
+#include "../include/common.h"
 
 void affinity_set(int id_core) {
 	int amount_core = 0;
@@ -48,3 +50,5 @@ void affinity_set(int id_core) {
 //			printf("hello!!!");
 	}
 }
+
+#endif
