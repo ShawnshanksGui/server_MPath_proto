@@ -1,15 +1,15 @@
 #include "../include/data_manager.h"
 
-#include "pthread.h"
-
 #include <queue>
 #include <chrono>
 #include "../include/server.h"
 #include "../include/common.h"
 #include "../include/utility.h"
+
 using namespace std;
 
 static std::mutex mtx;
+
 //==========================================================================
 //==========================================================================
 //Author:      shawnshanks_fei         Date:        20180204
@@ -28,9 +28,8 @@ void Data_Manager::data_gen_thread() {
 		data_type *data_tmp = MALLOC(char, CODELINE);
 		if(END_FILE == Fread(data_tmp, CODELINE, fp)) break;  
 
-		data_gen(data_tmp);
+		while(SUCS_PUSH == data_gen(data_tmp));
 
-		usleep(50);
 		//records the eclpsing time for TEST_SECONDS
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds> 
@@ -44,35 +43,18 @@ void Data_Manager::data_gen_thread() {
 //==========================================================================
 //==========================================================================
 //Author:      shawnshanks_fei          Date:     20180204
-//Description: implement main data generating procedure which adds mutex signal  
-//Parameter:  		       
-//==========================================================================
-void Data_Manager::data_gen(data_type *data) {
-	std::unique_lock<std::mutex> lock(mtx);
-
-	Push(data);
-//debug
-//	cout << "Push one time:" << buf_size << endl;
-	//data generated enter at th back. 
-//	cout << data_video.back() << endl; 
-
-}
-//==========================================================================
-
-
-//==========================================================================
-//==========================================================================
-//Author:      shawnshanks_fei          Date:     20180204
 //Description: the thread function which simulates data fetch procedure  
 //Parameter:  CODELINE is equal to encoding symbol size
 //==========================================================================
 void Data_Manager::data_fetch_thread() {
-	data_type *data_str = MALLOC(char, CODELINE);
+	data_type *data_str = nullptr;
 	auto startTime = std::chrono::high_resolution_clock::now();
 
 	while(1) {
+//		data_str = nullptr;
+		//until fetch successfully
 		data_str = fetch();
-		usleep(50);
+
 		//records the eclpsing time for TEST_SECONDS
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>
@@ -85,6 +67,26 @@ void Data_Manager::data_fetch_thread() {
 	}
 }
 //==========================================================================
+
+
+//==========================================================================
+//==========================================================================
+//Author:      shawnshanks_fei          Date:     20180204
+//Description: implement main data generating procedure which adds mutex signal  
+//Parameter:  		       
+//==========================================================================
+bool Data_Manager::data_gen(data_type *data) {
+	std::unique_lock<std::mutex> lock(mtx);
+
+	return Push(data);
+//debug
+//	cout << "Push one time:" << buf_size << endl;
+	//data generated enter at th back. 
+//	cout << data_video.back() << endl; 
+
+}
+//==========================================================================
+
 
 //==========================================================================
 //==========================================================================
@@ -100,14 +102,19 @@ data_type *Data_Manager::fetch() {
 
 
 //safety push into queue
-void Data_Manager::Push(data_type *data_src) {
+bool Data_Manager::Push(data_type *data_src) {
 	if(!Is_overflow()) {
 		data_video.push(data_src);
 		buf_size += 1;
 //debug		
 		cout << "Push one time:" << buf_size << endl;
+		return SUCS_PUSH;
 	}
+	//data buffer overflows, busy waiting for push at next time 
+	else 
+		return FAIL_PUSH;
 }
+
 
 //safety pop from queue;
 data_type *Data_Manager::Pop() {
@@ -119,6 +126,7 @@ data_type *Data_Manager::Pop() {
 		cout << "pop one time " << buf_size << endl;
 		return data_dst;
 	}
+	return nullptr;
 }
 
 bool Data_Manager::Is_overflow() {
@@ -136,7 +144,7 @@ Data_Manager::Data_Manager(int max_size) {
 
 Data_Manager::~Data_Manager() {
 	while(buf_size--) {
-		delete data_video.front(); 
+		SAFE_FREE(data_video.front()); 
 		data_video.pop();
 	}
 }
