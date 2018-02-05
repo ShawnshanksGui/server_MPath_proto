@@ -14,8 +14,7 @@ static std::mutex mtx;
 //==========================================================================
 //Author:      shawnshanks_fei         Date:        20180204
 //Description: the thread function which simulates data generating procedure  
-//Parameter:  CODELINE is equal to encoding symbol size
-//		       
+//Parameter:  CODELINE is equal to encoding symbol size 
 //==========================================================================
 void Data_Manager::data_gen_thread() {
 	FILE *fp;
@@ -30,13 +29,14 @@ void Data_Manager::data_gen_thread() {
 		//real memory allocation function for data generated 
 		data_type *data_tmp = MALLOC(char, CODELINE);
 		if(END_FILE == Fread(data_tmp, CODELINE, fp)) break;  
-
-		while(SUCS_PUSH == data_gen(data_tmp));
+		//until push successfully
+		while(SUCS_PUSH != data_gen(data_tmp));
 
 		//records the eclpsing time for TEST_SECONDS
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds> 
                         (endTime - startTime ).count();
+
 		if(duration > TEST_SECONDS*1000000) break;
 	}	
 }
@@ -50,25 +50,20 @@ void Data_Manager::data_gen_thread() {
 //Parameter:  CODELINE is equal to encoding symbol size
 //==========================================================================
 void Data_Manager::data_fetch_thread() {
-	data_type *data_str = nullptr;
-
 	auto startTime = std::chrono::high_resolution_clock::now();
 
 //set thread core affinity and bind core 1 to the current thread
 	affinity_set(1);  
 //
 	while(1) {
-		data_str = fetch();
-
+		data_type *data_str = fetch();
+		SAFE_FREE(data_str);
+//		data_str = nullptr;
 		//records the eclpsing time for calculating testing time
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>
         				(endTime - startTime ).count();
         if(duration > TEST_SECONDS*1000000) break;
-//debug
-//		cout << "pop one time " << buf_size << endl;
-		//data popped out from the front of queue
-//		cout << data_str << endl;
 	}
 }
 //==========================================================================
@@ -84,11 +79,6 @@ bool Data_Manager::data_gen(data_type *data) {
 	std::unique_lock<std::mutex> lock(mtx);
 
 	return Push(data);
-//debug
-//	cout << "Push one time:" << buf_size << endl;
-	//data generated enter at th back. 
-//	cout << data_video.back() << endl; 
-
 }
 //==========================================================================
 
@@ -112,7 +102,8 @@ bool Data_Manager::Push(data_type *data_src) {
 		data_video.push(data_src);
 		buf_size += 1;
 //debug		
-//		cout << "Push one time:" << buf_size << endl;
+		cout << "Push one time:" << buf_size << endl;
+//		printf("%s\n\n", data_video.back());
 		return SUCS_PUSH;
 	}
 	//data buffer overflows, busy waiting for push at next time 
@@ -128,13 +119,14 @@ data_type *Data_Manager::Pop() {
 		data_video.pop();
 		buf_size -= 1;
 //debug
-//		cout << "pop one time " << buf_size << endl;
+		cout << "pop one time " << buf_size << endl;
+//		printf("%s\n", data_dst);
 		return data_dst;
 	}
 	return nullptr;
 }
 
-bool Data_Manager::Is_overflow() {
+bool Data_Manager::	Is_overflow() {
 	return MAX_SIZE == buf_size;
 }
 
