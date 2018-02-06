@@ -257,9 +257,9 @@ void *encode_FFT_RS(char *data_src, struct Para_Encd para_encd) {
 			elem_procs[j] = data_src[(j-(Size-para_encd.K))*para_encd.S+i];
 		}
 		encodeH(&elem_procs[Size-para_encd.K], para_encd.K, elem_procs, codeword);
-		memcpy(codeword, elem_procs, sizeof(GFSymbol)*Size);
+//		memcpy(codeword, elem_procs, sizeof(GFSymbol)*Size);
 		for(int j = 0; j < Size; j++) {
-			data_dst[j*para_encd.S+i] = codeword[j];
+			data_dst[j*para_encd.S+i] = elem_procs[j];
 		}
 	}
 	return data_dst;
@@ -277,7 +277,7 @@ void *encode_FFT_RS(char *data_src, struct Para_Encd para_encd) {
 //Parameters:  
 //		 para_encd.S is Symbol size, para_encd.K denotes Block size
 //       and actually both S and K are upper cases,
-//       decode one element every time stored in 'elem_prcs' temporarily.
+//       decode one element every time stored in 'elem_procs' temporarily.
 //==========================================================================
 void *decode_FFT_RS(struct Data_Remain data_remain, 
 	                struct Para_Decd para_decd) {
@@ -348,7 +348,7 @@ int main() {
 //simulate erasure
 	srand(time(NULL));
 	for(int i = 0; i < Size; i++) {
-		if((rand()%100/100.0) < 0.49) {
+		if((rand()%100/100.0) < 0.3) {
 			data_remain.erasure[i] = LOST;
 		}
 		else {data_remain.erasure[i] = GET;}
@@ -360,7 +360,7 @@ int main() {
 	}
 
 //decoding
-	decode_FFT_RS(data_remain, para_decd); 
+	data_recovery = decode_FFT_RS(data_remain, para_decd); 
 	free(data_encd);
 	free(data_recovery);
 	return 0;
