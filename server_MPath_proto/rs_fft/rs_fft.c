@@ -250,7 +250,9 @@ void decode_main(GFSymbol* codeword, _Bool* erasure, GFSymbol* log_walsh2){
 void *encode_FFT_RS(char *data_src, struct Para_Encd para_encd) {
 	GFSymbol elem_procs[Size] = {'\0'};
 	GFSymbol codeword[Size]   = {'\0'};
+
 	GFSymbol *data_dst        = MALLOC(char, Size*para_encd.S);
+	
 
 	for(int i = 0; i < para_encd.S; i++) {
 		for(int j = Size-para_encd.K; j < Size; j++) {
@@ -262,6 +264,8 @@ void *encode_FFT_RS(char *data_src, struct Para_Encd para_encd) {
 			data_dst[j*para_encd.S+i] = elem_procs[j];
 		}
 	}
+//	printf("encoding data is:\n %s\n\n\n", data_dst);
+
 	return data_dst;
 }
 //==========================================================================
@@ -284,6 +288,7 @@ void *decode_FFT_RS(struct Data_Remain data_remain,
 	_Bool    erasure_a[Size]  = {0};//Array indicating erasures
 	char     elem_procs[Size] = {'\0'};
 	GFSymbol log_walsh2[Size] = {'\0'};
+
 	char     *data_dst        = MALLOC(char, para_decd.K*para_decd.S);
 
 	for(int i = 0; i < Size; i++) {
@@ -312,7 +317,8 @@ void *decode_FFT_RS(struct Data_Remain data_remain,
 			}
 		}		
 	}
-	printf("%s\n\n", data_dst);
+	printf("recovery data is:\n%s\n\n", data_dst);
+
 	return data_dst;
 }
 //==========================================================================
@@ -340,7 +346,7 @@ int main() {
 		num++;
 		if(122 == num) {num = 97;}
 	} 
-	printf("\n\n\n");
+	printf("\n\n");
 
 	data_encd = encode_FFT_RS(data_src, para_encd);
 //	printf("%s\n\n", data_encd);
@@ -358,11 +364,12 @@ int main() {
 			memcpy(data_remain.data[i], &data_encd[i*para_decd.S], para_decd.S);
 		}
 	}
-
 //decoding
 	data_recovery = decode_FFT_RS(data_remain, para_decd); 
+
 	free(data_encd);
 	free(data_recovery);
+
 	return 0;
 }
 //==========================================================================

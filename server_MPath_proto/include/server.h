@@ -13,12 +13,15 @@
 
 #define MAX_BUF               10 
 
-#define TEST_SECONDS          2
+#define TEST_SECONDS         0.1
 
 #define TOTAL_WORK_THREADS    10
 
 #define CODELINE             100
-#define MAX_INPUT_SYMBOL_NUM  20
+#define SYMB_SIZE          100
+//original data block size
+#define ORIGIN_BLOCK_SIZE    240  
+#define ENCD_BLOCK_SIZE      256    
 
 /*
 struct Transmit{

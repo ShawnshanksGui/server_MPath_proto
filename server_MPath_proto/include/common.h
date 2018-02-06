@@ -14,8 +14,5 @@
 #include        <list>
 #include    <iostream>
 
-#define SUCS_PUSH 1
-#define FAIL_PUSH 0
-
 #define MALLOC(type, size) ((type *)malloc(sizeof(type) * (size)))
 #define SAFE_FREE(a) {if (a != nullptr) free(a);}
