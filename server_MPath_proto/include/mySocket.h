@@ -5,6 +5,8 @@
 #include "sys/types.h"
 #include "sys/socket.h"
 
+typedef struct sockaddr SA;
+
 class Udp_sock {
 private:
 	int sock_id;
@@ -17,7 +19,7 @@ private:
 
 	void Bind(int, SA *, int) const;
 
-//  udp needn't establish any connection!!!
+//  Udp socket doesn't need to establish any connections!!!
 //	void Connect(int sock_id, struct sockaddr *serv_addr, int len_sock_addr) const;
 
 public:

@@ -1,14 +1,10 @@
 #ifndef _DATA_MANAGER_H_
 #define _DATA_MANAGER_H_
 
-
 #include <queue>
-#include <list>
 
 #include <thread>
 #include <mutex>
-
-#include "common.h"
 
 typedef char data_type;
 
@@ -26,12 +22,12 @@ public:
 	void data_fetch_thread();
 
 private:
-	void data_gen(data_type *data);
+	bool data_gen(data_type *data);
 	data_type *fetch();
 
 	bool Is_empty();
 	bool Is_overflow();
-	void Push(data_type *data_src);
+	bool Push(data_type *data_src);
 	data_type *Pop();
 	int buf_size;
 	int MAX_SIZE;

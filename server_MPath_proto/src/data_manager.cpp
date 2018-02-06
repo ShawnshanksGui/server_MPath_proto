@@ -1,8 +1,9 @@
 #include "../include/thread_core_affinity_set.h"
+
 #include "../include/data_manager.h"
 
-#include <queue>
 #include <chrono>
+
 #include "../include/server.h"
 #include "../include/common.h"
 #include "../include/utility.h"
@@ -27,10 +28,10 @@ void Data_Manager::data_gen_thread() {
 //
 	while(1) {
 		//real memory allocation function for data generated 
-		data_type *data_tmp = MALLOC(char, CODELINE);
-		if(END_FILE == Fread(data_tmp, CODELINE, fp)) break;  
+		data_type *elem_mem_alloc = MALLOC(char, CODELINE);
+		if(END_FILE == Fread(elem_mem_alloc, CODELINE, fp)) break;  
 		//until push successfully
-		while(SUCS_PUSH != data_gen(data_tmp));
+		while(SUCS_PUSH != data_gen(elem_mem_alloc));
 
 		//records the eclpsing time for TEST_SECONDS
         auto endTime  = std::chrono::high_resolution_clock::now();
@@ -58,7 +59,7 @@ void Data_Manager::data_fetch_thread() {
 	while(1) {
 		data_type *data_str = fetch();
 		SAFE_FREE(data_str);
-//		data_str = nullptr;
+
 		//records the eclpsing time for calculating testing time
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>

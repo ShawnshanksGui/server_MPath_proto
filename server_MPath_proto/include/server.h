@@ -2,20 +2,20 @@
 //#define UDP                   17
 
 //control procedure sending or stopping
-#define STOP                   0
-#define READY                  1
+#define STOP                  0
+#define READY                 1
 
 //the amount of command parameters required 
-#define NUM_PARA               6
+#define NUM_PARA              6
 
-//finish reading one video file  
-#define END_FILE               0
+//finish reading for a video file  
+#define END_FILE              0
 
 #define MAX_BUF               10 
 
-#define TEST_SECONDS          10
+#define TEST_SECONDS          2
 
-#define TOTAL_WORK_THREADS     1
+#define TOTAL_WORK_THREADS    10
 
 #define CODELINE             100
 #define MAX_INPUT_SYMBOL_NUM  20

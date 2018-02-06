@@ -10,10 +10,12 @@
 
 #include "netinet/in.h"
 #include  "arpa/inet.h"
+   
+#include        <list>
+#include    <iostream>
 
-#include <iostream>
-
-typedef struct sockaddr SA;
+#define SUCS_PUSH 1
+#define FAIL_PUSH 0
 
 #define MALLOC(type, size) ((type *)malloc(sizeof(type) * (size)))
-#define SAFE_FREE(a) if (a != NULL) free(a);
+#define SAFE_FREE(a) {if (a != nullptr) free(a);}
