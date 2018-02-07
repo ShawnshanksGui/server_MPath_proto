@@ -15,7 +15,7 @@ extern "C"
 
 using namespace std;
 
-static std::mutex mtx;
+//static std::mutex mtx;
 
 //==========================================================================
 //==========================================================================
@@ -88,10 +88,7 @@ void Data_Manager::data_handler_thread() {
 //=======================================================
 		encd_Q[id_path].push(encd_block);
 
-//=======================================================
-//		data_handle_procedure
 
-//=======================================================
 //		SAFE_FREE(data_str);
 
 		//records the eclpsing time for calculating testing time
@@ -102,28 +99,6 @@ void Data_Manager::data_handler_thread() {
 	}
 }
 
-void Data_Manager::sender_thread_a(){
-	
-	while(1) {
-		char *data = encd_Q[id_path].front(); 
-		encd_Q[id_path].pop();	
-		for(int i = 0; i < ENCD_BLOCK_SIZE; i++) {
-			Udp_send(encd_block[i*SYMBOL_SIZE], SYMBOL_SIZE);
-		}
-	}	
-}
-
-void Data_Manager::sender_thread_a(){
-	
-	while(1) {
-		char *data = encd_Q[id_path].front(); 
-		encd_Q[id_path].pop();	
-		for(int i = 0; i < ENCD_BLOCK_SIZE; i++) {
-			Udp_send(encd_block[i*SYMBOL_SIZE], SYMBOL_SIZE);
-		}
-	}	
-}
-//==========================================================================
 
 
 //==========================================================================
@@ -133,7 +108,7 @@ void Data_Manager::sender_thread_a(){
 //Parameter:  		       
 //==========================================================================
 bool Data_Manager::data_save(data_type *data, ID_PATH id_path) {
-	std::unique_lock<std::mutex> lock(mtx);
+	std::unique_lock<std::mutex> lock(mtx[id_path]);
 
 	return Push(data, id_path);
 }
@@ -147,7 +122,7 @@ bool Data_Manager::data_save(data_type *data, ID_PATH id_path) {
 //Parameter:  		       
 //==========================================================================
 data_type *Data_Manager::data_fetch(ID_PATH id_path) {   
-	std::unique_lock<std::mutex> lock(mtx);	
+	std::unique_lock<std::mutex> lock(mtx[id_path]);	
 
 	return Pop(id_path);
 }
@@ -221,10 +196,10 @@ Data_Manager::~Data_Manager() {
 int main() {
 	Data_Manager dm = Data_Manager(100);
 
-	std::thread worker_data_gen(&Data_Manager::data_gen_thread, &dm);
-	std::thread worker_fetch(&Data_Manager::data_fetch_thread,  &dm); 
+	std::thread worker_data_gen(&Data_Manager::data_gen_thread,  &dm);
+	std::thread worker_fetch(&Data_Manager::data_handler_thread, &dm); 
 	worker_data_gen.join();
-	worker_fetch.join();
+	data_handler_thread.join();
 
 	return 0;
 }

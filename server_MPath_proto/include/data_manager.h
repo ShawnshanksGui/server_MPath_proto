@@ -22,8 +22,7 @@ using namespace std;
 class Data_Manager {
 public:	
 	queue<char *> data_video[NUM_PATH];
-	queue<char *> encd_Q[NUM_PATH];
-	
+
 	Data_Manager(int max_size);
 	Data_Manager();
 	~Data_Manager();
@@ -32,6 +31,8 @@ public:
 	void data_handler_thread();
 
 private:
+	std:mutex mtx[2];
+	
 	int buf_size[NUM_PATH];
 	int MAX_SIZE[NUM_PATH];
 
