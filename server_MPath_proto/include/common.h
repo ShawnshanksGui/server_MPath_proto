@@ -15,14 +15,14 @@
 #include    <iostream>
 
 //control procedure sending or stopping
-#define STOP                  0
-#define READY                 1
+#define STOP                   0
+#define READY                  1
 
 //the amount of command parameters required 
-#define NUM_PARA              6
-
+#define NUM_PARA               6
+ 
 //finish reading for a video file  
-#define END_FILE              0
+#define END_FILE               0
 
 #define MAX_BUF               10 
 

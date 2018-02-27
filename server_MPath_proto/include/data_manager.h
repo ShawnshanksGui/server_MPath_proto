@@ -11,10 +11,19 @@ typedef int    ID_PATH;
 typedef int     ID_BUF;
 
 //Judge whether PUSH is succesfully or not! 
-#define SUCS_PUSH 1
 #define FAIL_PUSH 0
+#define SUCS_PUSH 1
 
-//Specify total amount of paths(or buffers)
+//specify all the ID number of core bound to responding thread
+#define DATA_GEN_CORE      0
+#define DATA_HANDLER_CORE  1
+#define TRANSMIT_CORE      2
+
+
+//the bytes of control message bytes  in one packet 
+#define LEN_CONTRL_MSG 10
+
+//Specify total number of paths(or sending buffers)
 #define NUM_PATH 2 
 
 using namespace std;
@@ -22,10 +31,15 @@ using namespace std;
 class Data_Manager {
 public:	
 	queue<char *> data_video[NUM_PATH];
+	queue<char *> encd_Q[NUM_PATH];
 
 	Data_Manager(int max_size);
 	Data_Manager();
 	~Data_Manager();
+
+	void path_decision(int &id_path, double plr[NUM_PATH], 
+		               double RTT[NUM_PATH]);
+	void para_FEC_decision(struct Para_encd &para_encd, double plr);
 
 	void data_gen_thread();
 	void data_handler_thread();

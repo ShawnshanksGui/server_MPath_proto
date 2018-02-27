@@ -27,7 +27,8 @@ void Data_Manager::data_gen_thread() {
 	int id_path  = 0;
 	int _count   = 0;
 	int len_read = 0;
-//original data block size.
+
+	//original data block size.
 	int block_size = 200;
 
 	FILE *fp;
@@ -35,19 +36,19 @@ void Data_Manager::data_gen_thread() {
 
 	auto startTime = std::chrono::high_resolution_clock::now();
 
-//set thread core affinity and bind core 1 to the current thread
-	affinity_set(0);
+	//set thread core affinity and bind the current thread to core 1 
+	affinity_set(DATA_GEN_CORE);
 //
 	while(1) {
 		//real memory allocation function for data generated 
 		data_type *elem_mem_alloc = MALLOC(char, SYMB_SIZE*block_size);
 		len_read = Fread(elem_mem_alloc, SYMB_SIZE*block_size, fp);
-		if(END_FILE == len_read) break;  
-
+		if(END_FILE == len_read) break;
+		
 		//until pushed and saved successfully
 		while(SUCS_PUSH != data_save(elem_mem_alloc, id_path));
 
-		//records the eclpsing time for TEST_SECONDS
+		//record the eclpsing time for TEST_SECONDS
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds> 
                         (endTime - startTime ).count();
@@ -70,15 +71,18 @@ void Data_Manager::data_handler_thread() {
 	data_type *data_take  = nullptr;	
 	data_type *encd_block = nullptr;
 
-	//encd_Qfer save data from origin data queue
-	
+//decide encoding parameters
+	struct Para_encd para_encd  = {1000, 240};
+//	decision_para_FEC(para_encd);
+//
+
 	auto startTime = std::chrono::high_resolution_clock::now();
 
-	//set thread core affinity and bind core 1 to the current thread
-	affinity_set(1);  
+	//set thread core affinity and bind the current thread to core 1
+	affinity_set(DATA_HANDLER_CORE);  
 //
 	while(1) {
-		char *tmp_data = MALLOC(char, SYMB_SIZE*ENCD_BLOCK_SIZE);
+//		char *tmp_data = MALLOC(char, SYMB_SIZE*ENCD_BLOCK_SIZE);
 		while(nullptr == (data_take = data_fetch(id_path)));
 
 //		CopyFromDataQ2EncdQ(encd_Q[id_path], tmp_data, SYMB_SIZE*ENCD_BLOCK_SIZE);
@@ -88,9 +92,7 @@ void Data_Manager::data_handler_thread() {
 //=======================================================
 		encd_Q[id_path].push(encd_block);
 
-
 //		SAFE_FREE(data_str);
-
 		//records the eclpsing time for calculating testing time
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>
@@ -98,7 +100,40 @@ void Data_Manager::data_handler_thread() {
         if(duration > TEST_SECONDS*1000000) break;
 	}
 }
+//==========================================================================
 
+
+//==========================================================================
+//==========================================================================
+//Author:      shawnshanks_fei          Date:     20180204
+//Description: the thread function which simulates data fetch procedure  
+//Parameter:   num_core   
+//			   id_path
+//			   argv[]
+//             para_encd
+//==========================================================================
+void Data_Manager::transmit_thread(int num_core, int id_path, 
+	                               struct Para_encd para_encd,
+	                               struct Argv argv[4]) {
+	Udp_sock _client;
+	char packet[para_encd.S + LEN_CONTRL_MSG];
+
+	affinity_set(num_core);
+
+	_client.udp_sock_client_new(argv[1], argv[2], argv[3], argv[4]);
+
+	while(1) {
+//fetch the data from encd_Q, queue buffer
+		data_type *data_tmp = encd_Q[id_path].front();
+		encd_Q[id_path].pop();
+
+		for(int i=0; i < para_encd.K; i++) {
+			packet_encaps(packet, &(data_tmp[i*para_encd.S]), para_encd.S);
+			_client.Send_udp(packet, packet_encd + LEN_CONTRL_MSG);
+		}
+	}
+}	
+//==========================================================================
 
 
 //==========================================================================
@@ -143,7 +178,6 @@ bool Data_Manager::Push(data_type *data_src, ID_PATH id_path) {
 	else 
 		return FAIL_PUSH;
 }
-
 
 //safety pop from queue;
 data_type *Data_Manager::Pop(ID_PATH id_path) {
