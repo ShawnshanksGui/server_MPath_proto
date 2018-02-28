@@ -1,10 +1,25 @@
 #ifndef _RS_FFT_H
 #define _RS_FFT_H
 
+struct Data_Remain{
+	_Bool erasure[256]; //erasure[N]
+	char data[256][10]; //data[N][S]
+};
+
+struct Param_Encd {
+	int S;  //symbol size
+	int K;  //original data block size
+};
+
+struct Param_Decd {
+	int S;	//symbol size
+	int K;  //original data block size
+};
+
 void init();
 void init_dec();
 
-void *encode_FFT_RS(char    * data_src, struct Para_Encd para_encd); 
-void *decode_FFT_RS(struct Data_Remain, struct Para_Decd para_decd); 
+void *encode_FFT_RS(char    * data_src, struct Param_Encd param_encd); 
+void *decode_FFT_RS(struct Data_Remain, struct Param_Decd param_decd); 
 
 #endif

@@ -6,9 +6,9 @@
 #include <thread>
 #include <mutex>
 
-typedef char data_type;
-typedef int    ID_PATH;
 typedef int     ID_BUF;
+typedef int    ID_PATH;
+typedef char data_type;
 
 //Judge whether PUSH is succesfully or not! 
 #define FAIL_PUSH 0
@@ -19,7 +19,6 @@ typedef int     ID_BUF;
 #define DATA_HANDLER_CORE  1
 #define TRANSMIT_CORE      2
 
-
 //the bytes of control message bytes  in one packet 
 #define LEN_CONTRL_MSG 10
 
@@ -27,6 +26,21 @@ typedef int     ID_BUF;
 #define NUM_PATH 2 
 
 using namespace std;
+
+struct Param_Reader {
+	char *path_input;
+//	int len_block; 
+};
+
+struct Param_Transmitter{
+	int num_core;
+	int id_path;
+	char *addr_self;
+	char *port_self; 
+	char *addr_dst; 
+	char *port_dst;	
+};
+
 
 class Data_Manager {
 public:	
@@ -40,9 +54,10 @@ public:
 //	void path_decision(int &id_path, double plr[NUM_PATH], 
 //		               double RTT[NUM_PATH]);
 //	void para_FEC_decision(struct Para_encd &para_encd, double plr);
-
-	void data_gen_thread();
+	
+	void video_reader_thread();
 	void data_handler_thread();
+	void transmit_thread(struct Param_Transmitter param_transmit);
 
 private:
 	std:mutex mtx[2];
@@ -57,6 +72,12 @@ private:
 	bool Is_overflow(ID_BUF id_buf);
 	bool Push(data_type *data_src, ID_PATH id_path);
 	data_type *Pop(ID_PATH id_path);
+
+//video reader
+//	void gen_param_reader(char input_video_path);
+
+//transmitter
+	void Init_param_transmitter(struct Param_Transmitter &param_transmit);
 };
 
 

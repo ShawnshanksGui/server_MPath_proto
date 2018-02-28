@@ -23,7 +23,7 @@ using namespace std;
 //Description: the thread function which simulates data generating procedure  
 //Parameter:  SYMB_SIZE is equal to encoding symbol size 
 //==========================================================================
-void Data_Manager::data_gen_thread() {
+void Data_Manager::video_reader_thread() {
 	int id_path  = 0;
 	int _count   = 0;
 	int len_read = 0;
@@ -32,7 +32,7 @@ void Data_Manager::data_gen_thread() {
 	int block_size = 200;
 
 	FILE *fp;
-	Fopen_for_read(&fp, "input.mp4");
+	Fopen_for_read(&fp, "input_video.mp4");
 
 	auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -72,28 +72,26 @@ void Data_Manager::data_handler_thread() {
 	data_type *encd_block = nullptr;
 
 //decide encoding parameters
-	struct Para_encd para_encd  = {1000, 240};
-//	decision_para_FEC(para_encd);
+	struct Param_Encd param_encd  = {1000, 240};
+//	decision_para_FEC(param_encd);
 //
-
 	auto startTime = std::chrono::high_resolution_clock::now();
 
-	//set thread core affinity and bind the current thread to core 1
+//set thread core affinity and bind the current thread to core 1
 	affinity_set(DATA_HANDLER_CORE);  
 //
 	while(1) {
 //		char *tmp_data = MALLOC(char, SYMB_SIZE*ENCD_BLOCK_SIZE);
 		while(nullptr == (data_take = data_fetch(id_path)));
 
-//==================================================================
-		encd_block = encode_FFT_RS(data_take, para_encd);
+//================================================================
+		encd_block = encode_FFT_RS(data_take, param_encd);
 		SAFE_FREE(data_take);
 //path decision of packets, store encoding data into send_queue
 		send_Q[id_path].push(encd_block);
-//==================================================================
+//================================================================
 
-//		SAFE_FREE(data_str);
-		//records the eclpsing time for calculating testing time
+//records the eclpsing time for calculating testing time
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>
         				(endTime - startTime ).count();
@@ -110,26 +108,27 @@ void Data_Manager::data_handler_thread() {
 //Parameter:   num_core   
 //			   id_path
 //			   argv[]
-//             para_encd
+//             param_encd
 //==========================================================================
-void Data_Manager::transmit_thread(int num_core, int id_path, 
-	                               struct Para_encd para_encd,
-	                               struct Argv argv[4]) {
+void Data_Manager::transmit_thread(struct Param_Transmitter param_transmit) {
 	Udp_sock _client;
-	char packet[para_encd.S + LEN_CONTRL_MSG];
+	char packet[param_encd.S + LEN_CONTRL_MSG];
 
-	affinity_set(num_core);
+	affinity_set(param_tranmit.num_core);
 
-	_client.udp_sock_client_new(argv[1], argv[2], argv[3], argv[4]);
+	_client.udp_sock_client_new(param_transmit.addr_self, 
+		                        param_transmit.port_self, 
+		                        param_transmit.addr_dst,
+		                        param_transmit.port_dst);
 
 	while(1) {
 //fetch the data from send_Q, queue buffer
-		data_type *data_tmp = send_Q[id_path].front();
-		send_Q[id_path].pop();
+		data_type *data_tmp = send_Q[param_tranmit.id_path].front();
+		send_Q[param_tranmit.id_path].pop();
 
-		for(int i=0; i < para_encd.K; i++) {
-			packet_encaps(packet, &(data_tmp[i*para_encd.S]), para_encd.S);
-			_client.Send_udp(packet, packet_encd + LEN_CONTRL_MSG);
+		for(int i=0; i < param_encd.K; i++) {
+			packet_encaps(packet, &(data_tmp[i*param_encd.S]), param_encd.S);
+			_client.Send_udp(packet, param_encd.S + LEN_CONTRL_MSG);
 		}
 	}
 }	
@@ -228,12 +227,18 @@ Data_Manager::~Data_Manager() {
 
 //test
 int main() {
+	struct Param_Transmitter param_transmit;
+	Init_param_transmitter(param_transmit);
+
 	Data_Manager dm = Data_Manager(100);
 
-	std::thread worker_data_gen(&Data_Manager::data_gen_thread,  &dm);
-	std::thread worker_fetch(&Data_Manager::data_handler_thread, &dm); 
+	std::thread video_read_worker(&Data_Manager::video_reader_thread,  &dm);
+	std::thread fetch_worker(&Data_Manager::data_handler_thread, &dm); 
+	std::thread transmit_worker(&Data_Manager::transmit_thread, &dm, 
+		                        param_transmit);
 	worker_data_gen.join();
 	data_handler_thread.join();
+	transmit_worker.jion();
 
 	return 0;
 }

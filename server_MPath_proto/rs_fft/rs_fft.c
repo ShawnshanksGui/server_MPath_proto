@@ -10,27 +10,11 @@ Lin, Han and Chung, "Novel Polynomial Basis and Its Application to Reed-Solomon 
 #include <string.h>
 #include <time.h>
 #include <stdint.h>
-
+#include "../include/rs_fft.h"
 
 #define GET  0 //Packet received successfully
 #define LOST 1 //Packet lost in  transmission
 #define MALLOC(type, size) malloc(sizeof(type) * (size))
-
-struct Data_Remain{
-	_Bool erasure[256]; //erasure[N]
-	char data[256][10]; //data[N][S]
-};
-
-struct Para_Encd {
-	int S;  //symbol size
-	int K;  //original data block size
-};
-
-struct Para_Decd {
-	int S;	//symbol size
-	int K;  //original data block size
-};
-
 
 typedef unsigned char GFSymbol;
 #define len 8//2^len: the size of Galois field
@@ -244,24 +228,24 @@ void decode_main(GFSymbol* codeword, _Bool* erasure, GFSymbol* log_walsh2){
 //Description: the core encoding proccedure of FFT_RS, which calls 
 //		       the original FFT_RS lib  
 //Parameter:  
-//		       para_encd.S is Symbol size, para_encd.K denotes Block  
+//		       param_encd.S is Symbol size, param_encd.K denotes Block  
 //             size  and actually both S and K are upper cases
 //==========================================================================
-void *encode_FFT_RS(char *data_src, struct Para_Encd para_encd) {
+void *encode_FFT_RS(char *data_src, struct Param_Encd param_encd) {
 	GFSymbol elem_procs[Size] = {'\0'};
 	GFSymbol codeword[Size]   = {'\0'};
 
-	GFSymbol *data_dst        = MALLOC(char, Size*para_encd.S);
+	GFSymbol *data_dst        = MALLOC(char, Size*param_encd.S);
 	
 
-	for(int i = 0; i < para_encd.S; i++) {
-		for(int j = Size-para_encd.K; j < Size; j++) {
-			elem_procs[j] = data_src[(j-(Size-para_encd.K))*para_encd.S+i];
+	for(int i = 0; i < param_encd.S; i++) {
+		for(int j = Size-param_encd.K; j < Size; j++) {
+			elem_procs[j] = data_src[(j-(Size-param_encd.K))*param_encd.S+i];
 		}
-		encodeH(&elem_procs[Size-para_encd.K], para_encd.K, elem_procs, codeword);
+		encodeH(&elem_procs[Size-param_encd.K], param_encd.K, elem_procs, codeword);
 //		memcpy(codeword, elem_procs, sizeof(GFSymbol)*Size);
 		for(int j = 0; j < Size; j++) {
-			data_dst[j*para_encd.S+i] = elem_procs[j];
+			data_dst[j*param_encd.S+i] = elem_procs[j];
 		}
 	}
 //	printf("encoding data is:\n %s\n\n\n", data_dst);
@@ -279,31 +263,31 @@ void *encode_FFT_RS(char *data_src, struct Para_Encd para_encd) {
 //		the core decoding proccedure of FFT_RS, which calls 
 //		the original FFT_RS lib 
 //Parameters:  
-//		 para_encd.S is Symbol size, para_encd.K denotes Block size
+//		 param_encd.S is Symbol size, param_encd.K denotes Block size
 //       and actually both S and K are upper cases,
 //       decode one element every time stored in 'elem_procs' temporarily.
 //==========================================================================
 void *decode_FFT_RS(struct Data_Remain data_remain, 
-	                struct Para_Decd para_decd) {
+	                struct Param_Decd param_decd) {
 	_Bool    erasure_a[Size]  = {0};//Array indicating erasures
 	char     elem_procs[Size] = {'\0'};
 	GFSymbol log_walsh2[Size] = {'\0'};
 
-	char     *data_dst        = MALLOC(char, para_decd.K*para_decd.S);
+	char     *data_dst        = MALLOC(char, param_decd.K*param_decd.S);
 
 	for(int i = 0; i < Size; i++) {
 		erasure_a[i] = data_remain.erasure[i];
 	}
 	decode_init(erasure_a, log_walsh2);//Evaluate error locator polynomial
 
-	for(int i = 0; i < para_decd.S; i++) {
+	for(int i = 0; i < param_decd.S; i++) {
 		for(int j = 0; j < Size; j++) {
 			if(GET == erasure_a[j]) {
 				//copy data from data_remain to elem_procs if GET
 				elem_procs[j] = data_remain.data[j][i];
 				//(1)copy the data not lost from data_remain to data_destination
-				if(j >= para_decd.K) {
-					data_dst[(j-para_decd.K)*para_decd.S+i] = data_remain.data[j][i];
+				if(j >= param_decd.K) {
+					data_dst[(j-param_decd.K)*param_decd.S+i] = data_remain.data[j][i];
 				}
 			}
 			else {elem_procs[j] = 0;} //keep default value if LOST
@@ -311,9 +295,9 @@ void *decode_FFT_RS(struct Data_Remain data_remain,
 		//----------main processing fucntion-----------
 		decode_main(elem_procs, erasure_a, log_walsh2);
 		//(2)copy the data recovered from elem_procs to data_destination
-		for(int j = para_decd.K; j < Size; j++) {
+		for(int j = param_decd.K; j < Size; j++) {
 			if(LOST == erasure_a[j]) {
-				data_dst[(j-para_decd.K)*para_decd.S+i] = elem_procs[j];
+				data_dst[(j-param_decd.K)*param_decd.S+i] = elem_procs[j];
 			}
 		}		
 	}
@@ -333,8 +317,8 @@ int main() {
 	char   data_src[128*10]         = {'\0'};
 	char   *data_encd               = NULL;
 	char   *data_recovery           = NULL;
-	struct Para_Encd para_encd      = {10, 128};
-	struct Para_Decd para_decd      = {10, 128};
+	struct Param_Encd param_encd      = {10, 128};
+	struct Param_Decd param_decd      = {10, 128};
 	struct Data_Remain data_remain;
 
 	init();
@@ -348,7 +332,7 @@ int main() {
 	} 
 	printf("\n\n");
 
-	data_encd = encode_FFT_RS(data_src, para_encd);
+	data_encd = encode_FFT_RS(data_src, param_encd);
 //	printf("%s\n\n", data_encd);
 
 //simulate erasure
@@ -361,11 +345,11 @@ int main() {
 	}
 	for(int i = 0; i < Size; i++) {
 		if(GET == data_remain.erasure[i]) {
-			memcpy(data_remain.data[i], &data_encd[i*para_decd.S], para_decd.S);
+			memcpy(data_remain.data[i], &data_encd[i*param_decd.S], param_decd.S);
 		}
 	}
 //decoding
-	data_recovery = decode_FFT_RS(data_remain, para_decd); 
+	data_recovery = decode_FFT_RS(data_remain, param_decd); 
 
 	free(data_encd);
 	free(data_recovery);
