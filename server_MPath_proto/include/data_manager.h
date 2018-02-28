@@ -31,15 +31,15 @@ using namespace std;
 class Data_Manager {
 public:	
 	queue<char *> data_video[NUM_PATH];
-	queue<char *> encd_Q[NUM_PATH];
+	queue<char *> send_Q[NUM_PATH];
 
 	Data_Manager(int max_size);
 	Data_Manager();
 	~Data_Manager();
 
-	void path_decision(int &id_path, double plr[NUM_PATH], 
-		               double RTT[NUM_PATH]);
-	void para_FEC_decision(struct Para_encd &para_encd, double plr);
+//	void path_decision(int &id_path, double plr[NUM_PATH], 
+//		               double RTT[NUM_PATH]);
+//	void para_FEC_decision(struct Para_encd &para_encd, double plr);
 
 	void data_gen_thread();
 	void data_handler_thread();

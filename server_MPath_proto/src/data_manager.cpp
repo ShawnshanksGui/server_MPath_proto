@@ -85,12 +85,12 @@ void Data_Manager::data_handler_thread() {
 //		char *tmp_data = MALLOC(char, SYMB_SIZE*ENCD_BLOCK_SIZE);
 		while(nullptr == (data_take = data_fetch(id_path)));
 
-//		CopyFromDataQ2EncdQ(encd_Q[id_path], tmp_data, SYMB_SIZE*ENCD_BLOCK_SIZE);
-//=======================================================
+//==================================================================
 		encd_block = encode_FFT_RS(data_take, para_encd);
 		SAFE_FREE(data_take);
-//=======================================================
-		encd_Q[id_path].push(encd_block);
+//path decision of packets, store encoding data into send_queue
+		send_Q[id_path].push(encd_block);
+//==================================================================
 
 //		SAFE_FREE(data_str);
 		//records the eclpsing time for calculating testing time
@@ -123,9 +123,9 @@ void Data_Manager::transmit_thread(int num_core, int id_path,
 	_client.udp_sock_client_new(argv[1], argv[2], argv[3], argv[4]);
 
 	while(1) {
-//fetch the data from encd_Q, queue buffer
-		data_type *data_tmp = encd_Q[id_path].front();
-		encd_Q[id_path].pop();
+//fetch the data from send_Q, queue buffer
+		data_type *data_tmp = send_Q[id_path].front();
+		send_Q[id_path].pop();
 
 		for(int i=0; i < para_encd.K; i++) {
 			packet_encaps(packet, &(data_tmp[i*para_encd.S]), para_encd.S);
