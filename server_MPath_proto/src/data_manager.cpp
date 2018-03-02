@@ -163,12 +163,12 @@ data_type *Data_Manager::data_fetch(ID_PATH id_path) {
 //==========================================================================
 
 
-//safety push into one queue(default the first queue)
+//safely push into one queue(default the first queue)
 bool Data_Manager::Push(data_type *data_src, ID_PATH id_path) {
 	if(!Is_overflow(id_path)) {
 		data_video[id_path].push(data_src);
 		buf_size[id_path] += 1;
-//debug		
+//debug
 		cout << "Push one time:" << buf_size[id_path] << endl;
 //		printf("%s\n\n", data_video.back());
 		return SUCS_PUSH;
