@@ -17,53 +17,14 @@ using namespace std;
 
 //static std::mutex mtx;
 
-//==========================================================================
-//==========================================================================
-//Author:      shawnshanks_fei         Date:        20180204
-//Description: the thread function which simulates data generating procedure  
-//Parameter:  SYMB_SIZE is equal to encoding symbol size 
-//==========================================================================
-void Data_Manager::video_reader_thread() {
-	int id_path  = 0;
-	int _count   = 0;
-	int len_read = 0;
 
-	//original data block size.
-	int block_size = 200;
-
-	FILE *fp;
-	Fopen_for_read(&fp, "input_video.mp4");
-
-	auto startTime = std::chrono::high_resolution_clock::now();
-
-	//set thread core affinity and bind the current thread to core 1 
-	affinity_set(DATA_GEN_CORE);
-//
-	while(1) {
-		//real memory allocation function for data generated 
-		data_type *elem_mem_alloc = MALLOC(char, SYMB_SIZE*block_size);
-		len_read = Fread(elem_mem_alloc, SYMB_SIZE*block_size, fp);
-		if(END_FILE == len_read) break;
-		
-		//until pushed and saved successfully
-		while(SUCS_PUSH != data_save(elem_mem_alloc, id_path));
-
-		//record the eclpsing time for TEST_SECONDS
-        auto endTime  = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds> 
-                        (endTime - startTime ).count();
-
-		if(duration > TEST_SECONDS*1000000) break;
-	}	
-}
-//==========================================================================
 
 
 //==========================================================================
 //==========================================================================
 //Author:      shawnshanks_fei          Date:     20180204
 //Description: the thread function which simulates data fetch procedure  
-//Parameter:  SYMB_SIZE is equal to encoding symbol size
+//Parameter:   SYMB_SIZE is equal to encoding symbol size
 //==========================================================================
 void Data_Manager::data_handler_thread() {
 	int id_path = 0;
@@ -101,38 +62,6 @@ void Data_Manager::data_handler_thread() {
 //==========================================================================
 
 
-//==========================================================================
-//==========================================================================
-//Author:      shawnshanks_fei          Date:     20180204
-//Description: the thread function which simulates data fetch procedure  
-//Parameter:   num_core   
-//			   id_path
-//			   argv[]
-//             param_encd
-//==========================================================================
-void Data_Manager::transmit_thread(struct Param_Transmitter param_transmit) {
-	Udp_sock _client;
-	char packet[param_encd.S + LEN_CONTRL_MSG];
-
-	affinity_set(param_tranmit.num_core);
-
-	_client.udp_sock_client_new(param_transmit.addr_self, 
-		                        param_transmit.port_self, 
-		                        param_transmit.addr_dst,
-		                        param_transmit.port_dst);
-
-	while(1) {
-//fetch the data from send_Q, queue buffer
-		data_type *data_tmp = send_Q[param_tranmit.id_path].front();
-		send_Q[param_tranmit.id_path].pop();
-
-		for(int i=0; i < param_encd.K; i++) {
-			packet_encaps(packet, &(data_tmp[i*param_encd.S]), param_encd.S);
-			_client.Send_udp(packet, param_encd.S + LEN_CONTRL_MSG);
-		}
-	}
-}	
-//==========================================================================
 
 
 //==========================================================================

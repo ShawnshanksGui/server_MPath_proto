@@ -4,19 +4,19 @@
 #define ON_REUSEADDR  1  //you can reuse the addr after binding addr without no waiting time 
 //#define OFF_REUSEADDR 0
 
-Udp_sock::~Udp_sock() {
+Transmitter::~Transmitter() {
 	if(sock_id > 0)
 		close(sock_id);
 }
 
-void Udp_sock::Socket_for_udp() {
+void Transmitter::Socket_for_udp() {
 	if((sock_id = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
 		perror("Create socket falied\n");
 		exit(0);
 	}
 }
 
-void Udp_sock::Setsockopt(int sock_id, int level, int option_name,
+void Transmitter::Setsockopt(int sock_id, int level, int option_name,
                void *option_value, int option_len) {
     if(-1 == setsockopt(sock_id, level, 
     	option_name, option_value, option_len)) {
@@ -25,7 +25,7 @@ void Udp_sock::Setsockopt(int sock_id, int level, int option_name,
     }
 }
 
-void Udp_sock::Bind(int sock_id, SA *addr_self, int len) const 
+void Transmitter::Bind(int sock_id, SA *addr_self, int len) const 
 {
 	if(bind(sock_id, addr_self, len)) {
 		perror("bind failed!!!");
@@ -35,7 +35,7 @@ void Udp_sock::Bind(int sock_id, SA *addr_self, int len) const
 
 //  udp protocol doesn't neede to establish any connections!!!
 
-//void Udp_sock::Connect(int sock_id, struct sockaddr *serv_addr, int len_sock_addr) const {
+//void Transmitter::Connect(int sock_id, struct sockaddr *serv_addr, int len_sock_addr) const {
 //	if(-1 == connect(sock_id, serv_addr, len_sock_addr)) {
 //       	perror("Connect socket failed!\n");
 //        exit(0);
@@ -43,7 +43,7 @@ void Udp_sock::Bind(int sock_id, SA *addr_self, int len) const
 //}
 //
 
-void Udp_sock::udp_sock_client_new(char *addr_self, char *port_self, 
+void Transmitter::udp_sock_client_new(char *addr_self, char *port_self, 
 	                               char *addr_dst, char *port_dst) {
 	memset(&(server_addr), 0, sizeof(server_addr));
 	memset(&(client_addr), 0, sizeof(client_addr));
@@ -69,7 +69,7 @@ void Udp_sock::udp_sock_client_new(char *addr_self, char *port_self,
 //	Connect(sock_id, (struct sockaddr *)&server_addr, sizeof(struct sockaddr));  
 }
 
-int Udp_sock::Send_udp(char *data, int len) {
+int Transmitter::Send_udp(char *data, int len) {
 	int num_sent = 0;
 
 	if((num_sent = sendto(sock_id, data, len, 0, 
@@ -80,7 +80,7 @@ int Udp_sock::Send_udp(char *data, int len) {
 	return num_sent;
 }
 
-int Udp_sock::Recv_udp(char *buf_dst, int len) {
+int Transmitter::Recv_udp(char *buf_dst, int len) {
 	int num_recv = 0;
 	socklen_t len_server_addr;
 
@@ -91,3 +91,37 @@ int Udp_sock::Recv_udp(char *buf_dst, int len) {
 	}
 	return num_recv;
 }
+
+//==========================================================================
+//==========================================================================
+//Author:      shawnshanks_fei          Date:     20180204
+//Description: the thread function which implement data sending procedure 
+//Parameter:   num_core   
+//			   id_path
+//			   argv[]
+//             param_encd
+//==========================================================================
+void Transmitter::transmit_thread(struct Param_Transmitter param_transmit,
+	                              Data_Manager data_manager) {
+	Transmitter _client;
+	char packet[param_encd.S + LEN_CONTRL_MSG];
+
+	affinity_set(param_transmit.num_core);
+
+	_client.udp_sock_client_new(param_transmit.addr_self, 
+		                        param_transmit.port_self, 
+		                        param_transmit.addr_dst,
+		                        param_transmit.port_dst);
+
+	while(1) {
+//fetch the data from send_Q, queue buffer
+		data_type *data_tmp = data_manager.send_Q[param_transmit.id_path].front();
+		data_manager.send_Q[param_transmit.id_path].pop();
+
+		for(int i=0; i < param_encd.K; i++) {
+			packet_encaps(packet, &(data_tmp[i*param_encd.S]), param_encd.S);
+			_client.Send_udp(packet, param_encd.S + LEN_CONTRL_MSG);
+		}
+	}
+}	
+//==========================================================================

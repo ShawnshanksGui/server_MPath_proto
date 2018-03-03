@@ -32,14 +32,6 @@ struct Param_Reader {
 //	int len_block; 
 };
 
-struct Param_Transmitter{
-	int num_core;
-	int id_path;
-	char *addr_self;
-	char *port_self; 
-	char *addr_dst; 
-	char *port_dst;	
-};
 
 
 class Data_Manager {
@@ -54,10 +46,14 @@ public:
 //	void path_decision(int &id_path, double plr[NUM_PATH], 
 //		               double RTT[NUM_PATH]);
 //	void para_FEC_decision(struct Para_encd &para_encd, double plr);
-	
-	void video_reader_thread();
+
+//	void video_reader_thread();
 	void data_handler_thread();
-	void transmit_thread(struct Param_Transmitter param_transmit);
+
+//friend classes
+	friend class Video_Reader;
+	friend class Encoder;
+	friend class Udp_sock;
 
 private:
 	std:mutex mtx[2];
@@ -79,6 +75,5 @@ private:
 //transmitter
 	void Init_param_transmitter(struct Param_Transmitter &param_transmit);
 };
-
 
 #endif
