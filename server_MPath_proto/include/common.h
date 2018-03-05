@@ -32,6 +32,24 @@
 #define TOTAL_WORK_THREADS    10
 
 
+#define MALLOC(type, size) ((type *)malloc(sizeof(type) * (size)))
+#define SAFE_FREE(a) {if (a != nullptr) free(a);}
+
+struct Channel_Inf {
+//packet loss rate estimated in realtime
+	double plr;
+//round trip time estimated in realtime
+	double RTT;
+//available bandwidth estimated in realtime from the receiver's feedback 
+	double avail_bw;
+};
+
+struct Tile_Num {
+	int total_tileNum;
+	int fov_tileNum;
+	int cushion_tileNum;
+	int outmost_tileNum;
+};
 
 /*
 #define CODELINE             100
@@ -40,7 +58,3 @@
 #define ORIGIN_BLOCK_SIZE    240  
 #define ENCD_BLOCK_SIZE      256    
 */
-
-
-#define MALLOC(type, size) ((type *)malloc(sizeof(type) * (size)))
-#define SAFE_FREE(a) {if (a != nullptr) free(a);}

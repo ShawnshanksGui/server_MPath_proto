@@ -23,7 +23,7 @@ Timer::Timer() {
 //             startFlag_one_timeSlice directly control the switch of all 
 //             the processes; 
 //==========================================================================
-void Timer::setTimer(&startFlag_one_timeSlice) {
+void Timer::setTimer_td_func(&startFlag_one_timeSlice) {
 	while(num_timeSlice--) {
 		startFlag_one_timeSlice = START;
 		usleep(len_timeSlice*1000000);

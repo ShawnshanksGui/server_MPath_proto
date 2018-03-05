@@ -1,6 +1,10 @@
 #include "../include/video_reader.h"
 
-class Bitrate_Select {
+#define  LOWEST 0
+#define  MEDIAN 1
+#define HIGHEST 2
+
+class Bitrate_Selector {
 public:
 	int S_FEC;
 	int K_FEC;
@@ -8,7 +12,8 @@ public:
 	Bitrate_Select() {}
 	~Bitrate_Select() {}
 
-	void bitrate_select_thread_fun(Video_Reader &video_reader); 
+	void setBitrate(Tile_Num tile_num, Channel_Inf chan_inf, 
+					Video_Reader &video_reader); 
 
 private:
 

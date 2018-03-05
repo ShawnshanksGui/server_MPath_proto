@@ -6,7 +6,7 @@ public:
 	FEC_Param_Adjuster();
 	~FEC_Param_Adjuster();
 
-	setFEC_param(double plr, Bitrate_Selector &bitrate_selector,
+	setFEC_param(Channel_Inf chan_inf, Bitrate_Selector &bitrate_selector,
 				 Video_Reader &video_reader);
 private:
 

@@ -9,9 +9,11 @@
 #include  "../include/utility.h"
 //#include   "pthread.h"
 
+Channel_Inf chan_inf{0.1, 50, 100};
+Tile_Num tile_num{TILE_NUM, FOV_TILE_NUM, 
+	              CUSHION_TILE_NUM, OUTMOST_TILE_NUM};
 
 int main() {
-	double plr = 0.1;
 
 	int startFlag_one_timeSlice = 0;
 
@@ -30,25 +32,19 @@ int main() {
 
 	while(1) {
 		if(startFlag_one_timeSlice) {
-/*
-		std::thread setFECParam_worker(&FEC_Param_Adjuster::setFECParam_td_func,
-	    	                           &fec_param_adj);
-		std::thread setBitrate_worker(&Bitrate_Selector::setBitrate_td_func,
-								      &bitrate_selector);
-		std::thread pathSelect_worker(&Path_Selector::setPath_td_func,
-									  &path_selector);
-*/		
-			fec_param_adj.setFEC_param(plr, bitrate_selctor, video_reader);
-			path_selector.setPath(video_reader);
-			bitrate_selctor.setBitrate(video_reader);
+
+			fec_param_adj.setFEC_param(chan_inf, bitrate_selector, video_reader);
+			bitrate_selector.setBitrate(tile_num, chan_inf, video_reader);
+			path_selector.select_Path(chan_inf, video_reader);
+
 //create the threads required.
-			std::thread readVideo_worker(&Video_Reader::video_reader_thread,
+			std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
 										 &video_reader);
 			for(int i = 0; i < NUM_PATH; i++) {
-				std::thread encoder_worker(&Encoder::encoder_thread;
+				std::thread encoder_worker(&Encoder::encoder_td_func;
 										   &encoder[i]);
-				std::thread sender_worker(&Transmitter::send_thread, 
-					                      server[i]);
+				std::thread sender_worker(&Transmitter::send_td_func, 
+					                      &server[i]);
 			}
 //recycle the threads created.	
 			readVideo_worker.join();	
@@ -62,6 +58,14 @@ int main() {
 	return 0;
 }
 
+/*
+		std::thread setFECParam_worker(&FEC_Param_Adjuster::setFECParam_td_func,
+	    	                           &fec_param_adj);
+		std::thread setBitrate_worker(&Bitrate_Selector::setBitrate_td_func,
+								      &bitrate_selector);
+		std::thread pathSelect_worker(&Path_Selector::setPath_td_func,
+									  &path_selector);
+*/		
 
 /*
 int main(int argc, char *argv[]) {	

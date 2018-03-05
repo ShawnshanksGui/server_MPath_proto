@@ -52,7 +52,7 @@ public:
 //friend classes
 	friend class Video_Reader;
 	friend class Encoder;
-	friend class Udp_sock;
+	friend class Transmitter;
 
 private:
 	std:mutex mtx[2];

@@ -101,7 +101,7 @@ int Transmitter::Recv_udp(char *buf_dst, int len) {
 //			   argv[]
 //             param_encd
 //==========================================================================
-void Transmitter::send_thread(struct Param_Transmitter param_transmit,
+void Transmitter::send_td_func(struct Param_Transmitter param_transmit,
 	                              Data_Manager data_manager) {
 	Transmitter _client;
 	char packet[param_encd.S + LEN_CONTRL_MSG];

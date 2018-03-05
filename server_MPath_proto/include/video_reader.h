@@ -21,6 +21,7 @@ private:
 	int path_decs[frame_num][region_num];
 
 //  THe bitrate decision about each region of a video segment
+//the first is the bitrate of FOV, 
 	int bitrate_decs[region_num];
 };
 

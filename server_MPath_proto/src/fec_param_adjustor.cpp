@@ -11,12 +11,12 @@
 //             S_FEC is equal to the encoding symbol size 
 //             K_FEC denotes the orignal block size(K)
 //==========================================================================
-setFEC_param(double plr[], Bitrate_Selector &bitrate_selector,
+void setFEC_param(Channel_Inf chan_inf, Bitrate_Selector &bitrate_selector,
 			 Video_Reader &video_reader) {
 	for(int i = 0; i < NUM_PATH; i++) {
 		bitrate_selecotor.S_FEC = 1000;
 		bitrate_selector.K_FEC  = 224;
-		video_reader.S_FEC = 1000;
+		video_reader.S_FEC = 1000; 
 		video_reader.K_FEC = 224;
 }
 //==========================================================================

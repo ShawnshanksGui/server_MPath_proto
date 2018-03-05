@@ -43,7 +43,7 @@ public:
 	int Send_udp(char *data, int len);
 	int Recv_udp(char *buf_dst, int len);
 
-	void send_thread(struct Param_Transmitter param_transmit,
+	void send_td_func(struct Param_Transmitter param_transmit,
 		             Data_Manager &data_manager);
 };
 

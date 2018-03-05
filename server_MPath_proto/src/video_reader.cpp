@@ -13,7 +13,7 @@ Video_Reader::Video_Reader() {
 //Description: the thread function which simulates data generating procedure  
 //Parameter:   SYMB_SIZE is equal to encoding symbol size 
 //==========================================================================
-void Video_Reader::video_reader_td_func(Data_Manager data_manager) {
+void Video_Reader::video_reader_td_func(Data_Manager &data_manager) {
 	int id_path  = 0;
 	int _count   = 0;
 	int len_read = 0;
@@ -36,7 +36,7 @@ void Video_Reader::video_reader_td_func(Data_Manager data_manager) {
 		if(END_FILE == len_read) break;
 		
 		//until pushed and saved successfully
-		while(SUCS_PUSH != data.manager.data_save(elem_mem_alloc, id_path));
+		while(SUCS_PUSH != data_manager.data_save(elem_mem_alloc, id_path));
 
 		//record the eclpsing time for TEST_SECONDS
         auto endTime  = std::chrono::high_resolution_clock::now();
