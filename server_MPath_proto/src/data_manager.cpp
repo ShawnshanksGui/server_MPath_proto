@@ -24,7 +24,7 @@ using namespace std;
 //==========================================================================
 //Author:      shawnshanks_fei          Date:     20180204
 //Description: the thread function which simulates data fetch procedure  
-//Parameter:   SYMB_SIZE is equal to encoding symbol size
+//Parameter:   SYMB_SIZE is equal to the encoding symbol size
 //==========================================================================
 void Data_Manager::data_handler_thread() {
 	int id_path = 0;
@@ -60,7 +60,6 @@ void Data_Manager::data_handler_thread() {
 	}
 }
 //==========================================================================
-
 
 
 
@@ -167,7 +166,7 @@ int main() {
 		                        param_transmit);
 	worker_data_gen.join();
 	data_handler_thread.join();
-	transmit_worker.jion();
+	transmit_worker.join();
 
 	return 0;
 }

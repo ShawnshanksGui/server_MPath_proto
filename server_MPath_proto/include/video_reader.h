@@ -2,16 +2,19 @@
 
 class Video_Reader {
 public:
+	int S_FEC;
+	int K_FEC;	
+
 	Video_Reader();
 	~Video_Reader() {}
 
-	void video_reader_thread_func(Data_Manager &data_manager);
-	friend class Bitrate_Select;
+	void video_reader_td_func(Data_Manager &data_manager);
+	friend class Bitrate_Selector;
 	friend class Path_Decs;
+
 private:
 	int  frame_num; 
 	int region_num;
- 
 
 //  The path decision about each region(FOV, adjacent, outsise) 
 //	for every frame in a video segment.  

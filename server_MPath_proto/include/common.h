@@ -14,6 +14,7 @@
 #include        <list>
 #include    <iostream>
 
+
 //control procedure sending or stopping
 #define STOP                   0
 #define READY                  1
@@ -30,11 +31,15 @@
 
 #define TOTAL_WORK_THREADS    10
 
+
+
+/*
 #define CODELINE             100
 #define SYMB_SIZE            100
 //original data block size
 #define ORIGIN_BLOCK_SIZE    240  
 #define ENCD_BLOCK_SIZE      256    
+*/
 
 
 #define MALLOC(type, size) ((type *)malloc(sizeof(type) * (size)))

@@ -43,7 +43,7 @@ void Transmitter::Bind(int sock_id, SA *addr_self, int len) const
 //}
 //
 
-void Transmitter::udp_sock_client_new(char *addr_self, char *port_self, 
+void Transmitter::transmitter_new(char *addr_self, char *port_self, 
 	                               char *addr_dst, char *port_dst) {
 	memset(&(server_addr), 0, sizeof(server_addr));
 	memset(&(client_addr), 0, sizeof(client_addr));
@@ -101,7 +101,7 @@ int Transmitter::Recv_udp(char *buf_dst, int len) {
 //			   argv[]
 //             param_encd
 //==========================================================================
-void Transmitter::transmit_thread(struct Param_Transmitter param_transmit,
+void Transmitter::send_thread(struct Param_Transmitter param_transmit,
 	                              Data_Manager data_manager) {
 	Transmitter _client;
 	char packet[param_encd.S + LEN_CONTRL_MSG];

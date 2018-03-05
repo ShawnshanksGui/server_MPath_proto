@@ -1,4 +1,5 @@
 #include "../include/video_reader.h"
+#include "system.params"
 #include <chrono>
 
 Video_Reader::Video_Reader() {
@@ -12,7 +13,7 @@ Video_Reader::Video_Reader() {
 //Description: the thread function which simulates data generating procedure  
 //Parameter:   SYMB_SIZE is equal to encoding symbol size 
 //==========================================================================
-void Video_Reader::video_reader_thread_func(Data_Manager data_manager) {
+void Video_Reader::video_reader_td_func(Data_Manager data_manager) {
 	int id_path  = 0;
 	int _count   = 0;
 	int len_read = 0;

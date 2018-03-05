@@ -2,6 +2,9 @@
 
 class Bitrate_Select {
 public:
+	int S_FEC;
+	int K_FEC;
+	
 	Bitrate_Select() {}
 	~Bitrate_Select() {}
 

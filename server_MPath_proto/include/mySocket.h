@@ -37,14 +37,14 @@ public:
 
 	~Transmitter();
 
-	void udp_sock_client_new(char *addr_self, char *port_self, 
-		                     char *addr_dst,  char *port_dst); 
+	void transmitter_new(char *addr_self, char *port_self, 
+		                 char *addr_dst,  char *port_dst); 
 	
 	int Send_udp(char *data, int len);
 	int Recv_udp(char *buf_dst, int len);
 
-	void transmit_thread(struct Param_Transmitter param_transmit,
-		                 Data_Manager &data_manager);
+	void send_thread(struct Param_Transmitter param_transmit,
+		             Data_Manager &data_manager);
 };
 
 #endif

@@ -5,6 +5,7 @@
 
 #include <thread>
 #include <mutex>
+#include "system_params.h"
 
 typedef int     ID_BUF;
 typedef int    ID_PATH;
@@ -22,8 +23,6 @@ typedef char data_type;
 //the bytes of control message bytes  in one packet 
 #define LEN_CONTRL_MSG 10
 
-//Specify total number of paths(or sending buffers)
-#define NUM_PATH 2 
 
 using namespace std;
 
