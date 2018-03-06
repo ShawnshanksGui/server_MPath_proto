@@ -19,7 +19,8 @@
 //Parameters:  id_core is the ID of core(for example: 0,1,2...)  
 //==========================================================================
 void affinity_set(int id_core) {
-	int       amount_core;
+    
+    int       amount_core;
     cpu_set_t        mask;
     cpu_set_t         get;
 
