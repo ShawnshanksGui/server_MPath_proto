@@ -39,8 +39,8 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager) {
 		while(SUCS_PUSH != data_manager.data_save(elem_mem_alloc, id_path));
 
 		//record the eclpsing time for TEST_SECONDS
-        auto endTime  = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds> 
+		auto endTime  = std::chrono::high_resolution_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::microseconds> 
                         (endTime - startTime ).count();
 
 		if(duration > TEST_SECONDS*1000000) break;
