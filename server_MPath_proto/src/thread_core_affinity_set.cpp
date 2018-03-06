@@ -20,7 +20,7 @@
 //==========================================================================
 void affinity_set(int id_core) {
 	int       amount_core;
-	cpu_set_t        mask;
+    cpu_set_t        mask;
     cpu_set_t         get;
 
     amount_core = sysconf(_SC_NPROCESSORS_CONF);
