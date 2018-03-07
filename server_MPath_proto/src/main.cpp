@@ -38,7 +38,7 @@ int main() {
 	while(1) {
 		if(startFlag_one_timeSlice) {
 
-			fec_param_adj.setFEC_param(chan_inf, bitrate_selector, video_reader);
+			fec_param_adj.setFEC_params(chan_inf, bitrate_selector, video_reader);
 			bitrate_selector.setBitrate(tile_num, chan_inf, video_reader);
 			path_selector.select_Path(chan_inf, video_reader);
 

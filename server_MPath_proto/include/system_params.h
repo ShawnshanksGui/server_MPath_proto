@@ -27,3 +27,8 @@
 
 //specify the vailable number of video tile's quality    
 #define BITRATE_TYPE_NUM 3
+
+
+
+//for setFEC_params
+#define STEP_VALUE 0.005

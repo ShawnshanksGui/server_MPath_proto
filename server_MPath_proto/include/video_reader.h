@@ -1,8 +1,11 @@
 #include "../include/data_manager.h"
 
+
+
+
 class Video_Reader {
 public:
-	int S_FEC[REGION_NUM][FRAME_GOP*];
+	int S_FEC[REGION_NUM][FRAME_GOP];
 	int K_FEC[REGION_NUM][FRAME_GOP];	
 
 	Video_Reader();
