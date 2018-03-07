@@ -1,8 +1,6 @@
 #include "../include/data_manager.h"
 
 
-
-
 class Video_Reader {
 public:
 	int S_FEC[REGION_NUM][FRAME_GOP];
@@ -11,7 +9,7 @@ public:
 	Video_Reader();
 	~Video_Reader() {}
 
-	void video_reader_td_func(Data_Manager &data_manager);
+	void video_reader_td_func(Data_Manager &data_manager, int id_VSegment);
 
 	friend class Bitrate_Selector;
 	friend class Path_Decs;

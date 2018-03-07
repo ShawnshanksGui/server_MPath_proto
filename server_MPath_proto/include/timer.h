@@ -7,7 +7,7 @@ public:
 	Timer();
 	~Timer();
 
-	setTimer(&startFlag_one_timeSlice);
+	setTimer(int &startFlag_one_timeSlice);
 
 private:
 

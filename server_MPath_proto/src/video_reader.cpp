@@ -1,6 +1,8 @@
 #include "../include/video_reader.h"
+#include "../include/common.h"
 #include "system.params.h"
 #include <chrono>
+#include "string"
 
 Video_Reader::Video_Reader() {
 	gop_num      = GOP_NUM;
@@ -14,7 +16,9 @@ Video_Reader::Video_Reader() {
 //Description: the thread function which simulates data generating procedure  
 //Parameter:   SYMB_SIZE is equal to encoding symbol size 
 //==========================================================================
-void Video_Reader::video_reader_td_func(Data_Manager &data_manager) {
+void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
+										int id_VSegment) {
+
 /*
 	int id_path  = 0;
 	int _count   = 0;
@@ -43,11 +47,19 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager) {
 		//record the eclpsing time for TEST_SECONDS
 		auto endTime  = std::chrono::high_resolution_clock::now();
 		auto duration = std::chrono::duration_cast<std::chrono::microseconds> 
-                        (endTime - startTime ).count();
+                        (endTime - startTime).count();
 
 		if(duration > TEST_SECONDS*1000000) break;
 	}	
-*/
-
+	*/
+	FILE *fd;
+	for(int i = 0; i < REGION_NUM; i++) {
+		std::string videoPath;
+		videoPath = "video_" + std::to_string(bitrate_decs[]) +
+		             "_" + std::to_string(id_VSegment);
+//==========================================================================
+		read		          
+//==========================================================================	
+	}
 }
 //==========================================================================

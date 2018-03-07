@@ -1,11 +1,10 @@
 #include "unistd.h"
 #include "../include/timer.h"
+#include "../include/system_params.h"
+
 
 #define START 1
 #define STOP  0
-
-#define NUM_TIMESLICE 1
-#define LEN_TIMESLICE 1
 
 
 Timer::Timer() {
@@ -23,7 +22,7 @@ Timer::Timer() {
 //             startFlag_one_timeSlice directly control the switch of all 
 //             the processes; 
 //==========================================================================
-void Timer::setTimer_td_func(&startFlag_one_timeSlice) {
+void Timer::setTimer_td_func(int &startFlag_one_timeSlice) {
 	while(num_timeSlice--) {
 		startFlag_one_timeSlice = START;
 		usleep(len_timeSlice*1000000);

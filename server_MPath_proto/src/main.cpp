@@ -20,6 +20,7 @@ int _bitrate[BITRATE_TYPE_NUM] = {50, 25, 10};
 
 
 int main() {
+	int id_VSegment = 0;
 	int startFlag_one_timeSlice = 0;
 
 	Timer t;
@@ -37,21 +38,22 @@ int main() {
 
 	while(1) {
 		if(startFlag_one_timeSlice) {
-
+			id_VSegment++;
 			fec_param_adj.setFEC_params(chan_inf, bitrate_selector, video_reader);
 			bitrate_selector.setBitrate(tile_num, chan_inf, video_reader);
 			path_selector.select_Path(chan_inf, video_reader);
 
 //create the threads required.
 			std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
-										 &video_reader);
+										 &video_reader, data_manager, 
+										 id_VSegment);
 			for(int i = 0; i < NUM_PATH; i++) {
 				std::thread encoder_worker(&Encoder::encoder_td_func;
 										   &encoder[i]);
 				std::thread sender_worker(&Transmitter::send_td_func, 
 					                      &server[i]);
 			}
-//recycle the threads created.	
+//reap or recycle the threads created.	
 			readVideo_worker.join();	
 			for(int i = 0; i < NUM_PATH; i++) {
 				encoder_worker.join();
@@ -59,6 +61,8 @@ int main() {
 			}	
 		}	
 	}
+
+	setTimer_worker.join();
 
 	return 0;
 }

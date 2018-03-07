@@ -32,3 +32,8 @@
 
 //for setFEC_params
 #define STEP_VALUE 0.005
+
+
+//running time for program 
+#define NUM_TIMESLICE 1
+#define LEN_TIMESLICE 1
