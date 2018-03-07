@@ -32,7 +32,6 @@ struct Param_Reader {
 };
 
 
-
 class Data_Manager {
 public:	
 	queue<char *> data_video[NUM_PATH];

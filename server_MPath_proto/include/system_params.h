@@ -12,6 +12,10 @@
 //specify the bitrate of video segment
 //#define 
 
+//define the number of GOP in a video segment 
+#define GOP_NUM 2
+
+
 //define the number of frames in one GOP
 #define FRAME_GOP 15
 

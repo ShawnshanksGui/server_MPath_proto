@@ -24,12 +24,12 @@ void Path_Selector::select_Path(Channel_Inf chan_inf[],
 */
 	for(int i = 0; i < REGION_NUM; i++) {
 		if(i < 2) {
-			for(int k = 0; k < video_reader.frame_num; k++) {
+			for(int k = 0; k < video_reader.gopFrame_num; k++) {
 				path_decs[k][i] = CELLULAR_NETWORK; 
 		    }
 		}
 		else {
-			for(int k = 0; k < FRAME_GOP; k++) {
+			for(int k = 0; k < video_reader.gopFrame_num; k++) {
 				path_decs[k][i] = WIFI; 				
 		}
 	}
