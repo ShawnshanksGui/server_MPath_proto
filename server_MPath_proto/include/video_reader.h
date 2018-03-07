@@ -9,6 +9,7 @@ public:
 	~Video_Reader() {}
 
 	void video_reader_td_func(Data_Manager &data_manager);
+	
 	friend class Bitrate_Selector;
 	friend class Path_Decs;
 
@@ -24,4 +25,3 @@ private:
 //the first is the bitrate of FOV, 
 	int bitrate_decs[region_num];
 };
-

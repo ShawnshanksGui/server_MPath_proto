@@ -9,7 +9,7 @@
 
 typedef int     ID_BUF;
 typedef int    ID_PATH;
-typedef char data_type;
+typedef char VData_Type;
 
 //Judge whether PUSH is succesfully or not! 
 #define FAIL_PUSH 0

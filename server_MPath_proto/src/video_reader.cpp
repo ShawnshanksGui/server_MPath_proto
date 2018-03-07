@@ -1,10 +1,10 @@
 #include "../include/video_reader.h"
-#include "system.params"
+#include "system.params.h"
 #include <chrono>
 
 Video_Reader::Video_Reader() {
-	frame_num = 30;
-	region_num = 3;
+	frame_num = FRAME_GOP;
+	region_num = REGION_NUM;
 }
 
 //==========================================================================
@@ -31,7 +31,7 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager) {
 //
 	while(1) {
 		//real memory allocation function for data generated 
-		data_type *elem_mem_alloc = MALLOC(char, SYMB_SIZE*block_size);
+		VData_Type *elem_mem_alloc = MALLOC(char, SYMB_SIZE*block_size);
 		len_read = Fread(elem_mem_alloc, SYMB_SIZE*block_size, fp);
 		if(END_FILE == len_read) break;
 		

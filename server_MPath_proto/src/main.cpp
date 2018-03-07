@@ -3,23 +3,28 @@
 #include <thread>
 #include <mutex>
 
-#include   "../include/server.h"
-#include   "../include/common.h"
-#include "../include/mySocket.h"
-#include  "../include/utility.h"
-//#include   "pthread.h"
+#include        "../include/server.h"
+#include        "../include/common.h"
+#include       "../include/utility.h"
+#include      "../include/mySocket.h"
+#include "../include/system_params.h"
 
-Channel_Inf chan_inf{0.1, 50, 100};
-Tile_Num tile_num{TILE_NUM, FOV_TILE_NUM, 
-	              CUSHION_TILE_NUM, OUTMOST_TILE_NUM};
+//two channels' realtime infomation
+Channel_Inf chan_inf[NUM_PATH] = {{0.1, 50, 100}, {0.2, 90, 50}};
+//Tile_Num tile_num{TILE_NUM, FOV_TILE_NUM, 
+//	              CUSHION_TILE_NUM, OUTMOST_TILE_NUM};
+int tile_num [REGION_NUM] = {FOV_TILE_NUM, CUSHION_TILE_NUM, 
+							 OUTMOST_TILE_NUM};
+//the unit is Mb/s
+int _bitrate[BITRATE_TYPE_NUM] = {50, 25, 10};
+
 
 int main() {
-
 	int startFlag_one_timeSlice = 0;
 
 	Timer t;
 	FEC_Param_Adjuster fec_param_adj;
-	Bitrate_Selector bitrate_selector;
+	Bitrate_Selector bitrate_selector = Bitrate_Selector(_bitrate);
 	Path_Selector path_selector;
 	Video_Reader video_reader;
 	Encoder encoder[NUM_PATH];

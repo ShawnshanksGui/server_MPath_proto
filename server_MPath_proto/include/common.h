@@ -16,7 +16,7 @@
 
 
 //control procedure sending or stopping
-#define STOP                   0
+#define  STOP                  0
 #define READY                  1
 
 //the amount of command parameters required 
@@ -27,9 +27,9 @@
 
 #define MAX_BUF               10 
 
-#define TEST_SECONDS         0.1
+//#define TEST_SECONDS         0.1
 
-#define TOTAL_WORK_THREADS    10
+//#define TOTAL_WORK_THREADS    10
 
 
 #define MALLOC(type, size) ((type *)malloc(sizeof(type) * (size)))
