@@ -6,7 +6,29 @@
 
 #include "cstdio"
 
+//for test and debug
+#define ENABLE_DEBUG
+
 using namespace std;
+
+//for test and debug
+#ifdef ENABLE_DEBUG
+
+#define REGION_NUM 3
+#define FRAME_GOP 15
+#define GOP_NUM 2
+
+struct Nalu_Elem{
+//the start address for each NALU. 
+    int _addr;
+//the size for each NALU.
+    int _size;
+    bool I_FRAME;
+};
+
+struct Nalu_Elem nalu[REGION_NUM][(FRAME_GOP+10)*GOP_NUM];
+#endif
+
 
 #define    HEVC_NAL_TRAIL_N     0
 #define    HEVC_NAL_TRAIL_R     1
@@ -38,23 +60,31 @@ using namespace std;
 #define    HEVC_NAL_SEI_SUFFIX  40
 
 
-int hevc_probe(string p)
-{
+std::string slurp(std::ifstream &File) {
+    std::stringstream sstr;
+    sstr << File.rdbuf();
+
+    return sstr.str();
+}
+
+void hevc_parser(string p, int id_region) {
     int i = 0;
     int num = 0;
-//the number of non-I frame(B,P)
-    int cnt_BorP = 0; 
     uint32_t code = -1;    
 
 //the start address for each NALU 
-    int addr_nalu[40] = {0};
+//    int addr_nalu[40] = {0};
 //the size for each NALU
-    int size_nalu[40] = {0};
+//    int size_nalu[40] = {0};
 
     int vps  = 0;
     int sps  = 0;
     int pps  = 0;
-    int irap = 0;
+
+//the number of I frame(B,P).
+    int cnt_irap = 0;
+//the number of non-I frame(B,P).
+    int cnt_BorP = 0; 
 
     for (i = 0; i < p.length(); i++) {
         code = (code << 8) + p[i];
@@ -72,23 +102,23 @@ int hevc_probe(string p)
             case HEVC_NAL_VPS:       
             {
                 vps++;
-                addr_nalu[num] = i;
+                nalu[id_region][num]._addr = i;;
                 break;
             }
             case HEVC_NAL_SPS:        
             {
                 sps++;
-                size_nalu[num] = i - addr_nalu[num];
+                nalu[id_region][num]._size = i - nalu[id_region][num]._addr;
                 num++; 
-                addr_nalu[num] = i;  
+                nalu[id_region][num]._addr = i;;  
                 break;
             }
             case HEVC_NAL_PPS:        
             {
                 pps++;
-                size_nalu[num] = i - addr_nalu[num];  
+                nalu[id_region][num]._size = i - nalu[id_region][num]._addr;  
                 num++;
-                addr_nalu[num] = i;                
+                nalu[id_region][num]._addr = i;;                
                 break;
             } 
             case HEVC_NAL_TRAIL_N:
@@ -103,15 +133,12 @@ int hevc_probe(string p)
             case HEVC_NAL_RASL_R:
             {
                 cnt_BorP++;
-                size_nalu[num] = i - addr_nalu[num];
+                nalu[id_region][num]._size = i - nalu[id_region][num]._addr;
                 num++;
-                addr_nalu[num] = i;
-//                std::cout << "the addro of the" << cnt_BorP+1<<
-//                           "'th P/B frame is " << i;
-//                std::cout << std::endl;             
+                nalu[id_region][num]._addr = i;;             
                 break;
             }
-
+//
             case HEVC_NAL_BLA_N_LP:
             case HEVC_NAL_BLA_W_LP:
             case HEVC_NAL_BLA_W_RADL:
@@ -119,11 +146,11 @@ int hevc_probe(string p)
             case HEVC_NAL_IDR_N_LP:
             case HEVC_NAL_IDR_W_RADL: 
             {
-                irap++;
-                size_nalu[num] = i - addr_nalu[num];
+                cnt_irap++;
+                nalu[id_region][num]._size = i - nalu[id_region][num]._addr;
                 num++;
-                addr_nalu[num] = i;
-//                std::cout << "addr of the " << irap <<
+                nalu[id_region][num]._addr = i;;
+//                std::cout << "addr of the " << cnt_irap <<
 //                           "'th I frame is " << i;
 //                std::cout << std::endl; 
                 break;
@@ -132,54 +159,53 @@ int hevc_probe(string p)
         }
     }
 //count the last NALU's size
-    size_nalu[num] = i- 1 - addr_nalu[num];
+    nalu[id_region][num]._size = i - 1 - nalu[id_region][num]._addr;
 //
+
+#ifdef ENABLE_DEBUG
+{
     printf("the number of vps, sps, pps, I_frame is %d,%d,%d,%d,%d\n\n",
-           vps, sps, pps, irap, cnt_BorP);
+           vps, sps, pps, cnt_irap, cnt_BorP);
     
     printf("the address of all nalus is following:\n");
     for(int i = 0; i < 40; i++) {
-        printf("%d  ", addr_nalu[i]);
+        printf("%d  ", nalu[id_region][i]._addr);
     }
     printf("\n\n");
 
     printf("the nalu size is following:\n");
     for(int i = 0; i < 40; i++) {
-        printf("%d  ", size_nalu[i]);
+        printf("%d  ", nalu[id_region][i]._size);
     }
     printf("\n");
-
-    if (vps && sps && pps && irap)
-//        return AVPROBE_SCORE_EXTENSION + 1; // 1 more than .mpg
-        return 1;
-
-    return 0;
+}
+#endif
+//    if (vps && sps && pps && cnt_irap)
+//        return 1;
+//    return 0;
 }
 
-std::string slurp(std::ifstream &File) {
-    std::stringstream sstr;
-    sstr << File.rdbuf();
-
-    return sstr.str();
-}
-
-
+#ifdef ENABLE_DEBUG
 int main() {
     int flag_video = 0;
 
     std::ifstream File;
     std::string inString;
 
+//    File.open("diving_with_sharks_8K_360.mp4.265", std::ios::in);
     File.open("input_non_b.265", std::ios::in);
     inString = slurp(File);
 
-    flag_video = hevc_probe(inString);
+    flag_video = hevc_parser(inString, 1);
 
 //    printf("\nflag_video is %d\n", flag_video);
 //  std::cout << inString;
 
     return 0;    
 }
+#endif
+
+
 
 
 
@@ -213,7 +239,7 @@ int main() {
 static int hevc_probe(AVProbeData *p)
 {
     uint32_t code = -1;
-    int vps = 0, sps = 0, pps = 0, irap = 0;
+    int vps = 0, sps = 0, pps = 0, cnt_irap = 0;
     int i;
 
     for (i = 0; i < p->buf_size - 1; i++) {
@@ -237,12 +263,12 @@ static int hevc_probe(AVProbeData *p)
             case HEVC_NAL_BLA_W_RADL:
             case HEVC_NAL_CRA_NUT:
             case HEVC_NAL_IDR_N_LP:
-            case HEVC_NAL_IDR_W_RADL: irap++; break;
+            case HEVC_NAL_IDR_W_RADL: cnt_irap++; break;
             }
         }
     }
 
-    if (vps && sps && pps && irap)
+    if (vps && sps && pps && cnt_irap)
         return AVPROBE_SCORE_EXTENSION + 1; // 1 more than .mpg
     return 0;
 }

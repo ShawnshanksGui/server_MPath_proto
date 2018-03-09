@@ -11,11 +11,6 @@
 
 
 
-
-
-
-
-
 /*
 int main(int argc, char *argv[]) {	
 	int num_sent = 0;

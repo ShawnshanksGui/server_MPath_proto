@@ -1,10 +1,21 @@
+#include "system_params.h"
 #include "../include/data_manager.h"
+
+struct Nalu_Elem{
+//the start address for each NALU. 
+	int _addr;
+//the size for each NALU.
+	int _size;
+	bool I_FRAME;
+};
 
 
 class Video_Reader {
 public:
 	int S_FEC[REGION_NUM][FRAME_GOP];
 	int K_FEC[REGION_NUM][FRAME_GOP];	
+
+	struct Nalu_Elem nalu[REGION_NUM][(FRAME_GOP+10)*GOP_NUM];
 
 	Video_Reader();
 	~Video_Reader() {}
@@ -19,7 +30,6 @@ private:
 	int gop_num;
 	int gopFrame_num; 
 	
-
 //  The path decision about each region(FOV, adjacent, outsise) 
 //	for every frame in a video segment.  
 	int path_decs[frame_num][region_num];
