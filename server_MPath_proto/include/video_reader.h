@@ -1,12 +1,19 @@
 #include "system_params.h"
 #include "../include/data_manager.h"
 
+
+//the intra pridicted frame
+#define I_FRAME 0
+//the forward predicted frame
+#define P_FRAME 1
+
+
 struct Nalu_Elem{
+	bool frameType;
 //the start address for each NALU. 
 	int _addr;
 //the size for each NALU.
 	int _size;
-	bool I_FRAME;
 };
 
 
@@ -20,7 +27,7 @@ public:
 	Video_Reader();
 	~Video_Reader() {}
 
-	void video_reader_td_func(Data_Manager &data_manager, int id_VSegment);
+
 
 	friend class Bitrate_Selector;
 	friend class Path_Decs;
@@ -37,4 +44,7 @@ private:
 //  THe bitrate decision about each region of a video segment
 //the first is the bitrate of FOV, 
 	int bitrate_decs[region_num];
+
+	void video_reader_td_func(Data_Manager &data_manager, int id_VSegment);
+	void partition_nalu();
 };

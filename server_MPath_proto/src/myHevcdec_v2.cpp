@@ -110,11 +110,13 @@ int hevc_parser(string &p, int id_region) {
             case HEVC_NAL_VPS:       
             {
                 vps++;
+                nalu[id_region][num].frameType = I_FRAME;
                 nalu[id_region][num]._addr = i-4;
                 if(num > 0) {
-                    num--;
-                    nalu[id_region][num]._size=i-nalu[id_region][num]._addr;
+                    //derive the size of the last one nalu;
+                    nalu[id_region][num-1]._size=i-4-nalu[id_region][num-1]._addr;
                 }
+                num++;
                 break;
             }
             case HEVC_NAL_SPS:      
@@ -149,10 +151,10 @@ int hevc_parser(string &p, int id_region) {
             case HEVC_NAL_RASL_R:
             {
                 cnt_BorP++;
+                nalu[id_region][num-1]._size = i-3-nalu[id_region][num-1]._addr;
                 nalu[id_region][num].frameType  = P_FRAME;
-                nalu[id_region][num]._size = i - nalu[id_region][num]._addr-3;
-                num++;
-                nalu[id_region][num]._addr = i-3;             
+                nalu[id_region][num]._addr = i-3;
+                num++;             
                 break;
             }
 //
@@ -163,11 +165,13 @@ int hevc_parser(string &p, int id_region) {
             case HEVC_NAL_IDR_N_LP:
             case HEVC_NAL_IDR_W_RADL: 
             {
+            /*
                 cnt_irap++;
                 nalu[id_region][num].frameType  = I_FRAME;
                 nalu[id_region][num]._size = i - nalu[id_region][num]._addr;
                 num++;
                 nalu[id_region][num]._addr = i-3;
+            */
 //                std::cout << "addr of the " << cnt_irap <<
 //                           "'th I frame is " << i;
 //                std::cout << std::endl; 
@@ -176,8 +180,8 @@ int hevc_parser(string &p, int id_region) {
             }
         }
     }
-//count the last NALU's size
-    nalu[id_region][num]._size = i - 1 - nalu[id_region][num]._addr;
+//count the isze of the video segment's last NALU 
+    nalu[id_region][num-1]._size = i - 1 - nalu[id_region][num-1]._addr;
 //
 
 #ifdef ENABLE_DEBUG
@@ -186,13 +190,13 @@ int hevc_parser(string &p, int id_region) {
            vps, sps, pps, cnt_irap, cnt_BorP);
     
     printf("the address of all nalus is following:\n");
-    for(int i = 0; i < 40; i++) {
+    for(int i = 0; i < (FRAME_GOP+10)*GOP_NUM; i++) {
         printf("%d  ", nalu[id_region][i]._addr);
     }
     printf("\n\n");
 
     printf("the nalu size is following:\n");
-    for(int i = 0; i < 40; i++) {
+    for(int i = 0; i < (FRAME_GOP+10)*GOP_NUM; i++) {
         printf("%d  ", nalu[id_region][i]._size);
     }
     printf("\n");

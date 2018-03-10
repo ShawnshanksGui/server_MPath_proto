@@ -20,6 +20,7 @@ Video_Reader::Video_Reader() {
 	}
 }
 
+
 //==========================================================================
 //==========================================================================
 //Author:      shawnshanks_fei         Date:        20180204
@@ -28,7 +29,6 @@ Video_Reader::Video_Reader() {
 //==========================================================================
 void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 										int id_VSegment, int id_region) {
-
 	int flag_video = 0;
 
     std::ifstream File;
@@ -43,11 +43,19 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
    		inString = slurp(File);
 
     	hevc_probe(inString, i);
-    	while(nalu[i][k++].size > 0) {
+    	for(int k = 0; nalu[i][k++].size > 0; k++) {
+    		partition_nalu();
+    	}
     		
     	}          
 //==========================================================================	
-	}
+}
+
+
+void Video_Reader::partition_nalu() {
+	
+}
+
 
 /*
 	int id_path  = 0;
@@ -80,7 +88,7 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
                         (endTime - startTime).count();
 
 		if(duration > TEST_SECONDS*1000000) break;
-	}	
-*/	
+	}
 }
+*/		
 //==========================================================================
