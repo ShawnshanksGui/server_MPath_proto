@@ -17,7 +17,7 @@ using namespace std;
 #ifdef ENABLE_DEBUG
 
 #define REGION_NUM 3
-#define FRAME_GOP 15
+#define FRAME_GOP 50
 #define GOP_NUM 2
 
 //the intra pridicted frame
@@ -210,12 +210,14 @@ int hevc_parser(string &p, int id_region) {
 #ifdef ENABLE_DEBUG
 int main() {
     int flag_video = 0;
-
+//    std::string _input;
     std::ifstream File;
     std::string inString;
 
-//    File.open("diving_with_sharks_8K_360.mp4.265", std::ios::in);
-    File.open("input_non_b.265", std::ios::in);
+    File.open("machu_picchu_8k_a_s111.265", std::ios::in);
+//    File.open("input_non_b.265", std::ios::in);
+//    cin >> _input;
+//    File.open(_input, std::ios::in);
     inString = slurp(File);
 
     flag_video = hevc_parser(inString, 1);
