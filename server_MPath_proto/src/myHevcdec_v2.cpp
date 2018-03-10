@@ -149,7 +149,7 @@ int hevc_parser(string &p, int id_region) {
             case HEVC_NAL_RADL_R:
             case HEVC_NAL_RASL_N:
             case HEVC_NAL_RASL_R:
-            {
+            {   
                 cnt_BorP++;
                 nalu[id_region][num-1]._size = i-3-nalu[id_region][num-1]._addr;
                 nalu[id_region][num].frameType  = P_FRAME;
@@ -214,7 +214,8 @@ int main() {
     std::ifstream File;
     std::string inString;
 
-    File.open("machu_picchu_8k_a_s111.265", std::ios::in);
+//    File.open("machu_picchu_8k_a_s111.265", std::ios::in);
+    File.open("machu_piccu_8k.265", std::ios::in);
 //    File.open("input_non_b.265", std::ios::in);
 //    cin >> _input;
 //    File.open(_input, std::ios::in);
