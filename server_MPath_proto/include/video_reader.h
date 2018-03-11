@@ -28,7 +28,6 @@ public:
 	~Video_Reader() {}
 
 
-
 	friend class Bitrate_Selector;
 	friend class Path_Decs;
 

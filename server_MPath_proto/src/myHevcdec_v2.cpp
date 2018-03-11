@@ -186,7 +186,7 @@ int hevc_parser(string &p, int id_region) {
 
 #ifdef ENABLE_DEBUG
 {
-    printf("the number of vps, sps, pps, I_frame is %d,%d,%d,%d,%d\n\n",
+    printf("the number of vps,sps,pps,I_frame,P_frame is %d,%d,%d,%d,%d,respectively\n\n",
            vps, sps, pps, cnt_irap, cnt_BorP);
     
     printf("the address of all nalus is following:\n");

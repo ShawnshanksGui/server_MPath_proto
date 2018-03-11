@@ -27,7 +27,7 @@ int main() {
 	FEC_Param_Adjuster fec_param_adj;
 	Bitrate_Selector bitrate_selector = Bitrate_Selector(_bitrate);
 	Path_Selector path_selector;
-	Video_Reader video_reader;
+//	Video_Reader video_reader;
 	Encoder encoder[NUM_PATH];
 
 	Transmitter server[NUM_PATH];
@@ -39,10 +39,12 @@ int main() {
 	while(1) {
 		if(startFlag_one_timeSlice) {
 			id_VSegment++;
+
+			Video_Reader video_reader;
+
 			fec_param_adj.setFEC_params(chan_inf, bitrate_selector, video_reader);
 			bitrate_selector.setBitrate(tile_num, chan_inf, video_reader);
 			path_selector.select_Path(chan_inf, video_reader);
-
 //create the threads required.
 			std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
 										 &video_reader, data_manager, 

@@ -2,8 +2,9 @@
 #include "string"
 
 #include "../include/common.h"
-#include "../include/my_Hevcdec.h"
+#include "../include/myHevcdec_v2.h"
 #include "../include/video_reader.h"
+#include "../include/data_manager.h"
 #include "../include/system.params.h"
 
 
@@ -28,7 +29,7 @@ Video_Reader::Video_Reader() {
 //ParameterS:  SYMB_SIZE is equal to encoding symbol size 
 //==========================================================================
 void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
-										int id_VSegment, int id_region) {
+										int id_VSegment) {
 	int flag_video = 0;
 
     std::ifstream File;
@@ -44,15 +45,16 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 
     	hevc_probe(inString, i);
     	for(int k = 0; nalu[i][k++].size > 0; k++) {
-    		partition_nalu();
+    		partition_nalu(inString, data_manager);
     	}
-    		
-    	}          
+
+    }          
 //==========================================================================	
 }
 
 
-void Video_Reader::partition_nalu() {
+void Video_Reader::partition_nalu(std::string &inString, 
+								  Data_Manager &data_manager) {
 	
 }
 

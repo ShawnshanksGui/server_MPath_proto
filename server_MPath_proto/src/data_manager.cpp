@@ -24,12 +24,11 @@ using namespace std;
 //Description: the thread function which simulates data fetch procedure  
 //Parameter:   SYMB_SIZE is equal to the encoding symbol size
 //==========================================================================
+/*
 void Data_Manager::data_handler_thread() {
 	int id_path = 0;
-
 	data_type *data_take  = nullptr;	
 	data_type *encd_block = nullptr;
-
 //decide encoding parameters
 	struct Param_Encd param_encd  = {1000, 240};
 //	decision_para_FEC(param_encd);
@@ -57,6 +56,7 @@ void Data_Manager::data_handler_thread() {
         if(duration > TEST_SECONDS*1000000) break;
 	}
 }
+*/
 //==========================================================================
 
 

@@ -7,8 +7,8 @@
 #include <mutex>
 #include "system_params.h"
 
-typedef int     ID_BUF;
-typedef int    ID_PATH;
+typedef int      ID_BUF;
+typedef int     ID_PATH;
 typedef char VData_Type;
 
 //Judge whether PUSH is succesfully or not! 
@@ -29,6 +29,18 @@ using namespace std;
 struct Param_Reader {
 	char *path_input;
 //	int len_block; 
+};
+
+struct Elem_Data{
+//an order of S*K bytes data
+	VData_Type *data;
+	int id_nalu;
+//specify sequence of nalus in a video segment,
+//the first, mid or the last nalu?
+	int type_location;
+	int S_FEC;
+	int K_FEC;
+//	int id_segment; 
 };
 
 
