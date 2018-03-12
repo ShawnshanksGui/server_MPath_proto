@@ -1,1 +1,1 @@
-g++ -g -o test_videoReader video_reader.cpp data_manager.cpp codeStreaming_parser.cpp bitrate_select.cpp fec_param_adjustor.cpp
+g++ -g -o test_videoReader video_reader.cpp data_manager.cpp codeStreaming_parser.cpp bitrate_select.cpp fec_param_adjustor.cpp 
