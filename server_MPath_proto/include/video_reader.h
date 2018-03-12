@@ -3,10 +3,9 @@
 
 
 //the intra pridicted frame
-#define I_FRAME 0
+#define I_FRAME 1
 //the forward predicted frame
-#define P_FRAME 1
-
+#define P_FRAME 0
 
 struct Nalu_Elem{
 	bool frameType;
@@ -22,11 +21,10 @@ public:
 	int S_FEC[REGION_NUM][FRAME_GOP];
 	int K_FEC[REGION_NUM][FRAME_GOP];	
 
-	struct Nalu_Elem nalu[REGION_NUM][(FRAME_GOP+10)*GOP_NUM];
+	struct Nalu_Elem nalu[REGION_NUM][FRAME_GOP*GOP_NUM];
 
 	Video_Reader();
 	~Video_Reader() {}
-
 
 	friend class Bitrate_Selector;
 	friend class Path_Decs;
@@ -38,12 +36,17 @@ private:
 	
 //  The path decision about each region(FOV, adjacent, outsise) 
 //	for every frame in a video segment.  
-	int path_decs[frame_num][region_num];
+	int path_decs[REGION_NUM][FRAME_GOP*GOP_NUM];
 
 //  THe bitrate decision about each region of a video segment
 //the first is the bitrate of FOV, 
-	int bitrate_decs[region_num];
+	int bitrate_decs[REGION_NUM];
 
 	void video_reader_td_func(Data_Manager &data_manager, int id_VSegment);
-	void partition_nalu();
+	void partition_nalu(int id_region, std::string &inString, 
+						Data_Manager &data_manager);
+	void Video_Reader::assign_attribute(struct Elem_Data *elem_data, int path,
+										int s_fec, int k_fec, int id_nalu,
+										int _addr, VData_Type *p_str,
+										Data_Manager data_manager);
 };

@@ -14,7 +14,7 @@ Lin, Han and Chung, "Novel Polynomial Basis and Its Application to Reed-Solomon 
 
 #define GET  0 //Packet received successfully
 #define LOST 1 //Packet lost in  transmission
-#define MALLOC(type, size) malloc(sizeof(type) * (size))
+#define MALLOC(type, size) ((type *)malloc(sizeof(type) * (size)))
 
 typedef unsigned char GFSymbol;
 #define len 8//2^len: the size of Galois field
@@ -283,9 +283,9 @@ void *decode_FFT_RS(struct Data_Remain data_remain,
 	for(int i = 0; i < param_decd.S; i++) {
 		for(int j = 0; j < Size; j++) {
 			if(GET == erasure_a[j]) {
-				//copy data from data_remain to elem_procs if GET
+			//copy data from data_remain to elem_procs if GET
 				elem_procs[j] = data_remain.data[j][i];
-				//(1)copy the data not lost from data_remain to data_destination
+			//(1)copy the data which is'nt lost,from data_remain to data_destination
 				if(j >= param_decd.K) {
 					data_dst[(j-param_decd.K)*param_decd.S+i] = data_remain.data[j][i];
 				}

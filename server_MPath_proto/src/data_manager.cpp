@@ -21,52 +21,10 @@ using namespace std;
 //==========================================================================
 //==========================================================================
 //Author:      shawnshanks_fei          Date:     20180204
-//Description: the thread function which simulates data fetch procedure  
-//Parameter:   SYMB_SIZE is equal to the encoding symbol size
-//==========================================================================
-/*
-void Data_Manager::data_handler_thread() {
-	int id_path = 0;
-	data_type *data_take  = nullptr;	
-	data_type *encd_block = nullptr;
-//decide encoding parameters
-	struct Param_Encd param_encd  = {1000, 240};
-//	decision_para_FEC(param_encd);
-//
-	auto startTime = std::chrono::high_resolution_clock::now();
-
-//set thread core affinity and bind the current thread to core 1
-	affinity_set(DATA_HANDLER_CORE);  
-//
-	while(1) {
-//		char *tmp_data = MALLOC(char, SYMB_SIZE*ENCD_BLOCK_SIZE);
-		while(nullptr == (data_take = data_fetch(id_path)));
-
-//================================================================
-		encd_block = encode_FFT_RS(data_take, param_encd);
-		SAFE_FREE(data_take);
-//path decision of packets, store encoding data into send_queue
-		send_Q[id_path].push(encd_block);
-//================================================================
-
-//records the eclpsing time for calculating testing time
-        auto endTime  = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds>
-        				(endTime - startTime ).count();
-        if(duration > TEST_SECONDS*1000000) break;
-	}
-}
-*/
-//==========================================================================
-
-
-//==========================================================================
-//==========================================================================
-//Author:      shawnshanks_fei          Date:     20180204
 //Description: implement main data generating procedure which adds mutex signal  
 //Parameter:  		       
 //==========================================================================
-bool Data_Manager::data_save(data_type *data, ID_PATH id_path) {
+bool Data_Manager::data_save(struct Elem_Data *data, ID_PATH id_path) {
 	std::unique_lock<std::mutex> lock(mtx[id_path]);
 
 	return Push(data, id_path);
@@ -80,7 +38,7 @@ bool Data_Manager::data_save(data_type *data, ID_PATH id_path) {
 //Description: implement main data fetch procedure  
 //Parameter:  		       
 //==========================================================================
-data_type *Data_Manager::data_fetch(ID_PATH id_path) {   
+struct Elem_Data *Data_Manager::data_fetch(ID_PATH id_path) {   
 	std::unique_lock<std::mutex> lock(mtx[id_path]);	
 
 	return Pop(id_path);
@@ -89,7 +47,7 @@ data_type *Data_Manager::data_fetch(ID_PATH id_path) {
 
 
 //safely push into one queue(default the first queue)
-bool Data_Manager::Push(data_type *data_src, ID_PATH id_path) {
+bool Data_Manager::Push(struct Elem_Data *data_src, ID_PATH id_path) {
 	if(!Is_overflow(id_path)) {
 		data_video[id_path].push(data_src);
 		buf_size[id_path] += 1;
@@ -104,9 +62,9 @@ bool Data_Manager::Push(data_type *data_src, ID_PATH id_path) {
 }
 
 //safety pop from queue;
-data_type *Data_Manager::Pop(ID_PATH id_path) {
+struct Elem_Data *Data_Manager::Pop(ID_PATH id_path) {
 	if(!Is_empty(id_path)) {
-		data_type *data_dst = data_video[id_path].front();
+		struct Elem_Data *data_dst = data_video[id_path].front();
 		data_video[id_path].pop();
 		buf_size[id_path] -= 1;
 //debug
@@ -167,3 +125,50 @@ int main() {
 
 	return 0;
 }
+
+
+
+
+
+
+
+//==========================================================================
+//==========================================================================
+//Author:      shawnshanks_fei          Date:     20180204
+//Description: the thread function which simulates data fetch procedure  
+//Parameter:   SYMB_SIZE is equal to the encoding symbol size
+//==========================================================================
+/*
+void Data_Manager::data_handler_thread() {
+	int id_path = 0;
+	struct Elem_Data *data_take  = nullptr;	
+	struct Elem_Data *encd_block = nullptr;
+//decide encoding parameters
+	struct Param_Encd param_encd  = {1000, 240};
+//	decision_para_FEC(param_encd);
+//
+	auto startTime = std::chrono::high_resolution_clock::now();
+
+//set thread core affinity and bind the current thread to core 1
+	affinity_set(DATA_HANDLER_CORE);  
+//
+	while(1) {
+//		char *tmp_data = MALLOC(char, SYMB_SIZE*ENCD_BLOCK_SIZE);
+		while(nullptr == (data_take = data_fetch(id_path)));
+
+//================================================================
+		encd_block = encode_FFT_RS(data_take, param_encd);
+		SAFE_FREE(data_take);
+//path decision of packets, store encoding data into send_queue
+		send_Q[id_path].push(encd_block);
+//================================================================
+
+//records the eclpsing time for calculating testing time
+        auto endTime  = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>
+        				(endTime - startTime ).count();
+        if(duration > TEST_SECONDS*1000000) break;
+	}
+}
+*/
+//==========================================================================

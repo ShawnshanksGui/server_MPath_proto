@@ -1,3 +1,4 @@
+#include "chrono"
 #include "iostream"
 #include "fstream"
 #include "sstream"
@@ -94,6 +95,8 @@ int hevc_parser(string &p, int id_region) {
 //the number of non-I frame(B,P).
     int cnt_BorP = 0; 
 
+    auto startTime = std::chrono::high_resolution_clock::now();
+
     for (i = 0; i < p.length(); i++) {
         code = (code << 8) + p[i];
         if ((code & 0xffffff00) == 0x100) {
@@ -111,10 +114,17 @@ int hevc_parser(string &p, int id_region) {
             {
                 vps++;
                 nalu[id_region][num].frameType = I_FRAME;
+/*                
                 nalu[id_region][num]._addr = i-4;
                 if(num > 0) {
                     //derive the size of the last one nalu;
                     nalu[id_region][num-1]._size=i-4-nalu[id_region][num-1]._addr;
+                }
+*/
+                nalu[id_region][num]._addr=(p[i-4]==0) ? (i-4) : (i-3);
+                if(num > 0) {
+                    //derive the size of the last one nalu;
+                    nalu[id_region][num-1]._size = nalu[id_region][num]._addr-nalu[id_region][num-1]._addr;
                 }
                 num++;
                 break;
@@ -151,9 +161,10 @@ int hevc_parser(string &p, int id_region) {
             case HEVC_NAL_RASL_R:
             {   
                 cnt_BorP++;
-                nalu[id_region][num-1]._size = i-3-nalu[id_region][num-1]._addr;
+                nalu[id_region][num]._addr = (p[i-4]==0) ? (i-4) : (i-3);
+                nalu[id_region][num-1]._size = nalu[id_region][num]._addr - nalu[id_region][num-1]._addr;
                 nalu[id_region][num].frameType  = P_FRAME;
-                nalu[id_region][num]._addr = i-3;
+
                 num++;             
                 break;
             }
@@ -165,8 +176,8 @@ int hevc_parser(string &p, int id_region) {
             case HEVC_NAL_IDR_N_LP:
             case HEVC_NAL_IDR_W_RADL: 
             {
-            /*
                 cnt_irap++;
+            /*
                 nalu[id_region][num].frameType  = I_FRAME;
                 nalu[id_region][num]._size = i - nalu[id_region][num]._addr;
                 num++;
@@ -183,6 +194,14 @@ int hevc_parser(string &p, int id_region) {
 //count the isze of the video segment's last NALU 
     nalu[id_region][num-1]._size = i - 1 - nalu[id_region][num-1]._addr;
 //
+
+
+//records the eclpsing time for calculating testing time
+    auto endTime  = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>
+                    (endTime - startTime ).count();
+
+    printf("the time cost is %ld us\n", duration);
 
 #ifdef ENABLE_DEBUG
 {
@@ -214,8 +233,8 @@ int main() {
     std::ifstream File;
     std::string inString;
 
-//    File.open("machu_picchu_8k_a_s111.265", std::ios::in);
-    File.open("machu_piccu_8k.265", std::ios::in);
+    File.open("../../../video_test/machu_picchu_a_s111_non_B.265", std::ios::in);
+//    File.open("machu_piccu_8k.265", std::ios::in);
 //    File.open("input_non_b.265", std::ios::in);
 //    cin >> _input;
 //    File.open(_input, std::ios::in);

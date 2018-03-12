@@ -12,12 +12,11 @@
 //specify the bitrate of video segment
 //#define 
 
-//define the number of GOP in a video segment 
+//define the number of GOP in a video segment(how much seconds) 
 #define GOP_NUM 2
 
-
 //define the number of frames in one GOP
-#define FRAME_GOP 15
+#define FRAME_GOP 30
 
 //define the number of regions(FOV, non-FOV region), 
 //which test video is conposed of 

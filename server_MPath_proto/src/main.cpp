@@ -7,6 +7,7 @@
 #include        "../include/common.h"
 #include       "../include/utility.h"
 #include      "../include/mySocket.h"
+#include  "../include/data_manager.h"
 #include "../include/system_params.h"
 
 //two channels' realtime infomation
@@ -24,6 +25,7 @@ int main() {
 	int startFlag_one_timeSlice = 0;
 
 	Timer t;
+	Data_Manager data_manager(100);
 	FEC_Param_Adjuster fec_param_adj;
 	Bitrate_Selector bitrate_selector = Bitrate_Selector(_bitrate);
 	Path_Selector path_selector;
@@ -37,10 +39,13 @@ int main() {
 		                        startFlag_one_timeSlice);	
 
 	while(1) {
+//reset the key data struct
+		Video_Reader video_reader;
+		Data_Manager data_manager;
+		
 		if(startFlag_one_timeSlice) {
+//process the next video segment
 			id_VSegment++;
-
-			Video_Reader video_reader;
 
 			fec_param_adj.setFEC_params(chan_inf, bitrate_selector, video_reader);
 			bitrate_selector.setBitrate(tile_num, chan_inf, video_reader);
@@ -51,9 +56,10 @@ int main() {
 										 id_VSegment);
 			for(int i = 0; i < NUM_PATH; i++) {
 				std::thread encoder_worker(&Encoder::encoder_td_func;
-										   &encoder[i]);
+										   &encoder[i], data_manager);
+//!!!params passing unfinished 				
 				std::thread sender_worker(&Transmitter::send_td_func, 
-					                      &server[i]);
+					                      &server[i], Param_Transmitter, data_manager);
 			}
 //reap or recycle the threads created.	
 			readVideo_worker.join();	
