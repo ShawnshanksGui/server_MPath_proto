@@ -1,5 +1,4 @@
 #include "chrono"
-
 #include "string"
 #include "vector"
 
@@ -7,14 +6,15 @@
 #include "../include/video_reader.h"
 #include "../include/data_manager.h"
 #include "../include/system_params.h"
+#include "../include/path_selector.h"
 #include "../include/codeStreaming_parser.h"
 
 //for debugging
-#define ENABLE_DEBUG
-
-#ifdef ENABLE_DEBUG
+#define ENABLE_DEBUG_READER
+#ifdef ENABLE_DEBUG_READER
 
 #include <thread>
+#include "../include/utility.h"
 #include "../include/bitrate_select.h"
 #include "../include/fec_param_adjustor.h"
 
@@ -50,17 +50,22 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 
 	for(int i = 0, k = 0; i < REGION_NUM; i++) {
 		std::string inputVideo_Path;
-		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[]i) +
+		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
 		             "_" + std::to_string(id_VSegment) + ".265";
 //==========================================================================
    		File.open(inputVideo_Path, std::ios::in);
    		inString = slurp(File);
+//replicate data to a safe location
+   		char *cstr = new char[inString.length() + 1];
+   		strcpy(cstr, inString.c_str());
 
-   		data_manager::data_vec.push_back(inString);
+   		data_manager.data_vec.push_back(cstr);
 
-    	hevc_probe(inString, i);
+    	hevc_parser(inString, i);
 
-    	partition_nalu(i, inString, data_manager);
+    	partition_nalu(i, cstr, data_manager);
+
+    	delete [] cstr;
     } 
 //==========================================================================	
 }
@@ -72,10 +77,9 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 //Description: split the video segment into data block with equal length(S*K)  
 //Parameters:  result stored into the Data_Mannager.queue<struct Elem_Data*>
 //==========================================================================
-void Video_Reader::partition_nalu(int id_region, std::string &inString,
+void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
 								  Data_Manager &data_manager) {
-	VData_Type *p_str = inString.cstr();
-
+//	const VData_Type *p_str = inString.c_str();
 	for(int i = 0; i < FRAME_GOP*GOP_NUM; i++) {
 //		int k = 0;
 //get the start address for the current nalu(or frame);
@@ -90,7 +94,7 @@ void Video_Reader::partition_nalu(int id_region, std::string &inString,
 		int num = nalu[id_region][i]._size / (s_fec*k_fec);
 
 //real start address of current NALU(or frame) in inString data.
-		p_str += nalu[id_region][i];
+		p_str = p_str + nalu[id_region][i];
 
 //when the length of nalu is divisible(num-1 == k)
 		if(0 == len_remaining) {
@@ -120,8 +124,8 @@ void Video_Reader::partition_nalu(int id_region, std::string &inString,
 				}
 				elem_data->size = s_fec*k_fec;
 
-				assign_attribute(elem_data, s_fec, k_fec,
-								 i, location, p_str);
+				assign_attribute(elem_data, path_decs[id_region][i], s_fec,
+				 k_fec, i, location, p_str, data_manager);
 				location += s_fec*k_fec;
 			}
 		}
@@ -156,8 +160,8 @@ void Video_Reader::partition_nalu(int id_region, std::string &inString,
 				}
 				else {elem_data->size = s_fec*k_fec;}
 
-				assign_attribute(elem_data, path_decs[][], s_fec, k_fec,
-								 i, location, p_str);
+				assign_attribute(elem_data, path_decs[id_region][i], s_fec,
+				 				 k_fec, i, location, p_str, data_manager);
 				location += s_fec*k_fec;
 			}
 		}
@@ -181,17 +185,17 @@ void Video_Reader::assign_attribute(struct Elem_Data *elem_data,int path,
 	elem_data->S_FEC   = s_fec;
 	elem_data->K_FEC   = k_fec;
 
-	data_manager::data_save(elem_data, elem_data->id_path);
+	Data_Manager::data_save(elem_data, elem_data->id_path);
 }
 
 
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_DEBUG_READER
 
 //two channels' realtime infomation
 Channel_Inf chan_inf[NUM_PATH] = {{0.1, 50, 100}, {0.2, 90, 50}};
 //Tile_Num tile_num{TILE_NUM, FOV_TILE_NUM, 
 //	              CUSHION_TILE_NUM, OUTMOST_TILE_NUM};
-int tile_num [REGION_NUM] = {FOV_TILE_NUM, CUSHION_TILE_NUM, 
+int tile_num[REGION_NUM] = {FOV_TILE_NUM, CUSHION_TILE_NUM, 
 							 OUTMOST_TILE_NUM};
 //the unit is Mb/s
 int _bitrate[BITRATE_TYPE_NUM] = {50, 25, 10};
@@ -206,7 +210,7 @@ int main() {
 
     Data_Manager data_manager(100);
 	FEC_Param_Adjuster fec_param_adj;
-	Bitrate_Selector bitrate_selector = Bitrate_Selector(_bitrate);
+	Bitrate_Selector bitrate_selector(_bitrate);
 	Video_Reader video_reader;	
 	Path_Selector path_selector;
 
@@ -224,6 +228,7 @@ int main() {
 
     flag_video = hevc_parser(inString, 1);
 
+    readVideo_worker.join();
 
     return 0;    
 }

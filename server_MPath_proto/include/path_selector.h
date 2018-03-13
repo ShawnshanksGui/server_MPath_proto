@@ -1,4 +1,7 @@
-#include "../include/video_reader.h"
+#ifndef _PATH_SELECTOR_H_
+#define _PATH_SELECTOR_H_
+
+#include "video_reader.h"
 #include "system_params.h"
 
 
@@ -20,3 +23,5 @@ public:
 private:
 
 };
+
+#endif

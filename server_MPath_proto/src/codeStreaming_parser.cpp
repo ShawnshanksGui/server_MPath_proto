@@ -13,10 +13,10 @@
 using namespace std;
 
 //for test and debug
-#define ENABLE_DEBUG
+//#define ENABLE_DEBUG_PARSER
 
 //for test and debug
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_DEBUG_PARSER
 
 #define REGION_NUM 3
 #define FRAME_GOP 50
@@ -207,7 +207,7 @@ int hevc_parser(string &p, int id_region) {
 
     printf("the time cost is %ld us\n", duration);
 
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_DEBUG_PARSER
 {
     printf("the number of vps,sps,pps,I_frame,P_frame is %d,%d,%d,%d,%d,respectively\n\n",
            vps, sps, pps, cnt_irap, cnt_BorP);
@@ -229,7 +229,7 @@ int hevc_parser(string &p, int id_region) {
 //==========================================================================
 
 
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_DEBUG_PARSER
 int main() {
     int flag_video = 0;
 //    std::string _input;

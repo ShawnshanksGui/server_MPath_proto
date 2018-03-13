@@ -2,7 +2,7 @@
 #include "../inlcude/bitrate_select.h"
 #include "../include/common.h"
 
-Bitrate_Selector::setBitrate(int _bitrate[BITRATE_TYPE_NUM]) {
+Bitrate_Selector::Bitrate_Selector(int _bitrate[BITRATE_TYPE_NUM]) {
 	for(int i = 0; i < BITRATE_TYPE_NUM; i++) {
 		bitrate[i] = _bitrate[i];
 	}

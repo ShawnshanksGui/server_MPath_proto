@@ -1,5 +1,6 @@
 #include "../include/video_reader.h"
 #include "../include/bitrate_selector.h"
+#include "../include/system_params.h"
 
 #include "math.h"
 

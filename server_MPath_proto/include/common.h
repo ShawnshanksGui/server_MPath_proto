@@ -1,3 +1,6 @@
+#ifndef _COMMON_H_
+#define _COMMON_H_
+
 #include        "ctime"
 #include       "cstdio"
 #include       "cerrno"
@@ -58,3 +61,5 @@ struct Tile_Num {
 #define ORIGIN_BLOCK_SIZE    240  
 #define ENCD_BLOCK_SIZE      256    
 */
+
+#endif

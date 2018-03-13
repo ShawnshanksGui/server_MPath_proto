@@ -1,5 +1,9 @@
+#ifndef _FEC_PARAM_ADJUSTOR_H_
+#define _FEC_PARAM_ADJUSTOR_H_
+
+#include "common.h"
 #include "video_reader.h"
-#include "include/bitrate_selector.h"
+#include "bitrate_select.h"
 
 typedef unsigned char uchar;
 
@@ -10,9 +14,11 @@ public:
 	FEC_Param_Adjuster();
 	~FEC_Param_Adjuster() {}
 
-	setFEC_params(Channel_Inf chan_inf[NUM_PATH], 
-		         Bitrate_Selector &bitrate_selector,
-				 Video_Reader &video_reader);
+	void setFEC_params(Channel_Inf chan_inf[NUM_PATH],
+				  Bitrate_Selector &bitrate_selector,
+		          Video_Reader &video_reader);
 private:
 
 };
+
+#endif

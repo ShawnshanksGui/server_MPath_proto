@@ -1,3 +1,6 @@
+#ifndef _BITRATE_SELECT_H
+#define _BITRATE_SELECT_H
+
 #include "video_reader.h"
 #include "system_params.h"
 
@@ -12,8 +15,10 @@ public:
 	
 	char bitrate[BITRATE_TYPE_NUM];
 
-	Bitrate_Select() {}
-	~Bitrate_Select() {}
+	Bitrate_Selector() {}
+	Bitrate_Selector(int _bitrate[BITRATE_TYPE_NUM]);
+
+	~Bitrate_Selector() {}
 
 	void setBitrate(int tile_num[], Channel_Inf chan_inf, 
 					Video_Reader &video_reader); 
@@ -21,3 +26,5 @@ public:
 private:
 
 };
+
+#endif

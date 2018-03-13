@@ -51,7 +51,7 @@ struct Param_Reader {
 //for a block 
 struct Elem_Data{
 //an order of S*K bytes data
-	struct Elem_Data *data;
+	VData_Type *data;
 	int size;
 	int id_path;
 	int id_nalu;

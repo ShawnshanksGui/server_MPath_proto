@@ -1,3 +1,6 @@
+#ifndef _SYSTEM_PARAMS_H_
+#define _SYSTEM_PARAMS_H_
+
 //Specify total number of paths, including a wifi and a cellular channel,
 //also equal to the number of sending buffers
 #define NUM_PATH 2 
@@ -34,3 +37,5 @@
 //running time for program 
 #define NUM_TIMESLICE 1
 #define LEN_TIMESLICE 1
+
+#endif
