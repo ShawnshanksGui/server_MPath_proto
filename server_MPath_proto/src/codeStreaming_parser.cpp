@@ -7,12 +7,16 @@
 
 #include "cstdio"
 
-//#include "../include/video_reader.h"
+//for test and debug
+//#define ENABLE_DEBUG_PARSER
+
+#ifndef ENABLE_DEBUG_PARSER
+#include "../include/video_reader.h"
+
+#endif
 
 using namespace std;
 
-//for test and debug
-//#define ENABLE_DEBUG_PARSER
 
 //for test and debug
 #ifdef ENABLE_DEBUG_PARSER
@@ -34,6 +38,7 @@ struct Nalu_Elem{
 };
 
 struct Nalu_Elem nalu[REGION_NUM][(FRAME_GOP+10)*GOP_NUM];
+
 #endif
 
 
@@ -83,6 +88,7 @@ std::string slurp(std::ifstream &File) {
 //Parameter:   id_region specify the ID of region(FOV, cushion and outmost)
 //             string obj load the specified pattern we deserve  
 //==========================================================================
+#ifdef ENABLE_DEBUG_PARSER
 int hevc_parser(string &p, int id_region) {
     int i = 0;
     int num = 0;  
@@ -203,10 +209,9 @@ int hevc_parser(string &p, int id_region) {
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>
                     (endTime - startTime ).count();
 
+  
     printf("the time cost is %ld us\n", duration);
 
-#ifdef ENABLE_DEBUG_PARSER
-{
     printf("the number of vps,sps,pps,I_frame,P_frame is %d,%d,%d,%d,%d,respectively\n\n",
            vps, sps, pps, cnt_irap, cnt_BorP);
     
@@ -221,10 +226,137 @@ int hevc_parser(string &p, int id_region) {
         printf("%d  ", nalu[id_region][i]._size);
     }
     printf("\n");
+
 }
-#endif
+
+
+#else
+int hevc_parser(string &p, int id_region, Video_Reader *video_reader){
+    int i = 0;
+    int num = 0;  
+    int loc = 0;
+
+    int vps  = 0;
+    int sps  = 0;
+    int pps  = 0;
+
+//the number of I frame(B,P).
+    int cnt_irap = 0;
+//the number of non-I frame(B,P).
+    int cnt_BorP = 0;
+
+    string obj;
+//    string tmp;
+
+    char tmp_a[3];
+    tmp_a[0] = 0;
+    tmp_a[1] = 0;
+    tmp_a[2] = 1;
+    char *p_str = tmp_a;
+    obj.append(p_str, 3);
+//    obj.append(tmp_b);
+
+    auto startTime = std::chrono::high_resolution_clock::now();
+//    for (i = 0; i < p.length(); i++) {
+    while(i < p.length()) {
+        loc = p.find(obj, i);
+        if(loc == string::npos) {
+            printf("parser procedure is finished\n");
+            break;
+        }
+        i = loc+3;
+        int type = (p[loc+3] & 0x7E) >> 1;
+        switch (type) {
+        case HEVC_NAL_VPS:       
+        {
+            vps++;
+            video_reader->nalu[id_region][num].frameType = I_FRAME;
+//            video_reader.nalu[id_region][num]._addr = i-4;
+            video_reader->nalu[id_region][num]._addr=(p[loc-1]==0) ? (i-4) : (i-3);
+            if(num > 0) {
+                //derive the size of the last one nalu;
+                video_reader->nalu[id_region][num-1]._size = video_reader->nalu[id_region][num]._addr-video_reader->nalu[id_region][num-1]._addr;
+            }
+            num++;
+            break;
+        }
+        case HEVC_NAL_SPS:      
+        {
+        /*
+            sps++;
+            video_reader.nalu[id_region][num]._size = i - video_reader.nalu[id_region][num]._addr;
+            num++; 
+            video_reader.nalu[id_region][num]._addr = i;;  
+        */ 
+            break;
+        }
+        case HEVC_NAL_PPS:        
+        { 
+        /*
+            pps++;
+            video_reader.nalu[id_region][num]._size = i - video_reader.nalu[id_region][num]._addr;  
+            num++;
+            video_reader.nalu[id_region][num]._addr = i;;                
+         */
+            break;
+        } 
+        case HEVC_NAL_TRAIL_N:
+        case HEVC_NAL_TRAIL_R:
+        case HEVC_NAL_TSA_N:
+        case HEVC_NAL_TSA_R:
+        case HEVC_NAL_STSA_N:
+        case HEVC_NAL_STSA_R:
+        case HEVC_NAL_RADL_N:
+        case HEVC_NAL_RADL_R:
+        case HEVC_NAL_RASL_N:
+        case HEVC_NAL_RASL_R:
+        {   
+            cnt_BorP++;
+            video_reader->nalu[id_region][num]._addr = (p[loc-1]==0) ? (i-4) : (i-3);
+            video_reader->nalu[id_region][num].frameType  = P_FRAME;
+            video_reader->nalu[id_region][num-1]._size = video_reader->nalu[id_region][num]._addr - video_reader->nalu[id_region][num-1]._addr;
+
+//            video_reader.nalu[id_region][num]._addr = i-3;
+            num++;             
+            break;
+        }
+//
+        case HEVC_NAL_BLA_N_LP:
+        case HEVC_NAL_BLA_W_LP:
+        case HEVC_NAL_BLA_W_RADL:
+        case HEVC_NAL_CRA_NUT:
+        case HEVC_NAL_IDR_N_LP:
+        case HEVC_NAL_IDR_W_RADL: 
+        {
+            cnt_irap++;
+        /* 
+            video_reader.nalu[id_region][num].frameType  = I_FRAME;
+            video_reader.nalu[id_region][num]._size = i - video_reader.nalu[id_region][num]._addr;
+            num++;
+            video_reader.nalu[id_region][num]._addr = i-3;
+        */
+//            std::cout << "addr of the " << cnt_irap <<
+//                       "'th I frame is " << i;
+//            std::cout << std::endl; 
+            break;
+        }
+        }
+    }
+//count the isze of the video segment's last NALU 
+    video_reader->nalu[id_region][num-1]._size = p.length()-1-video_reader->nalu[id_region][num-1]._addr;
+//
+
+//records the eclpsing time for calculating testing time
+    auto endTime  = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>
+                    (endTime - startTime ).count();
+
+    printf("the time cost is %ld us\n", duration);
 }
 //==========================================================================
+#endif
+
+
 
 
 #ifdef ENABLE_DEBUG_PARSER

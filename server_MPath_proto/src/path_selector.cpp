@@ -1,8 +1,9 @@
+#include "../include/common.h"
 #include "../include/system_params.h"
 #include "../include/path_selector.h"
 #include "../include/video_reader.h"
 
-void Path_Selector::select_Path(Channel_Inf chan_inf[], 
+void Path_Selector::select_Path(Channel_Inf chan_inf[NUM_PATH], 
 								Video_Reader &video_reader) {
 /*
 	double bw_final[NUM_PATH];
@@ -26,13 +27,14 @@ void Path_Selector::select_Path(Channel_Inf chan_inf[],
 		if(i < 2) {
 //			for(int k = 0; k < video_reader.gopFrame_num; k++) {
 			for(int k = 0; k < FRAME_GOP*GOP_NUM; k++) {
-				path_decs[i][k] = CELLULAR_NETWORK; 
+				video_reader.path_decs[i][k] = CELLULAR_NETWORK; 
 		    }
 		}
 		else {
 //			for(int k = 0; k < video_reader.gopFrame_num; k++) {
 			for(int k = 0; k < FRAME_GOP*GOP_NUM; k++) {
-				path_decs[i][k] = WIFI; 				
+				video_reader.path_decs[i][k] = WIFI; 				
+			}
 		}
 	}
 }

@@ -1,5 +1,5 @@
 #include "../include/system_params.h"
-#include "../inlcude/bitrate_select.h"
+#include "../include/bitrate_select.h"
 #include "../include/common.h"
 
 Bitrate_Selector::Bitrate_Selector(double _bitrate[BITRATE_TYPE_NUM]) {
@@ -11,9 +11,9 @@ Bitrate_Selector::Bitrate_Selector(double _bitrate[BITRATE_TYPE_NUM]) {
 //modified by shawnshanks_fei, in 20180316.am 
 //select bitrate types for each region of a video segment
 void Bitrate_Selector::setBitrate(int tile_num[REGION_NUM], 
-								  Channel_Inf chan_inf[NUM_PATH]], 
+								  Channel_Inf chan_inf[NUM_PATH], 
 								  Video_Reader &video_reader) {
-	double bw_redsidual;
+	double bw_residual;
 
 	for(int k = 0; k < REGION_NUM; k++) {
 		video_reader.bitrate_decs[k] = bitrate[LOWEST];	

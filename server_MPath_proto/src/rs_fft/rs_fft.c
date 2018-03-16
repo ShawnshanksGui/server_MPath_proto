@@ -17,6 +17,7 @@ Lin, Han and Chung, "Novel Polynomial Basis and Its Application to Reed-Solomon 
 #define MALLOC(type, size) ((type *)malloc(sizeof(type) * (size)))
 
 typedef unsigned char GFSymbol;
+typedef unsigned char Indicator_Type;
 #define len 8//2^len: the size of Galois field
 GFSymbol mask = 0x1D; //GF(2^8): x^8 + x^4 + x^3 + x^2 + 1
 GFSymbol Base[] = {1, 214, 152, 146, 86, 200, 88, 230};//Cantor basis
@@ -28,8 +29,7 @@ GFSymbol Base[len] = {1, 44234, 15374, 5694, 50562, 60718, 37196, 16402, 27800, 
 */
 
 //for debugging
-#define ENABLE_DEBUG_RS_FFT
-
+//#define ENABLE_DEBUG_RS_FFT
 
 #define Size (1<<len)//Field size
 #define mod (Size-1)
@@ -192,7 +192,7 @@ void encodeH(GFSymbol* data, int k, GFSymbol* parity, GFSymbol* mem){
 }
 
 //Compute the evaluations of the error locator polynomial
-void decode_init(_Bool* erasure, GFSymbol* log_walsh2){
+void decode_init(Indicator_Type* erasure, GFSymbol* log_walsh2){
 	for(int i=0; i<Size; i++)
 		log_walsh2[i] = erasure[i];
 	walsh(log_walsh2, Size);
@@ -203,7 +203,8 @@ void decode_init(_Bool* erasure, GFSymbol* log_walsh2){
 		if(erasure[i]) log_walsh2[i] = mod-log_walsh2[i];
 }
 
-void decode_main(GFSymbol* codeword, _Bool* erasure, GFSymbol* log_walsh2){
+void decode_main(GFSymbol* codeword, Indicator_Type* erasure,
+				 GFSymbol* log_walsh2){
 	int k2 = Size;//k2 can be replaced with k
 	for (int i=0; i<Size; i++)
 		codeword[i] = erasure[i]? 0 : mulE(codeword[i], log_walsh2[i]);
@@ -273,7 +274,8 @@ void *encode_FFT_RS(char *data_src, struct Param_Encd param_encd) {
 //==========================================================================
 void *decode_FFT_RS(struct Data_Remain data_remain, 
 	                struct Param_Decd param_decd) {
-	_Bool    erasure_a[Size]  = {0};//Array indicating erasures
+//Array indicating erasures
+	Indicator_Type    erasure_a[Size]  = {0};
 	char     elem_procs[Size] = {'\0'};
 	GFSymbol log_walsh2[Size] = {'\0'};
 

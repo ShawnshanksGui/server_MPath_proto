@@ -60,15 +60,15 @@ include rs_fft/CMakeFiles/RS_FFT.dir/flags.make
 rs_fft/CMakeFiles/RS_FFT.dir/rs_fft.c.o: rs_fft/CMakeFiles/RS_FFT.dir/flags.make
 rs_fft/CMakeFiles/RS_FFT.dir/rs_fft.c.o: ../rs_fft/rs_fft.c
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object rs_fft/CMakeFiles/RS_FFT.dir/rs_fft.c.o"
-	cd /home/guifei/server_Mpath_proto/server_MPath_proto/src/build/rs_fft && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/RS_FFT.dir/rs_fft.c.o   -c /home/guifei/server_Mpath_proto/server_MPath_proto/src/rs_fft/rs_fft.c
+	cd /home/guifei/server_Mpath_proto/server_MPath_proto/src/build/rs_fft && gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/RS_FFT.dir/rs_fft.c.o   -c /home/guifei/server_Mpath_proto/server_MPath_proto/src/rs_fft/rs_fft.c
 
 rs_fft/CMakeFiles/RS_FFT.dir/rs_fft.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/RS_FFT.dir/rs_fft.c.i"
-	cd /home/guifei/server_Mpath_proto/server_MPath_proto/src/build/rs_fft && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/guifei/server_Mpath_proto/server_MPath_proto/src/rs_fft/rs_fft.c > CMakeFiles/RS_FFT.dir/rs_fft.c.i
+	cd /home/guifei/server_Mpath_proto/server_MPath_proto/src/build/rs_fft && gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/guifei/server_Mpath_proto/server_MPath_proto/src/rs_fft/rs_fft.c > CMakeFiles/RS_FFT.dir/rs_fft.c.i
 
 rs_fft/CMakeFiles/RS_FFT.dir/rs_fft.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/RS_FFT.dir/rs_fft.c.s"
-	cd /home/guifei/server_Mpath_proto/server_MPath_proto/src/build/rs_fft && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/guifei/server_Mpath_proto/server_MPath_proto/src/rs_fft/rs_fft.c -o CMakeFiles/RS_FFT.dir/rs_fft.c.s
+	cd /home/guifei/server_Mpath_proto/server_MPath_proto/src/build/rs_fft && gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/guifei/server_Mpath_proto/server_MPath_proto/src/rs_fft/rs_fft.c -o CMakeFiles/RS_FFT.dir/rs_fft.c.s
 
 rs_fft/CMakeFiles/RS_FFT.dir/rs_fft.c.o.requires:
 

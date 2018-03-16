@@ -7,6 +7,6 @@ project (test_reader)
 add_subdirectory(rs_fft)
 
 #add_executable(test_reader DIR_SRCS)
-add_executable(test_reader  video_reader.cpp data_manager.cpp codeStreaming_parser.cpp bitrate_select.cpp fec_param_adjustor.cpp utility.cpp)
+add_executable(test_reader  video_reader.cpp data_manager.cpp codeStreaming_parser.cpp bitrate_select.cpp fec_param_adjustor.cpp path_selector.cpp utility.cpp)
 
 target_link_libraries(test_reader RS_FFT)

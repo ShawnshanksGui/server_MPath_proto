@@ -7,6 +7,8 @@
 #IncludeRegexTransform: 
 
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/bitrate_select.h
+common.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
 video_reader.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/video_reader.h
 system_params.h
@@ -19,6 +21,8 @@ iostream
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/iostream
 fstream
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/fstream
+video_reader.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/video_reader.h
 
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
 ctime
@@ -75,6 +79,8 @@ bitrate_select.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/bitrate_select.h
 
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/path_selector.h
+common.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
 video_reader.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/video_reader.h
 system_params.h
@@ -97,8 +103,8 @@ data_manager.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/bitrate_select.cpp
 ../include/system_params.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
-../inlcude/bitrate_select.h
-/home/guifei/server_Mpath_proto/server_MPath_proto/inlcude/bitrate_select.h
+../include/bitrate_select.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/bitrate_select.h
 ../include/common.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
 
@@ -117,6 +123,8 @@ ios
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/ios
 cstdio
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/cstdio
+../include/video_reader.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/video_reader.h
 
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/data_manager.cpp
 ../include/thread_core_affinity_set.h
@@ -133,14 +141,26 @@ chrono
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/rs_fft.h
 
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/fec_param_adjustor.cpp
+../include/fec_param_adjustor.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/fec_param_adjustor.h
 ../include/video_reader.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/video_reader.h
-../include/bitrate_selector.h
-/home/guifei/server_Mpath_proto/server_MPath_proto/include/bitrate_selector.h
+../include/bitrate_select.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/bitrate_select.h
 ../include/system_params.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
 math.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/math.h
+
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/path_selector.cpp
+../include/common.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
+../include/system_params.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
+../include/path_selector.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/path_selector.h
+../include/video_reader.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/video_reader.h
 
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/utility.cpp
 ../include/common.h

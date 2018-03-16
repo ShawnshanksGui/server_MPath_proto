@@ -62,7 +62,7 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 
    		data_manager.data_vec.push_back(cstr);
 
-    	hevc_parser(inString, i);
+    	hevc_parser(inString, i, this);
 
     	partition_nalu(i, cstr, data_manager);
 
@@ -227,9 +227,9 @@ int main() {
 //	std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
 //								 &video_reader, data_manager,
 //								 id_VSegment);
-    inString = slurp(File);
+//    inString = slurp(File);
 
-    flag_video = hevc_parser(inString, 1);
+//    flag_video = hevc_parser(inString, 1);
 
 //    readVideo_worker.join();
 

@@ -1,5 +1,6 @@
+#include "../include/fec_param_adjustor.h"
 #include "../include/video_reader.h"
-#include "../include/bitrate_selector.h"
+#include "../include/bitrate_select.h"
 #include "../include/system_params.h"
 
 #include "math.h"
@@ -52,9 +53,9 @@ void FEC_Param_Adjuster::setFEC_params(Channel_Inf chan_inf[NUM_PATH],
 		for(int i = FRAME_GOP-1; i > 0; i++) {
 			if((FRAME_GOP-1)==i && (REGION_NUM-1)==k) continue;
 //decide the K(or redundancy rate start from the last frame)
-			if((indicator+(RRAME_GOP-i)/6) <= 6 &&
+			if((indicator+(FRAME_GOP-i)/6) <= 6 &&
 			   (indicator+REGION_NUM-1-k) <= 6) { 
-				video_reader.K_FEC[k][i]=avail_K[indicator+(RRAME_GOP-i)6/+
+				video_reader.K_FEC[k][i]=avail_K[indicator+(FRAME_GOP-i)/6+
 										 (REGION_NUM-1-k)];
 			}
 			else if((indicator+(FRAME_GOP-i)/6) > 6) { 

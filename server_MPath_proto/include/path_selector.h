@@ -1,6 +1,7 @@
 #ifndef _PATH_SELECTOR_H_
 #define _PATH_SELECTOR_H_
 
+#include "common.h"
 #include "video_reader.h"
 #include "system_params.h"
 
@@ -10,10 +11,10 @@
 
 class Path_Selector{
 public:
-	Channel_Inf channel_inf[NUM_PATH];
+//	Channel_Inf channel_inf[NUM_PATH];
 	
-	Path_Selector();
-	~Path_Selector();
+	Path_Selector() {}
+	~Path_Selector() {}
 
 //	void set_channel_param();
 

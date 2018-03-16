@@ -244,6 +244,33 @@ fec_param_adjustor.cpp.s:
 	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.s
 .PHONY : fec_param_adjustor.cpp.s
 
+path_selector.o: path_selector.cpp.o
+
+.PHONY : path_selector.o
+
+# target to build an object file
+path_selector.cpp.o:
+	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/path_selector.cpp.o
+.PHONY : path_selector.cpp.o
+
+path_selector.i: path_selector.cpp.i
+
+.PHONY : path_selector.i
+
+# target to preprocess a source file
+path_selector.cpp.i:
+	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/path_selector.cpp.i
+.PHONY : path_selector.cpp.i
+
+path_selector.s: path_selector.cpp.s
+
+.PHONY : path_selector.s
+
+# target to generate assembly for a file
+path_selector.cpp.s:
+	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/path_selector.cpp.s
+.PHONY : path_selector.cpp.s
+
 utility.o: utility.cpp.o
 
 .PHONY : utility.o
@@ -320,6 +347,9 @@ help:
 	@echo "... fec_param_adjustor.o"
 	@echo "... fec_param_adjustor.i"
 	@echo "... fec_param_adjustor.s"
+	@echo "... path_selector.o"
+	@echo "... path_selector.i"
+	@echo "... path_selector.s"
 	@echo "... utility.o"
 	@echo "... utility.i"
 	@echo "... utility.s"

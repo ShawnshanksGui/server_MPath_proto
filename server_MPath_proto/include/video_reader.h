@@ -33,7 +33,7 @@ public:
 	friend class Data_Manager;
 	friend class Bitrate_Selector;
 	friend class Path_Decs;
-
+	friend class Path_Selector;
 	void video_reader_td_func(Data_Manager &data_manager, int id_VSegment);
 
 private:

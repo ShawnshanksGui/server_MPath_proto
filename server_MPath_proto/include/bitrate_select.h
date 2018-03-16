@@ -1,6 +1,7 @@
 #ifndef _BITRATE_SELECT_H
 #define _BITRATE_SELECT_H
 
+#include "common.h"
 #include "video_reader.h"
 #include "system_params.h"
 
