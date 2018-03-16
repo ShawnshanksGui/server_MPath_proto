@@ -10,14 +10,14 @@
 
 class Path_Selector{
 public:
-	Channel_Info channel_info[NUM_PATH];
+	Channel_Inf channel_inf[NUM_PATH];
 	
 	Path_Selector();
 	~Path_Selector();
 
 //	void set_channel_param();
 
-	void select_Path(Channnel_Info ch_i[NUM_PATH], 
+	void select_Path(Channel_Inf ch_i[NUM_PATH], 
 		         Video_Reader &video_reader);
 
 private:

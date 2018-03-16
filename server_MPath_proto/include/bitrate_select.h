@@ -4,9 +4,9 @@
 #include "video_reader.h"
 #include "system_params.h"
 
-#define  LOWEST 0
+#define  LOWEST 2
 #define  MEDIAN 1
-#define HIGHEST 2
+#define HIGHEST 0
 
 class Bitrate_Selector {
 public:
@@ -16,11 +16,12 @@ public:
 	char bitrate[BITRATE_TYPE_NUM];
 
 	Bitrate_Selector() {}
-	Bitrate_Selector(int _bitrate[BITRATE_TYPE_NUM]);
+	Bitrate_Selector(double _bitrate[BITRATE_TYPE_NUM]);
 
 	~Bitrate_Selector() {}
 
-	void setBitrate(int tile_num[], Channel_Inf chan_inf, 
+	void setBitrate(int tile_num[REGION_NUM], 
+					Channel_Inf chan_inf[NUM_PATH], 
 					Video_Reader &video_reader); 
 
 private:

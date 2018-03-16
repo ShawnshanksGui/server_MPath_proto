@@ -30,6 +30,7 @@ CMakeFiles/test_reader.dir/video_reader.cpp.o
  /home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
  /home/guifei/server_Mpath_proto/server_MPath_proto/include/data_manager.h
  /home/guifei/server_Mpath_proto/server_MPath_proto/include/fec_param_adjustor.h
+ /home/guifei/server_Mpath_proto/server_MPath_proto/include/path_selector.h
  /home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
  /home/guifei/server_Mpath_proto/server_MPath_proto/include/utility.h
  /home/guifei/server_Mpath_proto/server_MPath_proto/include/video_reader.h

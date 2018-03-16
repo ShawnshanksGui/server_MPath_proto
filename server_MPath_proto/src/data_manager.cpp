@@ -15,6 +15,10 @@ extern "C"
 
 using namespace std;
 
+//for debugging
+#define ENABLE_DEBUG_D_MAMAGER
+
+
 //static std::mutex mtx;
 
 
@@ -108,6 +112,8 @@ Data_Manager::~Data_Manager() {
 	}
 }
 
+
+#ifdef  ENABLE_DEBUG_D_MAMAGER
 //test
 int main() {
 	struct Param_Transmitter param_transmit;
@@ -126,6 +132,7 @@ int main() {
 	return 0;
 }
 
+#endif
 
 
 

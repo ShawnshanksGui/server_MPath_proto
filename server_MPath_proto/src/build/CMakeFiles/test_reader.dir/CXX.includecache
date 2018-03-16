@@ -74,6 +74,12 @@ video_reader.h
 bitrate_select.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/bitrate_select.h
 
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/path_selector.h
+video_reader.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/video_reader.h
+system_params.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
+
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/rs_fft.h
 
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/server.h
@@ -159,6 +165,8 @@ vector
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/data_manager.h
 ../include/system_params.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
+../include/path_selector.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/path_selector.h
 ../include/codeStreaming_parser.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/codeStreaming_parser.h
 thread

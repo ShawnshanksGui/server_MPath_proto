@@ -76,27 +76,26 @@ public:
 	Data_Manager();
 	~Data_Manager();
 
-//	void data_handler_thread();
+	bool data_save(struct Elem_Data *data, ID_PATH id_path);
+	struct Elem_Data *data_fetch(ID_PATH id_path);
 
 //friend classes
 	friend class Video_Reader;
 	friend class Encoder;
 	friend class Transmitter;
 
-private:
+
 	std::mutex mtx[2];
 	
 	int buf_size[NUM_PATH];
 	int MAX_SIZE[NUM_PATH];
-
-	bool data_save(struct Elem_Data *data, ID_PATH id_path);
-	struct Elem_Data *data_fetch(ID_PATH id_path);
 
 	bool Is_empty(ID_BUF id_buf);
 	bool Is_overflow(ID_BUF id_buf);
 	bool Push(struct Elem_Data *data_src, ID_PATH id_path);
 	struct Elem_Data *Pop(ID_PATH id_path);
 
+private:
 //video reader
 //	void gen_param_reader(char input_video_path);
 

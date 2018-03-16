@@ -11,7 +11,8 @@
 
 //for debugging
 #define ENABLE_DEBUG_READER
-#ifdef ENABLE_DEBUG_READER
+
+#ifdef  ENABLE_DEBUG_READER
 
 #include <thread>
 #include "../include/utility.h"
@@ -48,7 +49,7 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
     std::string inString;
 	
 
-	for(int i = 0, k = 0; i < REGION_NUM; i++) {
+	for(int i = 0; i < REGION_NUM; i++) {
 		std::string inputVideo_Path;
 		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
 		             "_" + std::to_string(id_VSegment) + ".265";
@@ -56,7 +57,7 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
    		File.open(inputVideo_Path, std::ios::in);
    		inString = slurp(File);
 //replicate data to a safe location
-   		char *cstr = new char[inString.length() + 1];
+   		VData_Type *cstr = new VData_Type[inString.length() + 1];
    		strcpy(cstr, inString.c_str());
 
    		data_manager.data_vec.push_back(cstr);
@@ -81,7 +82,6 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
 								  Data_Manager &data_manager) {
 //	const VData_Type *p_str = inString.c_str();
 	for(int i = 0; i < FRAME_GOP*GOP_NUM; i++) {
-//		int k = 0;
 //get the start address for the current nalu(or frame);
 		int location = nalu[id_region][i]._addr;
 
@@ -94,9 +94,10 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
 		int num = nalu[id_region][i]._size / (s_fec*k_fec);
 
 //real start address of current NALU(or frame) in inString data.
-		p_str = p_str + nalu[id_region][i];
+		p_str = p_str + nalu[id_region][i]._addr;
 
-//when the length of nalu is divisible(num-1 == k)
+//when the length of nalu is divisible(num-1 == k) by 
+//the product of s_fec and k_fec
 		if(0 == len_remaining) {
 //when the current nalu is longer than block size(s_fec*k_fec).
 			for(int k = 0; k < num; i++){
@@ -129,7 +130,7 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
 				location += s_fec*k_fec;
 			}
 		}
-//when the length of nalu is divisible, (num == k)
+//when the length of nalu is not divisible, (num == k)
 		else {
 			for(int k = 0; k <= num; k++) {
 				struct Elem_Data *elem_data = MALLOC(struct Elem_Data, 1);
@@ -185,8 +186,10 @@ void Video_Reader::assign_attribute(struct Elem_Data *elem_data,int path,
 	elem_data->S_FEC   = s_fec;
 	elem_data->K_FEC   = k_fec;
 
-	Data_Manager::data_save(elem_data, elem_data->id_path);
+	data_manager.data_save(elem_data, elem_data->id_path);
 }
+
+
 
 
 #ifdef ENABLE_DEBUG_READER
@@ -198,7 +201,7 @@ Channel_Inf chan_inf[NUM_PATH] = {{0.1, 50, 100}, {0.2, 90, 50}};
 int tile_num[REGION_NUM] = {FOV_TILE_NUM, CUSHION_TILE_NUM, 
 							 OUTMOST_TILE_NUM};
 //the unit is Mb/s
-int _bitrate[BITRATE_TYPE_NUM] = {50, 25, 10};
+double _bitrate[BITRATE_TYPE_NUM] = {50, 25, 10};
 
 int main() {
     int flag_video = 0;
@@ -222,7 +225,7 @@ int main() {
 //    File.open("../../../machu_picchu_8k_a_s111.265", std::ios::in);
 //    File.open("input_non_b.265", std::ios::in);
 	std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
-								 &video_reader, data_manager, 
+								 &video_reader, data_manager,
 								 id_VSegment);
     inString = slurp(File);
 

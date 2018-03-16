@@ -33,6 +33,8 @@ public:
 	friend class Bitrate_Selector;
 	friend class Path_Decs;
 
+	void video_reader_td_func(Data_Manager &data_manager, int id_VSegment);
+
 private:
 	int region_num;
 	int gop_num;
@@ -46,7 +48,7 @@ private:
 //the first is the bitrate of FOV, 
 	int bitrate_decs[REGION_NUM];
 
-	void video_reader_td_func(Data_Manager &data_manager, int id_VSegment);
+
 	void partition_nalu(int id_region, VData_Type *p_str, 
 						Data_Manager &data_manager);
 	void assign_attribute(struct Elem_Data *elem_data, int path,
