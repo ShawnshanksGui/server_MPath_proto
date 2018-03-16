@@ -224,14 +224,14 @@ int main() {
     File.open("../../../video_test/machu_picchu_a_s111_non_B.265", std::ios::in);
 //    File.open("../../../machu_picchu_8k_a_s111.265", std::ios::in);
 //    File.open("input_non_b.265", std::ios::in);
-	std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
-								 &video_reader, data_manager,
-								 id_VSegment);
+//	std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
+//								 &video_reader, data_manager,
+//								 id_VSegment);
     inString = slurp(File);
 
     flag_video = hevc_parser(inString, 1);
 
-    readVideo_worker.join();
+//    readVideo_worker.join();
 
     return 0;    
 }

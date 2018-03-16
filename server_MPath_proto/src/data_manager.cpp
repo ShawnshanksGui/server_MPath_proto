@@ -4,7 +4,6 @@
 
 #include <chrono>
 
-#include "../include/server.h"
 #include "../include/common.h"
 #include "../include/utility.h"
 
@@ -16,7 +15,7 @@ extern "C"
 using namespace std;
 
 //for debugging
-#define ENABLE_DEBUG_D_MAMAGER
+//#define ENABLE_DEBUG_D_MAMAGER
 
 
 //static std::mutex mtx;

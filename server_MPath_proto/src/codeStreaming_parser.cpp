@@ -1,4 +1,3 @@
-
 #include "chrono"
 #include "iostream"
 #include "fstream"
@@ -17,10 +16,9 @@ using namespace std;
 
 //for test and debug
 #ifdef ENABLE_DEBUG_PARSER
-
 #define REGION_NUM 3
-#define FRAME_GOP 50
 #define GOP_NUM 2
+#define FRAME_GOP 50
 
 //the intra pridicted frame
 #define I_FRAME 1

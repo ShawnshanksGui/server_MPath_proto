@@ -82,8 +82,6 @@ system_params.h
 
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/rs_fft.h
 
-/home/guifei/server_Mpath_proto/server_MPath_proto/include/server.h
-
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
 
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/thread_core_affinity_set.h
@@ -127,8 +125,6 @@ cstdio
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/data_manager.h
 chrono
 -
-../include/server.h
-/home/guifei/server_Mpath_proto/server_MPath_proto/include/server.h
 ../include/common.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
 ../include/utility.h

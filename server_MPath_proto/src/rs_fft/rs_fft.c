@@ -27,6 +27,10 @@ GFSymbol mask = 0x2D;//x^16 + x^5 + x^3 + x^2 + 1
 GFSymbol Base[len] = {1, 44234, 15374, 5694, 50562, 60718, 37196, 16402, 27800, 4312, 27250, 47360, 64952, 64308, 65336, 39198};//Cantor basis
 */
 
+//for debugging
+#define ENABLE_DEBUG_RS_FFT
+
+
 #define Size (1<<len)//Field size
 #define mod (Size-1)
 
@@ -301,12 +305,17 @@ void *decode_FFT_RS(struct Data_Remain data_remain,
 			}
 		}		
 	}
+
+#ifdef ENABLE_DEBUG_RS_FFT
 	printf("recovery data is:\n%s\n\n", data_dst);
+#endif
 
 	return data_dst;
 }
 //==========================================================================
 
+
+#ifdef ENABLE_DEBUG_RS_FFT
 //==========================================================================
 //==========================================================================
 //Author: shawnshanks_fei
@@ -356,6 +365,8 @@ int main() {
 
 	return 0;
 }
+
+#endif
 //==========================================================================
 
 /*

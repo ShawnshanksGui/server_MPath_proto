@@ -30,6 +30,7 @@ public:
 	Video_Reader();
 	~Video_Reader() {}
 
+	friend class Data_Manager;
 	friend class Bitrate_Selector;
 	friend class Path_Decs;
 
