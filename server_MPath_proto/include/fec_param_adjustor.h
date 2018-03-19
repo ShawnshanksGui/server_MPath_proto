@@ -4,12 +4,17 @@
 #include "common.h"
 #include "video_reader.h"
 #include "bitrate_select.h"
+#include "system_params.h"
+
+#define LEVEL_NUM 7
+//actually step_rate = 1/6, for coding conveniently
+#define STEP_RATE  FRAME_GOP/6
 
 typedef unsigned char uchar;
 
 class FEC_Param_Adjuster{
 public:
-	uchar avail_K[6];
+	int avail_K[LEVEL_NUM];
 
 	FEC_Param_Adjuster();
 	~FEC_Param_Adjuster() {}

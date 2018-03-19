@@ -17,7 +17,7 @@ Lin, Han and Chung, "Novel Polynomial Basis and Its Application to Reed-Solomon 
 #define MALLOC(type, size) ((type *)malloc(sizeof(type) * (size)))
 
 typedef unsigned char GFSymbol;
-typedef unsigned char Indicator_Type;
+
 #define len 8//2^len: the size of Galois field
 GFSymbol mask = 0x1D; //GF(2^8): x^8 + x^4 + x^3 + x^2 + 1
 GFSymbol Base[] = {1, 214, 152, 146, 86, 200, 88, 230};//Cantor basis

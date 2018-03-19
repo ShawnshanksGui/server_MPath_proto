@@ -2,6 +2,10 @@
 #include "../include/bitrate_select.h"
 #include "../include/common.h"
 
+//for debugging
+#define DEBUG_BITRATE_SELECTOR
+
+
 Bitrate_Selector::Bitrate_Selector(double _bitrate[BITRATE_TYPE_NUM]) {
 	for(int i = 0; i < BITRATE_TYPE_NUM; i++) {
 		bitrate[i] = _bitrate[i];
@@ -18,7 +22,10 @@ void Bitrate_Selector::setBitrate(int tile_num[REGION_NUM],
 	for(int k = 0; k < REGION_NUM; k++) {
 		video_reader.bitrate_decs[k] = bitrate[LOWEST];	
 	}
-
+	printf("\nThe bitrate is as following:\n");
+	for(int i = 0; i < REGION_NUM; i++) {
+		printf("%lf ", video_reader.bitrate_decs[i]);
+	}
 	bw_residual = chan_inf[0].avail_bw*(1-chan_inf[0].plr) + 
 				  chan_inf[1].avail_bw*(1-chan_inf[1].plr) - 
 				  bitrate[LOWEST];
@@ -35,4 +42,12 @@ void Bitrate_Selector::setBitrate(int tile_num[REGION_NUM],
 		}
 		bw_residual -= video_reader.bitrate_decs[i];
 	}
+
+#ifdef DEBUG_BITRATE_SELECTOR
+	printf("\nThe bitrate is as following:\n");
+	for(int i = 0; i < REGION_NUM; i++) {
+		printf("%lf ", video_reader.bitrate_decs[i]);
+	}
+	printf("\n");
+#endif
 }

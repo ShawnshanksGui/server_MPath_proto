@@ -4,12 +4,10 @@
 #include "system_params.h"
 #include "data_manager.h"
 
-
 //the intra pridicted frame
 #define I_FRAME 1
 //the forward predicted frame
 #define P_FRAME 0
-
 
 struct Nalu_Elem{
 	bool frameType;
@@ -18,7 +16,6 @@ struct Nalu_Elem{
 //the size for each NALU.
 	int _size;
 };
-
 
 class Video_Reader {
 public:

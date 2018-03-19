@@ -13,7 +13,6 @@
 #define ENABLE_DEBUG_READER
 
 #ifdef  ENABLE_DEBUG_READER
-
 #include <thread>
 #include "../include/utility.h"
 #include "../include/bitrate_select.h"
@@ -195,13 +194,13 @@ void Video_Reader::assign_attribute(struct Elem_Data *elem_data,int path,
 #ifdef ENABLE_DEBUG_READER
 
 //two channels' realtime infomation
-Channel_Inf chan_inf[NUM_PATH] = {{0.1, 50, 100}, {0.2, 90, 50}};
+Channel_Inf chan_inf[NUM_PATH] = {{0.03, 50.0, 100.0}, {0.05, 90.0, 50.0}};
 //Tile_Num tile_num{TILE_NUM, FOV_TILE_NUM, 
 //	              CUSHION_TILE_NUM, OUTMOST_TILE_NUM};
 int tile_num[REGION_NUM] = {FOV_TILE_NUM, CUSHION_TILE_NUM, 
 							 OUTMOST_TILE_NUM};
 //the unit is Mb/s
-double _bitrate[BITRATE_TYPE_NUM] = {50, 25, 10};
+double _bitrate[BITRATE_TYPE_NUM] = {50.0, 25.0, 10.0};
 
 int main() {
     int flag_video = 0;
@@ -224,9 +223,9 @@ int main() {
     File.open("../../../video_test/machu_picchu_a_s111_non_B.265", std::ios::in);
 //    File.open("../../../machu_picchu_8k_a_s111.265", std::ios::in);
 //    File.open("input_non_b.265", std::ios::in);
-//	std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
-//								 &video_reader, data_manager,
-//								 id_VSegment);
+	std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
+								 &video_reader, data_manager,
+								 id_VSegment);
 //    inString = slurp(File);
 
 //    flag_video = hevc_parser(inString, 1);

@@ -11,10 +11,11 @@
 #include "../include/system_params.h"
 
 //two channels' realtime infomation
-Channel_Inf chan_inf[NUM_PATH] = {{0.1, 50, 100}, {0.2, 90, 50}};
+Channel_Inf chan_inf[NUM_PATH] = {{0.01, 50.0, 100.0},
+								  {0.02, 90.0, 50.0}};
 //Tile_Num tile_num{TILE_NUM, FOV_TILE_NUM, 
 //	              CUSHION_TILE_NUM, OUTMOST_TILE_NUM};
-int tile_num [REGION_NUM] = {FOV_TILE_NUM, CUSHION_TILE_NUM, 
+int tile_num[REGION_NUM] = {FOV_TILE_NUM, CUSHION_TILE_NUM, 
 							 OUTMOST_TILE_NUM};
 //the unit is Mb/s
 int _bitrate[BITRATE_TYPE_NUM] = {50, 25, 10};
@@ -46,7 +47,11 @@ int main() {
 		if(startFlag_one_timeSlice) {
 //process the next video segment
 			id_VSegment++;
-
+			printf("\nThe chan_inf is as following\n");
+			for(int i = 0; i < NUM_PATH; i++) {
+				printf("%lf\n ", chan_inf.plr);
+			}
+			printf("\n");
 			fec_param_adj.setFEC_params(chan_inf, bitrate_selector, video_reader);
 			bitrate_selector.setBitrate(tile_num, chan_inf, video_reader);
 			path_selector.select_Path(chan_inf, video_reader);
