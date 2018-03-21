@@ -1,6 +1,7 @@
-#include "chrono"
-#include "string"
-#include "vector"
+#include <chrono>
+#include <string>
+#include <vector>
+#include <thread>
 
 #include "../include/common.h"
 #include "../include/video_reader.h"
@@ -10,14 +11,12 @@
 #include "../include/codeStreaming_parser.h"
 
 //for debugging
-#define ENABLE_DEBUG_READER
+//#define ENABLE_DEBUG_READER
 
 #ifdef  ENABLE_DEBUG_READER
-#include <thread>
 #include "../include/utility.h"
 #include "../include/bitrate_select.h"
 #include "../include/fec_param_adjustor.h"
-
 #endif
 
 Video_Reader::Video_Reader() {
@@ -40,6 +39,27 @@ Video_Reader::Video_Reader() {
 //Description: the thread function which simulates data generating procedure  
 //Parameters:  SYMB_SIZE is equal to encoding symbol size 
 //==========================================================================
+/*void Video_Reader::video_reader_td_func(int id_VSegment) {
+	int flag_video = 0;
+
+    std::ifstream File;
+    std::string inString;
+	
+	for(int i = 0; i < REGION_NUM; i++) {
+		std::string inputVideo_Path;
+		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
+		             "_" + std::to_string(id_VSegment) + ".265";
+//==========================================================================
+   		File.open(inputVideo_Path, std::ios::in);
+   		inString = slurp(File);
+//replicate data to a safe location
+   		VData_Type *cstr = new VData_Type[inString.length() + 1];
+   		strcpy(cstr, inString.c_str());
+
+   		delete [] cstr;
+	}
+}
+*/
 void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 										int id_VSegment) {
 	int flag_video = 0;
@@ -47,7 +67,6 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
     std::ifstream File;
     std::string inString;
 	
-
 	for(int i = 0; i < REGION_NUM; i++) {
 		std::string inputVideo_Path;
 		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
@@ -66,10 +85,13 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
     	partition_nalu(i, cstr, data_manager);
 
     	delete [] cstr;
-    } 
-//==========================================================================	
+    }
 }
+//==========================================================================	
 
+//void Video_Reader::setVideoReader(Data_Manager &&d_manager) {
+//	data_manager.Data_Manager() 
+//}
 
 //==========================================================================
 //==========================================================================
@@ -189,8 +211,6 @@ void Video_Reader::assign_attribute(struct Elem_Data *elem_data,int path,
 }
 
 
-
-
 #ifdef ENABLE_DEBUG_READER
 
 //two channels' realtime infomation
@@ -223,14 +243,17 @@ int main() {
     File.open("../../../video_test/machu_picchu_a_s111_non_B.265", std::ios::in);
 //    File.open("../../../machu_picchu_8k_a_s111.265", std::ios::in);
 //    File.open("input_non_b.265", std::ios::in);
-	std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
-								 &video_reader, data_manager,
-								 id_VSegment);
+
+//	std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
+//								 &video_reader, data_manager,
+//								 id_VSegment);
+//    std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
+//    							 &video_reader);
+    std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
+        						 video_reader);
 //    inString = slurp(File);
-
 //    flag_video = hevc_parser(inString, 1);
-
-//    readVideo_worker.join();
+    readVideo_worker.join();
 
     return 0;    
 }

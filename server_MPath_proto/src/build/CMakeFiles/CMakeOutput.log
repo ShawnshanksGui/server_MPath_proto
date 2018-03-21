@@ -603,3 +603,35 @@ make[1]: Leaving directory '/home/guifei/server_Mpath_proto/server_MPath_proto/s
     Feature record: CXX_FEATURE:0cxx_variable_templates
     Feature record: CXX_FEATURE:0cxx_variadic_macros
     Feature record: CXX_FEATURE:0cxx_variadic_templates
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_a23df/fast"
+make[1]: Entering directory '/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_a23df.dir/build.make CMakeFiles/cmTC_a23df.dir/build
+make[2]: Entering directory '/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a23df.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_a23df.dir/CheckIncludeFile.c.o   -c /home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_a23df
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a23df.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_a23df.dir/CheckIncludeFile.c.o  -o cmTC_a23df 
+make[2]: Leaving directory '/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_a692b/fast"
+make[1]: Entering directory '/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_a692b.dir/build.make CMakeFiles/cmTC_a692b.dir/build
+make[2]: Entering directory '/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a692b.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_a692b.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_a692b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a692b.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_a692b.dir/CheckFunctionExists.c.o  -o cmTC_a692b -lpthread 
+make[2]: Leaving directory '/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/CMakeTmp'
+
+

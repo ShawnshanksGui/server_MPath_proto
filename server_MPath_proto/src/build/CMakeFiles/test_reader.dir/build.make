@@ -57,9 +57,33 @@ include CMakeFiles/test_reader.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/test_reader.dir/flags.make
 
+CMakeFiles/test_reader.dir/test_videoReader.cpp.o: CMakeFiles/test_reader.dir/flags.make
+CMakeFiles/test_reader.dir/test_videoReader.cpp.o: ../test_videoReader.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test_reader.dir/test_videoReader.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_reader.dir/test_videoReader.cpp.o -c /home/guifei/server_Mpath_proto/server_MPath_proto/src/test_videoReader.cpp
+
+CMakeFiles/test_reader.dir/test_videoReader.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_reader.dir/test_videoReader.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/guifei/server_Mpath_proto/server_MPath_proto/src/test_videoReader.cpp > CMakeFiles/test_reader.dir/test_videoReader.cpp.i
+
+CMakeFiles/test_reader.dir/test_videoReader.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_reader.dir/test_videoReader.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/guifei/server_Mpath_proto/server_MPath_proto/src/test_videoReader.cpp -o CMakeFiles/test_reader.dir/test_videoReader.cpp.s
+
+CMakeFiles/test_reader.dir/test_videoReader.cpp.o.requires:
+
+.PHONY : CMakeFiles/test_reader.dir/test_videoReader.cpp.o.requires
+
+CMakeFiles/test_reader.dir/test_videoReader.cpp.o.provides: CMakeFiles/test_reader.dir/test_videoReader.cpp.o.requires
+	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/test_videoReader.cpp.o.provides.build
+.PHONY : CMakeFiles/test_reader.dir/test_videoReader.cpp.o.provides
+
+CMakeFiles/test_reader.dir/test_videoReader.cpp.o.provides.build: CMakeFiles/test_reader.dir/test_videoReader.cpp.o
+
+
 CMakeFiles/test_reader.dir/video_reader.cpp.o: CMakeFiles/test_reader.dir/flags.make
 CMakeFiles/test_reader.dir/video_reader.cpp.o: ../video_reader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test_reader.dir/video_reader.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/test_reader.dir/video_reader.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_reader.dir/video_reader.cpp.o -c /home/guifei/server_Mpath_proto/server_MPath_proto/src/video_reader.cpp
 
 CMakeFiles/test_reader.dir/video_reader.cpp.i: cmake_force
@@ -83,7 +107,7 @@ CMakeFiles/test_reader.dir/video_reader.cpp.o.provides.build: CMakeFiles/test_re
 
 CMakeFiles/test_reader.dir/data_manager.cpp.o: CMakeFiles/test_reader.dir/flags.make
 CMakeFiles/test_reader.dir/data_manager.cpp.o: ../data_manager.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/test_reader.dir/data_manager.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/test_reader.dir/data_manager.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_reader.dir/data_manager.cpp.o -c /home/guifei/server_Mpath_proto/server_MPath_proto/src/data_manager.cpp
 
 CMakeFiles/test_reader.dir/data_manager.cpp.i: cmake_force
@@ -107,7 +131,7 @@ CMakeFiles/test_reader.dir/data_manager.cpp.o.provides.build: CMakeFiles/test_re
 
 CMakeFiles/test_reader.dir/codeStreaming_parser.cpp.o: CMakeFiles/test_reader.dir/flags.make
 CMakeFiles/test_reader.dir/codeStreaming_parser.cpp.o: ../codeStreaming_parser.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/test_reader.dir/codeStreaming_parser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test_reader.dir/codeStreaming_parser.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_reader.dir/codeStreaming_parser.cpp.o -c /home/guifei/server_Mpath_proto/server_MPath_proto/src/codeStreaming_parser.cpp
 
 CMakeFiles/test_reader.dir/codeStreaming_parser.cpp.i: cmake_force
@@ -131,7 +155,7 @@ CMakeFiles/test_reader.dir/codeStreaming_parser.cpp.o.provides.build: CMakeFiles
 
 CMakeFiles/test_reader.dir/bitrate_select.cpp.o: CMakeFiles/test_reader.dir/flags.make
 CMakeFiles/test_reader.dir/bitrate_select.cpp.o: ../bitrate_select.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test_reader.dir/bitrate_select.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/test_reader.dir/bitrate_select.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_reader.dir/bitrate_select.cpp.o -c /home/guifei/server_Mpath_proto/server_MPath_proto/src/bitrate_select.cpp
 
 CMakeFiles/test_reader.dir/bitrate_select.cpp.i: cmake_force
@@ -155,7 +179,7 @@ CMakeFiles/test_reader.dir/bitrate_select.cpp.o.provides.build: CMakeFiles/test_
 
 CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.o: CMakeFiles/test_reader.dir/flags.make
 CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.o: ../fec_param_adjustor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.o -c /home/guifei/server_Mpath_proto/server_MPath_proto/src/fec_param_adjustor.cpp
 
 CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.i: cmake_force
@@ -179,7 +203,7 @@ CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.o.provides.build: CMakeFiles/t
 
 CMakeFiles/test_reader.dir/path_selector.cpp.o: CMakeFiles/test_reader.dir/flags.make
 CMakeFiles/test_reader.dir/path_selector.cpp.o: ../path_selector.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/test_reader.dir/path_selector.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/test_reader.dir/path_selector.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_reader.dir/path_selector.cpp.o -c /home/guifei/server_Mpath_proto/server_MPath_proto/src/path_selector.cpp
 
 CMakeFiles/test_reader.dir/path_selector.cpp.i: cmake_force
@@ -201,54 +225,56 @@ CMakeFiles/test_reader.dir/path_selector.cpp.o.provides: CMakeFiles/test_reader.
 CMakeFiles/test_reader.dir/path_selector.cpp.o.provides.build: CMakeFiles/test_reader.dir/path_selector.cpp.o
 
 
-CMakeFiles/test_reader.dir/utility.cpp.o: CMakeFiles/test_reader.dir/flags.make
-CMakeFiles/test_reader.dir/utility.cpp.o: ../utility.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/test_reader.dir/utility.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_reader.dir/utility.cpp.o -c /home/guifei/server_Mpath_proto/server_MPath_proto/src/utility.cpp
+CMakeFiles/test_reader.dir/myUtility.cpp.o: CMakeFiles/test_reader.dir/flags.make
+CMakeFiles/test_reader.dir/myUtility.cpp.o: ../myUtility.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/test_reader.dir/myUtility.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_reader.dir/myUtility.cpp.o -c /home/guifei/server_Mpath_proto/server_MPath_proto/src/myUtility.cpp
 
-CMakeFiles/test_reader.dir/utility.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_reader.dir/utility.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/guifei/server_Mpath_proto/server_MPath_proto/src/utility.cpp > CMakeFiles/test_reader.dir/utility.cpp.i
+CMakeFiles/test_reader.dir/myUtility.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_reader.dir/myUtility.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/guifei/server_Mpath_proto/server_MPath_proto/src/myUtility.cpp > CMakeFiles/test_reader.dir/myUtility.cpp.i
 
-CMakeFiles/test_reader.dir/utility.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_reader.dir/utility.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/guifei/server_Mpath_proto/server_MPath_proto/src/utility.cpp -o CMakeFiles/test_reader.dir/utility.cpp.s
+CMakeFiles/test_reader.dir/myUtility.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_reader.dir/myUtility.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/guifei/server_Mpath_proto/server_MPath_proto/src/myUtility.cpp -o CMakeFiles/test_reader.dir/myUtility.cpp.s
 
-CMakeFiles/test_reader.dir/utility.cpp.o.requires:
+CMakeFiles/test_reader.dir/myUtility.cpp.o.requires:
 
-.PHONY : CMakeFiles/test_reader.dir/utility.cpp.o.requires
+.PHONY : CMakeFiles/test_reader.dir/myUtility.cpp.o.requires
 
-CMakeFiles/test_reader.dir/utility.cpp.o.provides: CMakeFiles/test_reader.dir/utility.cpp.o.requires
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/utility.cpp.o.provides.build
-.PHONY : CMakeFiles/test_reader.dir/utility.cpp.o.provides
+CMakeFiles/test_reader.dir/myUtility.cpp.o.provides: CMakeFiles/test_reader.dir/myUtility.cpp.o.requires
+	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/myUtility.cpp.o.provides.build
+.PHONY : CMakeFiles/test_reader.dir/myUtility.cpp.o.provides
 
-CMakeFiles/test_reader.dir/utility.cpp.o.provides.build: CMakeFiles/test_reader.dir/utility.cpp.o
+CMakeFiles/test_reader.dir/myUtility.cpp.o.provides.build: CMakeFiles/test_reader.dir/myUtility.cpp.o
 
 
 # Object files for target test_reader
 test_reader_OBJECTS = \
+"CMakeFiles/test_reader.dir/test_videoReader.cpp.o" \
 "CMakeFiles/test_reader.dir/video_reader.cpp.o" \
 "CMakeFiles/test_reader.dir/data_manager.cpp.o" \
 "CMakeFiles/test_reader.dir/codeStreaming_parser.cpp.o" \
 "CMakeFiles/test_reader.dir/bitrate_select.cpp.o" \
 "CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.o" \
 "CMakeFiles/test_reader.dir/path_selector.cpp.o" \
-"CMakeFiles/test_reader.dir/utility.cpp.o"
+"CMakeFiles/test_reader.dir/myUtility.cpp.o"
 
 # External object files for target test_reader
 test_reader_EXTERNAL_OBJECTS =
 
+test_reader: CMakeFiles/test_reader.dir/test_videoReader.cpp.o
 test_reader: CMakeFiles/test_reader.dir/video_reader.cpp.o
 test_reader: CMakeFiles/test_reader.dir/data_manager.cpp.o
 test_reader: CMakeFiles/test_reader.dir/codeStreaming_parser.cpp.o
 test_reader: CMakeFiles/test_reader.dir/bitrate_select.cpp.o
 test_reader: CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.o
 test_reader: CMakeFiles/test_reader.dir/path_selector.cpp.o
-test_reader: CMakeFiles/test_reader.dir/utility.cpp.o
+test_reader: CMakeFiles/test_reader.dir/myUtility.cpp.o
 test_reader: CMakeFiles/test_reader.dir/build.make
 test_reader: rs_fft/libRS_FFT.a
 test_reader: CMakeFiles/test_reader.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable test_reader"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable test_reader"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test_reader.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -256,13 +282,14 @@ CMakeFiles/test_reader.dir/build: test_reader
 
 .PHONY : CMakeFiles/test_reader.dir/build
 
+CMakeFiles/test_reader.dir/requires: CMakeFiles/test_reader.dir/test_videoReader.cpp.o.requires
 CMakeFiles/test_reader.dir/requires: CMakeFiles/test_reader.dir/video_reader.cpp.o.requires
 CMakeFiles/test_reader.dir/requires: CMakeFiles/test_reader.dir/data_manager.cpp.o.requires
 CMakeFiles/test_reader.dir/requires: CMakeFiles/test_reader.dir/codeStreaming_parser.cpp.o.requires
 CMakeFiles/test_reader.dir/requires: CMakeFiles/test_reader.dir/bitrate_select.cpp.o.requires
 CMakeFiles/test_reader.dir/requires: CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.o.requires
 CMakeFiles/test_reader.dir/requires: CMakeFiles/test_reader.dir/path_selector.cpp.o.requires
-CMakeFiles/test_reader.dir/requires: CMakeFiles/test_reader.dir/utility.cpp.o.requires
+CMakeFiles/test_reader.dir/requires: CMakeFiles/test_reader.dir/myUtility.cpp.o.requires
 
 .PHONY : CMakeFiles/test_reader.dir/requires
 

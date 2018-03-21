@@ -244,6 +244,33 @@ fec_param_adjustor.cpp.s:
 	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.s
 .PHONY : fec_param_adjustor.cpp.s
 
+myUtility.o: myUtility.cpp.o
+
+.PHONY : myUtility.o
+
+# target to build an object file
+myUtility.cpp.o:
+	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/myUtility.cpp.o
+.PHONY : myUtility.cpp.o
+
+myUtility.i: myUtility.cpp.i
+
+.PHONY : myUtility.i
+
+# target to preprocess a source file
+myUtility.cpp.i:
+	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/myUtility.cpp.i
+.PHONY : myUtility.cpp.i
+
+myUtility.s: myUtility.cpp.s
+
+.PHONY : myUtility.s
+
+# target to generate assembly for a file
+myUtility.cpp.s:
+	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/myUtility.cpp.s
+.PHONY : myUtility.cpp.s
+
 path_selector.o: path_selector.cpp.o
 
 .PHONY : path_selector.o
@@ -271,32 +298,32 @@ path_selector.cpp.s:
 	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/path_selector.cpp.s
 .PHONY : path_selector.cpp.s
 
-utility.o: utility.cpp.o
+test_videoReader.o: test_videoReader.cpp.o
 
-.PHONY : utility.o
+.PHONY : test_videoReader.o
 
 # target to build an object file
-utility.cpp.o:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/utility.cpp.o
-.PHONY : utility.cpp.o
+test_videoReader.cpp.o:
+	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/test_videoReader.cpp.o
+.PHONY : test_videoReader.cpp.o
 
-utility.i: utility.cpp.i
+test_videoReader.i: test_videoReader.cpp.i
 
-.PHONY : utility.i
+.PHONY : test_videoReader.i
 
 # target to preprocess a source file
-utility.cpp.i:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/utility.cpp.i
-.PHONY : utility.cpp.i
+test_videoReader.cpp.i:
+	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/test_videoReader.cpp.i
+.PHONY : test_videoReader.cpp.i
 
-utility.s: utility.cpp.s
+test_videoReader.s: test_videoReader.cpp.s
 
-.PHONY : utility.s
+.PHONY : test_videoReader.s
 
 # target to generate assembly for a file
-utility.cpp.s:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/utility.cpp.s
-.PHONY : utility.cpp.s
+test_videoReader.cpp.s:
+	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/test_videoReader.cpp.s
+.PHONY : test_videoReader.cpp.s
 
 video_reader.o: video_reader.cpp.o
 
@@ -347,12 +374,15 @@ help:
 	@echo "... fec_param_adjustor.o"
 	@echo "... fec_param_adjustor.i"
 	@echo "... fec_param_adjustor.s"
+	@echo "... myUtility.o"
+	@echo "... myUtility.i"
+	@echo "... myUtility.s"
 	@echo "... path_selector.o"
 	@echo "... path_selector.i"
 	@echo "... path_selector.s"
-	@echo "... utility.o"
-	@echo "... utility.i"
-	@echo "... utility.s"
+	@echo "... test_videoReader.o"
+	@echo "... test_videoReader.i"
+	@echo "... test_videoReader.s"
 	@echo "... video_reader.o"
 	@echo "... video_reader.i"
 	@echo "... video_reader.s"

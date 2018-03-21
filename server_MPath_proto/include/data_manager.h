@@ -2,10 +2,10 @@
 #define _DATA_MANAGER_H_
 
 #include <queue>
-#include "vector"
-
-#include <thread>
 #include <mutex>
+#include <thread>
+#include <vector>
+
 #include "system_params.h"
 
 typedef int      ID_BUF;
@@ -67,8 +67,8 @@ struct Elem_Data{
 
 class Data_Manager {
 public:	
-	queue<struct Elem_Data *> data_video[NUM_PATH];
-	queue<char *> send_Q[NUM_PATH];
+	vector< queue<struct Elem_Data *> > data_video;
+//	vecotr< queue<char *> > send_Q;
 
 	vector<std::string> data_vec;
 
@@ -83,7 +83,6 @@ public:
 	friend class Video_Reader;
 	friend class Encoder;
 	friend class Transmitter;
-
 
 	std::mutex mtx[2];
 	

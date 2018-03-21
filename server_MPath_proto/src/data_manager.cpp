@@ -5,7 +5,7 @@
 #include <chrono>
 
 #include "../include/common.h"
-#include "../include/utility.h"
+#include "../include/myUtility.h"
 
 extern "C"
 {
@@ -17,9 +17,38 @@ using namespace std;
 //for debugging
 //#define ENABLE_DEBUG_D_MAMAGER
 
+Data_Manager::Data_Manager(int max_size) {
+	for(int i = 0; i < NUM_PATH; i++) {
+		buf_size[i] = 0;
+		MAX_SIZE[i] = max_size;
+	}
+//init
+	for(int k = 0; k < NUM_PATH; k++) {
+		queue<struct Elem_Data *> data_queue;
+		data_video.push_back(std::move(data_queue));
+	}
+}
 
-//static std::mutex mtx;
+Data_Manager::Data_Manager() {
+	for(int i = 0; i < NUM_PATH; i++) {
+		buf_size[i] = 0;
+		MAX_SIZE[i] = 1000;
+	}
+//init
+	for(int k = 0; k < NUM_PATH; k++) {
+		queue<struct Elem_Data *> data_queue;
+		data_video.push_back(std::move(data_queue));
+	}
+}
 
+Data_Manager::~Data_Manager() {
+	for(int i = 0; i < NUM_PATH; i++) {
+		while(buf_size[i]--) {
+			SAFE_FREE(data_video[i].front()); 
+			data_video[i].pop();
+		}
+	}
+}
 
 //==========================================================================
 //==========================================================================
@@ -86,29 +115,6 @@ bool Data_Manager::Is_overflow(ID_BUF id_buf) {
 bool Data_Manager::Is_empty(ID_BUF id_buf) {
 
 	return 0 == (buf_size[id_buf]);
-}
-
-Data_Manager::Data_Manager(int max_size) {
-	for(int i = 0; i < NUM_PATH; i++) {
-		buf_size[i] = 0;
-		MAX_SIZE[i] = max_size;
-	}
-}
-
-Data_Manager::Data_Manager() {
-	for(int i = 0; i < NUM_PATH; i++) {
-		buf_size[i] = 0;
-		MAX_SIZE[i] = 100;
-	}
-}
-
-Data_Manager::~Data_Manager() {
-	for(int i = 0; i < NUM_PATH; i++) {
-		while(buf_size[i]--) {
-			SAFE_FREE(data_video[i].front()); 
-			data_video[i].pop();
-		}
-	}
 }
 
 

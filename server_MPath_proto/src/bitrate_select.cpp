@@ -1,6 +1,7 @@
+#include "../include/common.h"
 #include "../include/system_params.h"
 #include "../include/bitrate_select.h"
-#include "../include/common.h"
+
 
 //for debugging
 #define DEBUG_BITRATE_SELECTOR

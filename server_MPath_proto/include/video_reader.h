@@ -24,20 +24,26 @@ public:
 
 	struct Nalu_Elem nalu[REGION_NUM][FRAME_GOP*GOP_NUM];
 
+	Data_Manager data_manager;
+
 	Video_Reader();
 	~Video_Reader() {}
+
+	void video_reader_td_func(Data_Manager &data_manager, int id_VSegment);
+//	void video_reader_td_func(int id_VSegment);
 
 	friend class Data_Manager;
 	friend class Bitrate_Selector;
 	friend class Path_Decs;
 	friend class Path_Selector;
-	void video_reader_td_func(Data_Manager &data_manager, int id_VSegment);
 
 private:
 	int region_num;
 	int gop_num;
 	int gopFrame_num; 
 	
+//	void setVideoReader(Data_Manager &&_data_manger);
+
 //  The path decision about each region(FOV, adjacent, outsise) 
 //	for every frame in a video segment.  
 	int path_decs[REGION_NUM][FRAME_GOP*GOP_NUM];
@@ -45,7 +51,6 @@ private:
 //  THe bitrate decision about each region of a video segment
 //the first is the bitrate of FOV, 
 	int bitrate_decs[REGION_NUM];
-
 
 	void partition_nalu(int id_region, VData_Type *p_str, 
 						Data_Manager &data_manager);

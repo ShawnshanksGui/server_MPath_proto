@@ -5,7 +5,7 @@
 
 #include        "../include/server.h"
 #include        "../include/common.h"
-#include       "../include/utility.h"
+#include     "../include/myUtility.h"
 #include      "../include/mySocket.h"
 #include  "../include/data_manager.h"
 #include "../include/system_params.h"
