@@ -68,7 +68,7 @@ class Data_Manager {
 public:	
 	vector< queue<struct Elem_Data *> > data_video;
 
-	vector<std::string> data_vec;
+	vector<VData_Type *> data_vec;
 
 	Data_Manager(int max_size);
 	Data_Manager();

@@ -64,11 +64,11 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 
     	partition_nalu(i, cstr, data_manager);
 
-    	delete [] cstr;
+//    	delete [] cstr;
     }
 }
 //==========================================================================	
-
+/*
 void Video_Reader::video_reader_func(Data_Manager &data_manager,
 									 int id_VSegment) {
 	int flag_video = 0;
@@ -77,7 +77,7 @@ void Video_Reader::video_reader_func(Data_Manager &data_manager,
     std::string inString;
 	
 //	for(int i = 0; i < REGION_NUM; i++) {
-	for(int i = 0; i < 1	; i++) {    
+	for(int i = 0; i < 1; i++) {    
 		std::string inputVideo_Path;	
 //		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
 //		             "_" + std::to_string(id_VSegment) + ".265";
@@ -97,7 +97,10 @@ void Video_Reader::video_reader_func(Data_Manager &data_manager,
     	partition_nalu(i, cstr, data_manager);
 //    	delete [] cstr;
     }
+
+	data_manager.buf_size[0] = 101;
 }
+*/
 
 //void Video_Reader::setVideoReader(Data_Manager &&d_manager) {
 //	data_manager.Data_Manager() 

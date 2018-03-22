@@ -37,6 +37,7 @@ Data_Manager():data_video(NUM_PATH) {
 Data_Manager::
 ~Data_Manager() {
 	printf("\nthe data stream is as following:\n");
+/*
 	for(int i = 0; i < NUM_PATH; i++) {
 		int num_elem = buf_size[i];
 		while(num_elem--) {
@@ -46,6 +47,22 @@ Data_Manager::
 			data_video[i].pop();
 		}
 	}
+*/
+/*
+	while(data_video.size() > 0) {
+		while(data_video.back().size() > 0) {
+			struct Elem_Data *tmp = data_video.back().front();
+			printf("%d %d %d %d\n", tmp->size, tmp->id_path, tmp->id_nalu, tmp->type_location);
+			SAFE_FREE(tmp); 
+			data_video.back().pop();
+		}
+		data_video.pop_back();
+	}
+	while(data_vec.size() > 0) {
+		SAFE_FREE(data_vec.back());
+		data_vec.pop_back();		
+	}
+*/
 }
 
 //==========================================================================
