@@ -2,6 +2,10 @@
 #include <string>
 #include <vector>
 #include <thread>
+#include "fstream"
+#include "sstream"
+#include "iostream"
+#include "ios"
 
 #include "../include/common.h"
 #include "../include/video_reader.h"
@@ -15,10 +19,11 @@
 #include "../include/fec_param_adjustor.h"
 
 
+
 //#ifdef ENABLE_DEBUG_READER
 
 //two channels' realtime infomation
-Channel_Inf chan_inf[NUM_PATH] = {{0.03, 50.0, 100.0}, {0.05, 90.0, 50.0}};
+Channel_Inf chan_inf[NUM_PATH] = {{0.03, 50.0, 50.0}, {0.05, 90.0, 25.0}};
 //Tile_Num tile_num{TILE_NUM, FOV_TILE_NUM, 
 //	              CUSHION_TILE_NUM, OUTMOST_TILE_NUM};
 int tile_num[REGION_NUM] = {FOV_TILE_NUM, CUSHION_TILE_NUM, 
@@ -26,13 +31,15 @@ int tile_num[REGION_NUM] = {FOV_TILE_NUM, CUSHION_TILE_NUM,
 //the unit is Mb/s
 double _bitrate[BITRATE_TYPE_NUM] = {50.0, 25.0, 10.0};
 
+
+
 int main() {
     int flag_video = 0;
 //    std::string _input;
 	int id_VSegment = 0;
+	std::string inString;
 
-    std::ifstream File;
-    std::string inString;
+	std::string inputVideo_Path;
 
     Data_Manager data_manager(100);
 	FEC_Param_Adjuster fec_param_adj;
@@ -44,25 +51,23 @@ int main() {
 	bitrate_selector.setBitrate(tile_num, chan_inf, video_reader);
 	path_selector.select_Path(chan_inf, video_reader);
 
-    File.open("../../../video_test/machu_picchu_a_s111_non_B.265", std::ios::in);
+
+//    File.open("../../../video_test/machu_picchu_a_s111_non_B.265", std::ios::in);
 //    File.open("../../../machu_picchu_8k_a_s111.265", std::ios::in);
 //    File.open("input_non_b.265", std::ios::in);
 
-//    video_reader.setVideoReader(std::move(data_manager));
+//		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
+//		             "_" + std::to_string(id_VSegment) + ".265";
+//		inputVideo_Path = "../../../video_test/machu_picchu_a_s111_non_B.265";
 
-//    std::thread readVideo_worker(&(video_reader.video_reader_td_func),
-//								 data_manager,id_VSegment);
 	std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
 								 &video_reader, std::ref(data_manager),
 								 id_VSegment);
 
+//	video_reader.video_reader_func(data_manager, id_VSegment);
 //    std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
- //   							 &video_reader, id_VSegment);
-
-//    inString = slurp(File);
-//    flag_video = hevc_parser(inString, 1);
+//   				    		 	 &video_reader, id_VSegment);
     readVideo_worker.join();
 
     return 0;    
 }
-//#endif

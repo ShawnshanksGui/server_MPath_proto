@@ -64,11 +64,9 @@ struct Elem_Data{
 //	int id_segment; 
 };
 
-
 class Data_Manager {
 public:	
 	vector< queue<struct Elem_Data *> > data_video;
-//	vecotr< queue<char *> > send_Q;
 
 	vector<std::string> data_vec;
 
@@ -83,8 +81,9 @@ public:
 	friend class Video_Reader;
 	friend class Encoder;
 	friend class Transmitter;
+	friend void partition_nalu(int id_region, VData_Type *cstr, Data_Manager &data_manager);	
 
-	std::mutex mtx[2];
+//	std::mutex mtx[2];
 	
 	int buf_size[NUM_PATH];
 	int MAX_SIZE[NUM_PATH];

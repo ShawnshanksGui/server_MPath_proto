@@ -1,0 +1,3 @@
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/test_parser/build/CMakeFiles/rebuild_cache.dir
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/test_parser/build/CMakeFiles/test_parser.dir
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/test_parser/build/CMakeFiles/edit_cache.dir

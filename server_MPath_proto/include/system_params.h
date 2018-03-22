@@ -16,7 +16,7 @@
 //#define 
 
 //define the number of GOP in a video segment(how much seconds) 
-#define GOP_NUM 2
+#define GOP_NUM 3
 
 //define the number of frames in one GOP
 #define FRAME_GOP 30
@@ -25,6 +25,9 @@
 //which test video is conposed of 
 #define REGION_NUM 3
 
+
+//FEC default parameter
+#define SYMBOL_FEC 1000
 
 //specify the vailable number of video tile's quality    
 #define BITRATE_TYPE_NUM 3

@@ -32,34 +32,12 @@ Video_Reader::Video_Reader() {
 	}
 }
 
-
 //==========================================================================
 //==========================================================================
 //Author:      shawnshanks_fei         Date:        20180311
 //Description: the thread function which simulates data generating procedure  
 //Parameters:  SYMB_SIZE is equal to encoding symbol size 
 //==========================================================================
-/*void Video_Reader::video_reader_td_func(int id_VSegment) {
-	int flag_video = 0;
-
-    std::ifstream File;
-    std::string inString;
-	
-	for(int i = 0; i < REGION_NUM; i++) {
-		std::string inputVideo_Path;
-		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
-		             "_" + std::to_string(id_VSegment) + ".265";
-//==========================================================================
-   		File.open(inputVideo_Path, std::ios::in);
-   		inString = slurp(File);
-//replicate data to a safe location
-   		VData_Type *cstr = new VData_Type[inString.length() + 1];
-   		strcpy(cstr, inString.c_str());
-
-   		delete [] cstr;
-	}
-}
-*/
 void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 										int id_VSegment) {
 	int flag_video = 0;
@@ -67,10 +45,12 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
     std::ifstream File;
     std::string inString;
 	
-	for(int i = 0; i < REGION_NUM; i++) {
-		std::string inputVideo_Path;
-		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
-		             "_" + std::to_string(id_VSegment) + ".265";
+//	for(int i = 0; i < REGION_NUM; i++) {
+	for(int i = 0; i < 1; i++) {    
+		std::string inputVideo_Path;	
+//		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
+//		             "_" + std::to_string(id_VSegment) + ".265";
+		inputVideo_Path = "../../../video_test/machu_picchu_a_s111_non_B.265";
 //==========================================================================
    		File.open(inputVideo_Path, std::ios::in);
    		inString = slurp(File);
@@ -89,6 +69,36 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 }
 //==========================================================================	
 
+void Video_Reader::video_reader_func(Data_Manager &data_manager,
+									 int id_VSegment) {
+	int flag_video = 0;
+
+    std::ifstream File;
+    std::string inString;
+	
+//	for(int i = 0; i < REGION_NUM; i++) {
+	for(int i = 0; i < 1	; i++) {    
+		std::string inputVideo_Path;	
+//		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
+//		             "_" + std::to_string(id_VSegment) + ".265";
+		inputVideo_Path = "../../../video_test/machu_picchu_a_s111_non_B.265";
+
+//==========================================================================
+   		File.open(inputVideo_Path, std::ios::in);
+   		inString = slurp(File);
+//replicate data to a safe location
+   		VData_Type *cstr = new VData_Type[inString.length() + 1];
+   		strcpy(cstr, inString.c_str());
+
+   		data_manager.data_vec.push_back(cstr);
+
+    	hevc_parser(inString, i, this);
+
+    	partition_nalu(i, cstr, data_manager);
+//    	delete [] cstr;
+    }
+}
+
 //void Video_Reader::setVideoReader(Data_Manager &&d_manager) {
 //	data_manager.Data_Manager() 
 //}
@@ -100,7 +110,7 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 //Parameters:  result stored into the Data_Mannager.queue<struct Elem_Data*>
 //==========================================================================
 void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
-								  Data_Manager &data_manager) {
+			 					  Data_Manager &data_manager) {
 //	const VData_Type *p_str = inString.c_str();
 	for(int i = 0; i < FRAME_GOP*GOP_NUM; i++) {
 //get the start address for the current nalu(or frame);
@@ -110,7 +120,7 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
 		int k_fec = K_FEC[id_region][i%FRAME_GOP];
 
 //remainder number 
-		int len_remaining = nalu[id_region][i]._size % (s_fec*k_fec);
+		int len_remaining = (nalu[id_region][i]._size) % (s_fec*k_fec);
 //
 		int num = nalu[id_region][i]._size / (s_fec*k_fec);
 
@@ -144,6 +154,7 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
 						elem_data->type_location = MID_FOR_MID_NALU;
 					else {elem_data->type_location = END_FOR_MID_NALU;}
 				}
+
 				elem_data->size = s_fec*k_fec;
 
 				assign_attribute(elem_data, path_decs[id_region][i], s_fec,
@@ -177,6 +188,7 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
 						elem_data->type_location = MID_FOR_MID_NALU;
 					else {elem_data->type_location = END_FOR_MID_NALU;}
 				}
+
 				if(k == num) {
 					elem_data->size = nalu[id_region][i]._size-location;
 				}
@@ -211,8 +223,13 @@ void Video_Reader::assign_attribute(struct Elem_Data *elem_data,int path,
 }
 
 
-#ifdef ENABLE_DEBUG_READER
 
+
+
+
+
+
+#ifdef ENABLE_DEBUG_READER
 //two channels' realtime infomation
 Channel_Inf chan_inf[NUM_PATH] = {{0.03, 50.0, 100.0}, {0.05, 90.0, 50.0}};
 //Tile_Num tile_num{TILE_NUM, FOV_TILE_NUM, 
@@ -251,46 +268,10 @@ int main() {
 //    							 &video_reader);
     std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
         						 video_reader);
-//    inString = slurp(File);
-//    flag_video = hevc_parser(inString, 1);
+
     readVideo_worker.join();
 
     return 0;    
 }
+
 #endif
-
-/*
-	int id_path  = 0;
-	int _count   = 0;
-	int len_read = 0;
-
-	//original data block size.
-	int block_size = 200;
-
-	FILE *fp;
-	Fopen_for_read(&fp, "input_video.mp4");
-
-	auto startTime = std::chrono::high_resolution_clock::now();
-
-	//set thread core affinity and bind the current thread to core 1 
-	affinity_set(DATA_GEN_CORE);
-//
-	while(1) {
-		//real memory allocation function for data generated 
-		VData_Type *elem_mem_alloc = MALLOC(char, SYMB_SIZE*block_size);
-		len_read = Fread(elem_mem_alloc, SYMB_SIZE*block_size, fp);
-		if(END_FILE == len_read) break;
-
-		//until pushed and saved successfully
-		while(SUCS_PUSH != data_manager.data_save(elem_mem_alloc, id_path));
-
-		//record the eclpsing time for TEST_SECONDS
-		auto endTime  = std::chrono::high_resolution_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::microseconds> 
-                        (endTime - startTime).count();
-
-		if(duration > TEST_SECONDS*1000000) break;
-	}
-}
-*/		
-//==========================================================================

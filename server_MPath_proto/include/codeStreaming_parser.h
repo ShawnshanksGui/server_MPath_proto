@@ -10,6 +10,6 @@
 std::string slurp(std::ifstream &File);
 
 //.h265 code streaming parser
-int hevc_parser(string &p, int i, Video_Reader *p_reader);
+int hevc_parser(string &p, int id_region, Video_Reader *p_reader);
 
 #endif

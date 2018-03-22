@@ -10,19 +10,13 @@
 //for test and debug
 //#define ENABLE_DEBUG_PARSER
 
-#ifndef ENABLE_DEBUG_PARSER
-#include "../include/video_reader.h"
-
-#endif
-
 using namespace std;
 
 
-//for test and debug
 #ifdef ENABLE_DEBUG_PARSER
 #define REGION_NUM 3
-#define GOP_NUM 2
-#define FRAME_GOP 50
+#define GOP_NUM    2
+#define FRAME_GOP 30
 
 //the intra pridicted frame
 #define I_FRAME 1
@@ -39,6 +33,8 @@ struct Nalu_Elem{
 
 struct Nalu_Elem nalu[REGION_NUM][(FRAME_GOP+10)*GOP_NUM];
 
+#else
+#include "../include/video_reader.h" 
 #endif
 
 
@@ -78,7 +74,6 @@ std::string slurp(std::ifstream &File) {
 
     return sstr.str();
 }
-
 
 //==========================================================================
 //==========================================================================
@@ -227,6 +222,7 @@ int hevc_parser(string &p, int id_region) {
     }
     printf("\n");
 
+    return 0;
 }
 
 
@@ -252,6 +248,7 @@ int hevc_parser(string &p, int id_region, Video_Reader *video_reader){
     tmp_a[0] = 0;
     tmp_a[1] = 0;
     tmp_a[2] = 1;
+
     char *p_str = tmp_a;
     obj.append(p_str, 3);
 //    obj.append(tmp_b);
@@ -352,6 +349,23 @@ int hevc_parser(string &p, int id_region, Video_Reader *video_reader){
                     (endTime - startTime ).count();
 
     printf("the time cost is %ld us\n", duration);
+
+    printf("the number of vps,sps,pps,I_frame,P_frame is %d,%d,%d,%d,%d,respectively\n\n",
+           vps, sps, pps, cnt_irap, cnt_BorP);
+    
+    printf("the address of all nalus is following:\n");
+    for(int i = 0; i < (FRAME_GOP+10)*GOP_NUM; i++) {
+        printf("%d  ", video_reader->nalu[id_region][i]._addr);
+    }
+    printf("\n\n");
+
+    printf("the nalu size is following:\n");
+    for(int i = 0; i < (FRAME_GOP+10)*GOP_NUM; i++) {
+        printf("%d  ", video_reader->nalu[id_region][i]._size);
+    }
+    printf("\n");
+
+    return 0;
 }
 //==========================================================================
 #endif
@@ -380,4 +394,5 @@ int main() {
 
     return 0;    
 }
+
 #endif

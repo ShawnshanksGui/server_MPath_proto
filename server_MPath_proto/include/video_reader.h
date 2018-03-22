@@ -1,10 +1,13 @@
 #ifndef _VIDEO_READER_H
 #define _VIDEO_READER_H
 
+#include <string>
+
 #include "system_params.h"
 #include "data_manager.h"
+//#include "codeStreaming_parser.h"
 
-//the intra pridicted frame
+//the intra pridicted frame 
 #define I_FRAME 1
 //the forward predicted frame
 #define P_FRAME 0
@@ -16,6 +19,12 @@ struct Nalu_Elem{
 //the size for each NALU.
 	int _size;
 };
+
+class A {
+public:
+	int num;
+};
+
 
 class Video_Reader {
 public:
@@ -29,6 +38,10 @@ public:
 	Video_Reader();
 	~Video_Reader() {}
 
+//for test
+	void video_reader_func(Data_Manager &data_manager, int id_VSegment);
+	void video_reader_func(A &a, int id_VSegment) {}
+
 	void video_reader_td_func(Data_Manager &data_manager, int id_VSegment);
 //	void video_reader_td_func(int id_VSegment);
 
@@ -36,6 +49,9 @@ public:
 	friend class Bitrate_Selector;
 	friend class Path_Decs;
 	friend class Path_Selector;
+
+	friend std::string slurp(std::ifstream &File);
+	friend void partition_nalu(int id_region, VData_Type *cstr, Data_Manager &data_manager);
 
 private:
 	int region_num;

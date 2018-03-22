@@ -37,9 +37,11 @@ void Bitrate_Selector::setBitrate(int tile_num[REGION_NUM],
 	for(int i = 0; i < REGION_NUM; i++){
 //start selecting from the highest quality
 		bw_residual += video_reader.bitrate_decs[i];
-		for(int k = 1; k < BITRATE_TYPE_NUM; k++) {
-			if(bw_residual > (bitrate[k] / TILE_NUM_TOTAL * tile_num[i]))
+		for(int k = 0; k < BITRATE_TYPE_NUM-1; k++) {
+			if(bw_residual > (bitrate[k] / TILE_NUM_TOTAL * tile_num[i])) {
 				video_reader.bitrate_decs[i] = bitrate[k];
+				break;
+			}
 		}
 		bw_residual -= video_reader.bitrate_decs[i];
 	}

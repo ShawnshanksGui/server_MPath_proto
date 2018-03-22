@@ -1,0 +1,1 @@
+/usr/bin/c++   -O0 -Wall -g -ggdb  -rdynamic CMakeFiles/test_parser.dir/codeStreaming_parser.o  -o test_parser 

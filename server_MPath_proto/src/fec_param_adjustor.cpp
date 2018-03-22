@@ -76,6 +76,12 @@ void FEC_Param_Adjuster::setFEC_params(Channel_Inf chan_inf[NUM_PATH],
 		}	
 	}
 
+//S_FEC defalutly is 1000 	
+	for(int i = 0; i < REGION_NUM; i++) 
+		for(int k = 0; k < FRAME_GOP; k++) {
+			video_reader.S_FEC[i][k] = SYMBOL_FEC;
+		}
+
 #ifdef ENABLE_DEBUG_FEC_ADJUSTOR
 	printf("\nThe k_value is as following:\n");
 	for(int i = 0; i < LEVEL_NUM; i++) {

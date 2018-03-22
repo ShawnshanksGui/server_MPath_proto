@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/test_parser/codeStreaming_parser.cpp
+chrono
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/test_parser/chrono
+iostream
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/test_parser/iostream
+fstream
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/test_parser/fstream
+sstream
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/test_parser/sstream
+string
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/test_parser/string
+ios
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/test_parser/ios
+cstdio
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/test_parser/cstdio
+../include/video_reader.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/include/video_reader.h
+

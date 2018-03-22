@@ -17,33 +17,31 @@ using namespace std;
 //for debugging
 //#define ENABLE_DEBUG_D_MAMAGER
 
-Data_Manager::Data_Manager(int max_size) {
+Data_Manager::
+Data_Manager(int max_size):data_video(NUM_PATH) {
 	for(int i = 0; i < NUM_PATH; i++) {
 		buf_size[i] = 0;
 		MAX_SIZE[i] = max_size;
 	}
-//init
-	for(int k = 0; k < NUM_PATH; k++) {
-		queue<struct Elem_Data *> data_queue;
-		data_video.push_back(std::move(data_queue));
-	}
 }
 
-Data_Manager::Data_Manager() {
+Data_Manager::
+Data_Manager():data_video(NUM_PATH) {
 	for(int i = 0; i < NUM_PATH; i++) {
 		buf_size[i] = 0;
 		MAX_SIZE[i] = 1000;
 	}
-//init
-	for(int k = 0; k < NUM_PATH; k++) {
-		queue<struct Elem_Data *> data_queue;
-		data_video.push_back(std::move(data_queue));
-	}
 }
 
-Data_Manager::~Data_Manager() {
+
+Data_Manager::
+~Data_Manager() {
+	printf("\nthe data stream is as following:\n");
 	for(int i = 0; i < NUM_PATH; i++) {
-		while(buf_size[i]--) {
+		int num_elem = buf_size[i];
+		while(num_elem--) {
+			struct Elem_Data *tmp = data_video[i].front();
+			printf("%d %d %d %d\n", tmp->size, tmp->id_path, tmp->id_nalu, tmp->type_location);
 			SAFE_FREE(data_video[i].front()); 
 			data_video[i].pop();
 		}
@@ -56,8 +54,9 @@ Data_Manager::~Data_Manager() {
 //Description: implement main data generating procedure which adds mutex signal  
 //Parameter:  		       
 //==========================================================================
-bool Data_Manager::data_save(struct Elem_Data *data, ID_PATH id_path) {
-	std::unique_lock<std::mutex> lock(mtx[id_path]);
+bool Data_Manager::
+data_save(struct Elem_Data *data, ID_PATH id_path) {
+//	std::unique_lock<std::mutex> lock(mtx[id_path]);
 
 	return Push(data, id_path);
 }
@@ -70,8 +69,9 @@ bool Data_Manager::data_save(struct Elem_Data *data, ID_PATH id_path) {
 //Description: implement main data fetch procedure  
 //Parameter:  		       
 //==========================================================================
-struct Elem_Data *Data_Manager::data_fetch(ID_PATH id_path) {   
-	std::unique_lock<std::mutex> lock(mtx[id_path]);	
+struct Elem_Data *Data_Manager::
+data_fetch(ID_PATH id_path) {   
+//	std::unique_lock<std::mutex> lock(mtx[id_path]);	
 
 	return Pop(id_path);
 }
@@ -79,7 +79,8 @@ struct Elem_Data *Data_Manager::data_fetch(ID_PATH id_path) {
 
 
 //safely push into one queue(default the first queue)
-bool Data_Manager::Push(struct Elem_Data *data_src, ID_PATH id_path) {
+bool Data_Manager::
+Push(struct Elem_Data *data_src, ID_PATH id_path) {
 	if(!Is_overflow(id_path)) {
 		data_video[id_path].push(data_src);
 		buf_size[id_path] += 1;
@@ -94,7 +95,8 @@ bool Data_Manager::Push(struct Elem_Data *data_src, ID_PATH id_path) {
 }
 
 //safety pop from queue;
-struct Elem_Data *Data_Manager::Pop(ID_PATH id_path) {
+struct Elem_Data *Data_Manager::
+Pop(ID_PATH id_path) {
 	if(!Is_empty(id_path)) {
 		struct Elem_Data *data_dst = data_video[id_path].front();
 		data_video[id_path].pop();
@@ -107,7 +109,8 @@ struct Elem_Data *Data_Manager::Pop(ID_PATH id_path) {
 	return nullptr;
 }
 
-bool Data_Manager::Is_overflow(ID_BUF id_buf) {
+bool Data_Manager::
+Is_overflow(ID_BUF id_buf) {
 //	return MAX_SIZE == (buf_size[id_buf]);
 	return buf_size[id_buf] == MAX_SIZE[id_buf];
 }

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libRS_FFT.a  CMakeFiles/RS_FFT.dir/rs_fft.c.o
+/usr/bin/ranlib libRS_FFT.a
