@@ -5,10 +5,9 @@
 
 extern "C"
 {
-	#include "rs_fft.h"
+	#include "../include/rs_fft.h"
 }
 
-/*
 class Encoder {
 public:
 	Encoder() {}
@@ -21,8 +20,6 @@ public:
 private:
 
 };
-*/
-
 
 void Encoder::encoder_td_func(Data_Manager &data_manager) {
 

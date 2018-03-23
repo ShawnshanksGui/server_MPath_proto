@@ -13,7 +13,6 @@ Timer::Timer() {
 	len_timeSlice = LEN_TIMESLICE;
 }
 
-
 //==========================================================================
 //==========================================================================
 //Author:      shawnshanks_fei         Date:        20180305
@@ -23,11 +22,15 @@ Timer::Timer() {
 //             startFlag_one_timeSlice directly control the switch of all 
 //             the processes; 
 //==========================================================================
-void Timer::setTimer_td_func(int &startFlag_one_timeSlice) {
+void Timer::setTimer_td_func(int &terminalFlag, 
+							 int &startFlag_one_timeSlice) {
 	while(num_timeSlice--) {
 		startFlag_one_timeSlice = START;
 		usleep(len_timeSlice*1000000);
 		startFlag_one_timeSlice = STOP;
 	}
+//equal to YES
+	terminalFlag = STOP;
+
 }
 //==========================================================================

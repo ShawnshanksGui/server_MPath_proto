@@ -2,12 +2,14 @@
 #include <string>
 #include <vector>
 #include <thread>
+
 #include "fstream"
 #include "sstream"
 #include "iostream"
 #include "ios"
 
 #include "../include/common.h"
+#include "../include/mySocket.h"
 #include "../include/video_reader.h"
 #include "../include/data_manager.h"
 #include "../include/system_params.h"
@@ -45,9 +47,6 @@ int main() {
     int flag_video = 0;
 //    std::string _input;
 	int id_VSegment = 0;
-	std::string inString;
-
-	std::string inputVideo_Path;
 
     Data_Manager data_manager(100);
 	FEC_Param_Adjuster fec_param_adj;
@@ -59,6 +58,16 @@ int main() {
 	bitrate_selector.setBitrate(tile_num, chan_inf, video_reader);
 	path_selector.select_Path(chan_inf, video_reader);
 
+	std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
+								 &video_reader, std::ref(data_manager),
+								 id_VSegment);
+
+    readVideo_worker.join();
+    printf("hello, world\n"); 
+    return 0;    
+}
+
+#endif
 
 //    File.open("../../../video_test/machu_picchu_a_s111_non_B.265", std::ios::in);
 //    File.open("../../../machu_picchu_8k_a_s111.265", std::ios::in);
@@ -69,17 +78,7 @@ int main() {
 //		inputVideo_Path = "../../../video_test/machu_picchu_a_s111_non_B.265";
 
 
-	std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
-								 &video_reader, std::ref(data_manager),
-								 id_VSegment);
 
 //	video_reader.video_reader_func(data_manager, id_VSegment);
 //    std::thread readVideo_worker(&Video_Reader::video_reader_td_func,
 //   				    		 	 &video_reader, id_VSegment);
-
-    readVideo_worker.join();
-    printf("hello, world\n"); 
-    return 0;    
-}
-
-#endif
