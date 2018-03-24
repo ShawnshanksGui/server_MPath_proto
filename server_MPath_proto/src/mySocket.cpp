@@ -124,8 +124,8 @@ void Transmitter::send_td_func(int id_path, Data_Manager &data_manager) {
 
 		shared_ptr<struct Elem_Data> data_elem = data_manager.data_fetch(id_path);
 
-		VData_Type *data_tmp = encoder.encode(data_elem->data, 
-											  data_elem->S_FEC, data_elem->K_FEC);
+		VData_Type *data_tmp = (char *)encoder.encode(data_elem->data, 
+										 data_elem->S_FEC, data_elem->K_FEC);
 //		data_manager.data_video[id_path].pop();
 		for(int i = 0; i < data_elem->K_FEC; i++) {
 			encaps_packet(packet, i, &(data_tmp[i*data_elem->S_FEC]), data_elem);
