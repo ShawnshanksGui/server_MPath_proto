@@ -3,14 +3,12 @@
 #include "../include/data_manager.h"
 
 #include <chrono>
+#include <memory>
 
 #include "../include/common.h"
 #include "../include/myUtility.h"
 
-extern "C"
-{
-	#include "../include/rs_fft.h"
-}
+
 
 using namespace std;
 
@@ -36,7 +34,13 @@ Data_Manager():data_video(NUM_PATH) {
 
 Data_Manager::
 ~Data_Manager() {
-	printf("\nthe data stream is as following:\n");
+	printf("\nEntering the deconstructor of Data_Manager\n");
+
+	for (int i = 0; i < this->data_vec.size(); i++) {
+		delete [] this->data_vec[i];
+	}
+
+	printf("finish the deconstructor of Data_Manager\n");
 /*
 	for(int i = 0; i < NUM_PATH; i++) {
 		int num_elem = buf_size[i];
@@ -72,7 +76,7 @@ Data_Manager::
 //Parameter:  		       
 //==========================================================================
 bool Data_Manager::
-data_save(struct Elem_Data *data, ID_PATH id_path) {
+data_save(shared_ptr<struct Elem_Data> data, ID_PATH id_path) {
 //	std::unique_lock<std::mutex> lock(mtx[id_path]);
 
 	return Push(data, id_path);
@@ -86,10 +90,9 @@ data_save(struct Elem_Data *data, ID_PATH id_path) {
 //Description: implement main data fetch procedure  
 //Parameter:  		       
 //==========================================================================
-struct Elem_Data *Data_Manager::
+shared_ptr<struct Elem_Data> Data_Manager::
 data_fetch(ID_PATH id_path) {   
 //	std::unique_lock<std::mutex> lock(mtx[id_path]);	
-
 	return Pop(id_path);
 }
 //==========================================================================
@@ -97,7 +100,7 @@ data_fetch(ID_PATH id_path) {
 
 //safely push into one queue(default the first queue)
 bool Data_Manager::
-Push(struct Elem_Data *data_src, ID_PATH id_path) {
+Push(shared_ptr<struct Elem_Data> data_src, ID_PATH id_path) {
 	if(!Is_overflow(id_path)) {
 		data_video[id_path].push(data_src);
 		buf_size[id_path] += 1;
@@ -112,10 +115,10 @@ Push(struct Elem_Data *data_src, ID_PATH id_path) {
 }
 
 //safety pop from queue;
-struct Elem_Data *Data_Manager::
+shared_ptr<struct Elem_Data> Data_Manager::
 Pop(ID_PATH id_path) {
 	if(!Is_empty(id_path)) {
-		struct Elem_Data *data_dst = data_video[id_path].front();
+		shared_ptr<struct Elem_Data> data_dst = data_video[id_path].front();
 		data_video[id_path].pop();
 		buf_size[id_path] -= 1;
 //debug
@@ -138,6 +141,9 @@ bool Data_Manager::Is_empty(ID_BUF id_buf) {
 }
 
 
+
+
+
 #ifdef  ENABLE_DEBUG_D_MAMAGER
 //test
 int main() {
@@ -158,9 +164,6 @@ int main() {
 }
 
 #endif
-
-
-
 //==========================================================================
 //==========================================================================
 //Author:      shawnshanks_fei          Date:     20180204

@@ -380,9 +380,9 @@ int main() {
     std::ifstream File;
     std::string inString;
 
-    File.open("../../../video_test/machu_picchu_a_s111_non_B.265", std::ios::in);
+//    File.open("../../../video_test/machu_picchu_a_s111_non_B.265", std::ios::in);
 //    File.open("../../../machu_picchu_8k_a_s111.265", std::ios::in);
-//    File.open("input_non_b.265", std::ios::in);
+    File.open("input_non_b.265", std::ios::in);
 
     inString = slurp(File);
 

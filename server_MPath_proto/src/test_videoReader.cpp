@@ -9,7 +9,7 @@
 #include "ios"
 
 #include "../include/common.h"
-#include "../include/mySocket.h"
+//#include "../include/mySocket.h"
 #include "../include/video_reader.h"
 #include "../include/data_manager.h"
 #include "../include/system_params.h"

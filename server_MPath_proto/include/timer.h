@@ -5,10 +5,11 @@ public:
 	int len_timeSlice;
 
 	Timer();
-	~Timer();
 
-	setTimer(int &startFlag_one_timeSlice);
+	~Timer() {}
 
+	void setTimer_td_func(int &terminalFlag, 
+					 	  int &startFlag_one_timeSlice);
 private:
 
 };

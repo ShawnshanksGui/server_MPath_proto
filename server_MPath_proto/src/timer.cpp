@@ -7,6 +7,8 @@
 #define START 1
 #define STOP  0
 
+#define YES   1
+
 
 Timer::Timer() {
 	num_timeSlice = NUM_TIMESLICE;
@@ -28,9 +30,10 @@ void Timer::setTimer_td_func(int &terminalFlag,
 		startFlag_one_timeSlice = START;
 		usleep(len_timeSlice*1000000);
 		startFlag_one_timeSlice = STOP;
+		usleep(len_timeSlice*1000000);		
 	}
 //equal to YES
-	terminalFlag = STOP;
+	terminalFlag =  YES;
 
 }
 //==========================================================================

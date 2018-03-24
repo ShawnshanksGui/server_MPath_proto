@@ -19,8 +19,8 @@ Lin, Han and Chung, "Novel Polynomial Basis and Its Application to Reed-Solomon 
 typedef unsigned char GFSymbol;
 
 #define len 8//2^len: the size of Galois field
-GFSymbol mask = 0x1D; //GF(2^8): x^8 + x^4 + x^3 + x^2 + 1
-GFSymbol Base[] = {1, 214, 152, 146, 86, 200, 88, 230};//Cantor basis
+static GFSymbol mask = 0x1D; //GF(2^8): x^8 + x^4 + x^3 + x^2 + 1
+static GFSymbol Base[] = {1, 214, 152, 146, 86, 200, 88, 230};//Cantor basis
 /*
 typedef unsigned short GFSymbol;
 #define len 16
@@ -308,13 +308,31 @@ void *decode_FFT_RS(struct Data_Remain data_remain,
 		}		
 	}
 
-#ifdef ENABLE_DEBUG_RS_FFT
+//#ifdef ENABLE_DEBUG_RS_FFT
 	printf("recovery data is:\n%s\n\n", data_dst);
-#endif
+//#endif
 
 	return data_dst;
 }
 //==========================================================================
+
+void *encode(char *data_src, int S, int K){
+	struct Param_Encd param_encd;
+
+	param_encd.S = S;
+	param_encd.K = K;
+
+	return encode_FFT_RS(data_src, param_encd);
+}
+
+void *decode(struct Data_Remain data_remain, int S, int K){
+	struct Param_Decd param_decd;
+
+	param_decd.S = S;
+	param_decd.K = K;
+
+	return decode_FFT_RS(data_remain, param_decd);
+}
 
 
 #ifdef ENABLE_DEBUG_RS_FFT

@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <thread>
+#include <memory>
 
 #include "../include/common.h"
 #include "../include/video_reader.h"
@@ -12,6 +13,9 @@
 
 //for debugging
 //#define ENABLE_DEBUG_READER
+
+using namespace std;
+
 
 #ifdef  ENABLE_DEBUG_READER
 #include "../include/utility.h"
@@ -24,6 +28,15 @@ Video_Reader::Video_Reader() {
 	gopFrame_num = FRAME_GOP;
 	region_num   = REGION_NUM;
 
+	for(int i = 0; i < REGION_NUM; i++) {
+		for(int k = 0; k < (FRAME_GOP+10)*GOP_NUM; k++) {
+			nalu[i][k]._size = 0;
+			nalu[i][k]._addr = 0;
+		}
+	}
+}
+
+void Video_Reader::reader_init() {
 	for(int i = 0; i < REGION_NUM; i++) {
 		for(int k = 0; k < (FRAME_GOP+10)*GOP_NUM; k++) {
 			nalu[i][k]._size = 0;
@@ -45,32 +58,34 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
     std::ifstream File;
     std::string inString;
 	
+
+	printf("entering video_reader_td_func\n");
 //	for(int i = 0; i < REGION_NUM; i++) {
 	for(int i = 0; i < 1; i++) {    
 		std::string inputVideo_Path;	
 //		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
 //		             "_" + std::to_string(id_VSegment) + ".265";
-		inputVideo_Path = "../../../video_test/machu_picchu_a_s111_non_B.265";
+//		inputVideo_Path = "../../../video_test/machu_picchu_a_s111_non_B.265";
+		inputVideo_Path = "input_non_b.265";
 //==========================================================================
    		File.open(inputVideo_Path, std::ios::in);
    		inString = slurp(File);
 //replicate data to a safe location
-   		VData_Type *cstr = new VData_Type[inString.length() + 1];
+   		VData_Type *cstr=new VData_Type[inString.length()+1];
    		strcpy(cstr, inString.c_str());
 
    		data_manager.data_vec.push_back(cstr);
 
     	hevc_parser(inString, i, this);
 
-    	partition_nalu(i, cstr, data_manager);
-
-//    	delete [] cstr;
-    }
+    	partition_nalu(i, cstr, id_VSegment, data_manager);
+    }    
 }
 //==========================================================================	
-/*
+
 void Video_Reader::video_reader_func(Data_Manager &data_manager,
 									 int id_VSegment) {
+/*
 	int flag_video = 0;
 
     std::ifstream File;
@@ -81,8 +96,8 @@ void Video_Reader::video_reader_func(Data_Manager &data_manager,
 		std::string inputVideo_Path;	
 //		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
 //		             "_" + std::to_string(id_VSegment) + ".265";
-		inputVideo_Path = "../../../video_test/machu_picchu_a_s111_non_B.265";
-
+//		inputVideo_Path = "../../../video_test/machu_picchu_a_s111_non_B.265";
+		inputVideo_Path = "input_non_b.265";
 //==========================================================================
    		File.open(inputVideo_Path, std::ios::in);
    		inString = slurp(File);
@@ -94,13 +109,12 @@ void Video_Reader::video_reader_func(Data_Manager &data_manager,
 
     	hevc_parser(inString, i, this);
 
-    	partition_nalu(i, cstr, data_manager);
+    	partition_nalu(i, cstr, id_VSegment, data_manager);
 //    	delete [] cstr;
     }
-
-	data_manager.buf_size[0] = 101;
-}
 */
+}
+
 
 //void Video_Reader::setVideoReader(Data_Manager &&d_manager) {
 //	data_manager.Data_Manager() 
@@ -112,7 +126,7 @@ void Video_Reader::video_reader_func(Data_Manager &data_manager,
 //Description: split the video segment into data block with equal length(S*K)  
 //Parameters:  result stored into the Data_Mannager.queue<struct Elem_Data*>
 //==========================================================================
-void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
+void Video_Reader::partition_nalu(int id_region, VData_Type *p_str, int id_seg,
 			 					  Data_Manager &data_manager) {
 //	const VData_Type *p_str = inString.c_str();
 	for(int i = 0; i < FRAME_GOP*GOP_NUM; i++) {
@@ -135,7 +149,7 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
 		if(0 == len_remaining) {
 //when the current nalu is longer than block size(s_fec*k_fec).
 			for(int k = 0; k < num; i++){
-				struct Elem_Data *elem_data = MALLOC(struct Elem_Data, 1);
+				shared_ptr<struct Elem_Data> elem_data = (shared_ptr<struct Elem_Data>)new(struct Elem_Data);
 				if(0 == i ) {
 					if(0 == k)
 						elem_data->type_location = FRONT_FOR_FIRST_NALU;
@@ -159,6 +173,7 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
 				}
 
 				elem_data->size = s_fec*k_fec;
+				elem_data->id_seg = id_seg;
 
 				assign_attribute(elem_data, path_decs[id_region][i], s_fec,
 				 k_fec, i, location, p_str, data_manager);
@@ -168,7 +183,9 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
 //when the length of nalu is not divisible, (num == k)
 		else {
 			for(int k = 0; k <= num; k++) {
-				struct Elem_Data *elem_data = MALLOC(struct Elem_Data, 1);
+				shared_ptr<struct Elem_Data> elem_data = (shared_ptr<struct Elem_Data>)new(struct Elem_Data);
+//				shared_ptr<struct Elem_Data> elem_data(new(struct Elem_Data));
+
 				if(0 == i ) {
 					if(0 == k)
 						elem_data->type_location = FRONT_FOR_FIRST_NALU;
@@ -196,6 +213,7 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
 					elem_data->size = nalu[id_region][i]._size-location;
 				}
 				else {elem_data->size = s_fec*k_fec;}
+				elem_data->id_seg = id_seg;
 
 				assign_attribute(elem_data, path_decs[id_region][i], s_fec,
 				 				 k_fec, i, location, p_str, data_manager);
@@ -207,9 +225,9 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str,
 //==========================================================================
 
 
-void Video_Reader::assign_attribute(struct Elem_Data *elem_data,int path, 
-									int s_fec, int k_fec, int id_nalu,
-									int _addr, VData_Type *p_str,
+void Video_Reader::assign_attribute(shared_ptr<struct Elem_Data> elem_data,
+									int path, int s_fec, int k_fec, 
+									int id_nalu, int _addr, VData_Type *p_str,
 									Data_Manager &data_manager) {
 	if(0 == (id_nalu % FRAME_GOP)) {
 		elem_data->type_nalu = I_FRAME;

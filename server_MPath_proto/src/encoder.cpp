@@ -1,29 +1,26 @@
-#include "string"
+#include <string>
+#include <memory>
 
 
 #include "../include/data_manager.h"
+#include "../include/encoder.h"
 
 extern "C"
 {
 	#include "../include/rs_fft.h"
 }
 
-class Encoder {
-public:
-	Encoder() {}
-	~Encoder() {}
-
-	void encoder_td_func();
-
-	void partition_nalu(std::string &inString,
-		  				Data_Manager &data_manager);
-private:
-
-};
-
-void Encoder::encoder_td_func(Data_Manager &data_manager) {
-
-	for(int i = 0; i < )
+void Encoder::encoder_init()  {
+	init();
+	init_dec();	
 }
 
+void *Encoder::encode(char *data_src, int S, int K) {
+	encode(data_src, S, K);
+}	
+/*
+void Encoder::encoder_td_func(Data_Manager &data_manager) {
 
+//	for(int i = 0; ; ;)
+}
+*/

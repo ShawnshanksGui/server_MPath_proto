@@ -2,6 +2,7 @@
 #define _VIDEO_READER_H
 
 #include <string>
+#include <memory>
 
 #include "system_params.h"
 #include "data_manager.h"
@@ -33,8 +34,6 @@ public:
 
 	struct Nalu_Elem nalu[REGION_NUM][FRAME_GOP*GOP_NUM];
 
-	Data_Manager data_manager;
-
 	Video_Reader();
 	~Video_Reader() {}
 
@@ -43,7 +42,7 @@ public:
 	void video_reader_func(A &a, int id_VSegment) {}
 
 	void video_reader_td_func(Data_Manager &data_manager, int id_VSegment);
-//	void video_reader_td_func(int id_VSegment);
+	void reader_init();
 
 	friend class Data_Manager;
 	friend class Bitrate_Selector;
@@ -68,9 +67,9 @@ private:
 //the first is the bitrate of FOV, 
 	int bitrate_decs[REGION_NUM];
 
-	void partition_nalu(int id_region, VData_Type *p_str, 
+	void partition_nalu(int id_region, VData_Type *p_str, int id_seg, 
 						Data_Manager &data_manager);
-	void assign_attribute(struct Elem_Data *elem_data, int path,
+	void assign_attribute(shared_ptr<struct Elem_Data> elem_data, int path,
 						  int s_fec, int k_fec, int id_nalu,
 						  int _addr, VData_Type *p_str,
 						  Data_Manager &data_manager);

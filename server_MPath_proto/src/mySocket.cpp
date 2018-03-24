@@ -1,8 +1,17 @@
+#include "../include/thread_core_affinity_set.h"
+
+#include "../include/encoder.h"
+
 #include "../include/common.h"
 #include "../include/mySocket.h"
+#include "../include/data_manager.h"
 
 #define ON_REUSEADDR  1  //you can reuse the addr after binding addr without no waiting time 
 //#define OFF_REUSEADDR 0
+
+#define DATA 1
+#define CONTROL 2
+
 
 Transmitter::~Transmitter() {
 	if(sock_id > 0)
@@ -94,34 +103,49 @@ int Transmitter::Recv_udp(char *buf_dst, int len) {
 
 //==========================================================================
 //==========================================================================
-//Author:      shawnshanks_fei          Date:     20180204
+//Author:      shawnshanks_fei          Date:  
 //Description: the thread function which implement data sending procedure 
 //Parameter:   num_core   
 //			   id_path
 //			   argv[]
 //             param_encd
 //==========================================================================
-void Transmitter::send_td_func(struct Param_Transmitter param_transmit,
-	                              Data_Manager &data_manager) {
-	Transmitter _client;
-	char packet[param_encd.S + LEN_CONTRL_MSG];
+void Transmitter::send_td_func(int id_path, Data_Manager &data_manager) {
+	Encoder encoder;
+	VData_Type packet[1000 + LEN_CONTRL_MSG];
 
-	affinity_set(param_transmit.num_core);
+	affinity_set(id_path);
 
-	_client.udp_sock_client_new(param_transmit.addr_self, 
-		                        param_transmit.port_self, 
-		                        param_transmit.addr_dst,
-		                        param_transmit.port_dst);
+	encoder.encoder_init();
 
 	while(1) {
 //fetch the data from send_Q, queue buffer
-		data_type *data_tmp = data_manager.send_Q[param_transmit.id_path].front();
-		data_manager.send_Q[param_transmit.id_path].pop();
+		memcpy(packet, 0, 1000 + LEN_CONTRL_MSG);
 
-		for(int i=0; i < param_encd.K; i++) {
-			packet_encaps(packet, &(data_tmp[i*param_encd.S]), param_encd.S);
-			_client.Send_udp(packet, param_encd.S + LEN_CONTRL_MSG);
+		shared_ptr<struct Elem_Data> data_elem = data_manager.data_fetch(id_path);
+
+		VData_Type *data_tmp = encoder.encode(data_elem->data, 
+											  data_elem->S_FEC, data_elem->K_FEC);
+//		data_manager.data_video[id_path].pop();
+		for(int i = 0; i < data_elem->K_FEC; i++) {
+			encaps_packet(packet, i, &(data_tmp[i*data_elem->S_FEC]), data_elem);
+			this->Send_udp(packet, data_elem->S_FEC + LEN_CONTRL_MSG);
+			SAFE_FREE(data_tmp);
 		}
 	}
 }	
+
+void Transmitter::encaps_packet(VData_Type *packet, int num, VData_Type *data_src, 
+								shared_ptr <struct Elem_Data> data_elem) {
+	packet[0] = DATA;
+	packet[1] = data_elem->id_path;
+	packet[2] = data_elem->id_seg;
+ 	packet[3] = data_elem->size;
+	packet[4] = data_elem->type_nalu;
+	packet[5] = data_elem->K_FEC;
+//specify which one S in the current block. 
+	packet[6] = num;
+
+	memcpy(&(packet[6]), data_src, data_elem->S_FEC);	
+}
 //==========================================================================

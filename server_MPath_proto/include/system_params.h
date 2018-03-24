@@ -16,7 +16,7 @@
 //#define 
 
 //define the number of GOP in a video segment(how much seconds) 
-#define GOP_NUM 3
+#define GOP_NUM 1 
 
 //define the number of frames in one GOP
 #define FRAME_GOP 30

@@ -5,6 +5,8 @@
 #include "sys/types.h"
 #include "sys/socket.h"
 
+#include "data_manager.h"
+/*
 struct Param_Transmitter{
 	int num_core;
 	int id_path;
@@ -13,6 +15,7 @@ struct Param_Transmitter{
 	char *addr_dst; 
 	char *port_dst;	
 };
+*/
 
 typedef struct sockaddr SA;
 
@@ -40,11 +43,12 @@ public:
 	void transmitter_new(char *addr_self, char *port_self, 
 		                 char *addr_dst,  char *port_dst); 
 	
+	void send_td_func(int id_path, Data_Manager &data_manager);
+	void encaps_packet(VData_Type *packet, int num, VData_Type *data_src, 
+					   shared_ptr <struct Elem_Data> data_elem);
+
 	int Send_udp(char *data, int len);
 	int Recv_udp(char *buf_dst, int len);
-
-	void send_td_func(struct Param_Transmitter param_transmit,
-		             Data_Manager &data_manager);
 };
 
 #endif

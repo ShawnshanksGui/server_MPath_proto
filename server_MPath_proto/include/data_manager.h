@@ -1,6 +1,8 @@
 #ifndef _DATA_MANAGER_H_
 #define _DATA_MANAGER_H_
 
+
+#include <memory>
 #include <queue>
 #include <mutex>
 #include <thread>
@@ -37,7 +39,7 @@ typedef char VData_Type;
 
 
 //the bytes of control message bytes  in one packet 
-#define LEN_CONTRL_MSG 10
+#define LEN_CONTRL_MSG 7
 
 
 using namespace std;
@@ -55,6 +57,7 @@ struct Elem_Data{
 	int size;
 	int id_path;
 	int id_nalu;
+	int id_seg;
 //specify sequence of nalus in a video segment,
 //the first, mid or the last nalu?
 	int type_location;
@@ -66,22 +69,25 @@ struct Elem_Data{
 
 class Data_Manager {
 public:	
-	vector< queue<struct Elem_Data *> > data_video;
+	vector<queue<shared_ptr<struct Elem_Data>>> data_video;
+//	vector< queue<struct Elem_Data *> > data_video;
 
 	vector<VData_Type *> data_vec;
+//	vector<VData_Type *> data_vec;
 
 	Data_Manager(int max_size);
 	Data_Manager();
 	~Data_Manager();
 
-	bool data_save(struct Elem_Data *data, ID_PATH id_path);
-	struct Elem_Data *data_fetch(ID_PATH id_path);
+	bool data_save(shared_ptr<struct Elem_Data> data, ID_PATH id_path);
+	shared_ptr<struct Elem_Data> data_fetch(ID_PATH id_path);
 
 //friend classes
 	friend class Video_Reader;
 	friend class Encoder;
 	friend class Transmitter;
-	friend void partition_nalu(int id_region, VData_Type *cstr, Data_Manager &data_manager);	
+	friend void partition_nalu(int id_region, VData_Type *cstr,
+							   Data_Manager &data_manager);	
 
 //	std::mutex mtx[2];
 	
@@ -90,8 +96,8 @@ public:
 
 	bool Is_empty(ID_BUF id_buf);
 	bool Is_overflow(ID_BUF id_buf);
-	bool Push(struct Elem_Data *data_src, ID_PATH id_path);
-	struct Elem_Data *Pop(ID_PATH id_path);
+	bool Push(shared_ptr<struct Elem_Data> data_src, ID_PATH id_path);
+	shared_ptr<struct Elem_Data> Pop(ID_PATH id_path);
 
 private:
 //video reader
