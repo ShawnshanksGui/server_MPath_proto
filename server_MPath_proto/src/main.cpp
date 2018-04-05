@@ -22,8 +22,6 @@
 #include "../include/bitrate_select.h"
 #include "../include/fec_param_adjustor.h"
 
-
-
 using namespace std;
 
 //two channels' realtime infomation

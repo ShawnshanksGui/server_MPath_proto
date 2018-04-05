@@ -8,14 +8,13 @@
 #include "cstdio"
 
 //for test and debug
-//#define ENABLE_DEBUG_PARSER
+#define ENABLE_DEBUG_PARSER
 
 using namespace std;
 
-
 #ifdef ENABLE_DEBUG_PARSER
 #define REGION_NUM 3
-#define GOP_NUM    3
+#define GOP_NUM    2
 #define FRAME_GOP 30
 
 //the intra pridicted frame
@@ -36,7 +35,6 @@ struct Nalu_Elem nalu[REGION_NUM][(FRAME_GOP+10)*GOP_NUM];
 #else
 #include "../include/video_reader.h" 
 #endif
-
 
 #define    HEVC_NAL_TRAIL_N     0
 #define    HEVC_NAL_TRAIL_R     1
@@ -166,9 +164,6 @@ int hevc_parser(string &p, int id_region) {
         {   
             cnt_BorP++;
             nalu[id_region][num]._addr = (p[loc-1]==0) ? (i-4) : (i-3);
-//            if(1 == cnt_BorP)
-//                printf("the %d byte is %d, %d, %d, %d, %d\n", 
-//                       nalu[id_region][num]._addr,  p[loc-2], p[loc-1], p[loc], p[loc+1], p[loc+2]);
             nalu[id_region][num].frameType  = P_FRAME;
             nalu[id_region][num-1]._size = nalu[id_region][num]._addr - nalu[id_region][num-1]._addr;
 
@@ -214,13 +209,13 @@ int hevc_parser(string &p, int id_region) {
            vps, sps, pps, cnt_irap, cnt_BorP);
     
     printf("the address of all nalus is following:\n");
-    for(int i = 0; i < (FRAME_GOP*GOP_NUM+5); i++) {
+    for(int i = 0; i < (FRAME_GOP+10)*GOP_NUM; i++) {
         printf("%d  ", nalu[id_region][i]._addr);
     }
     printf("\n\n");
 
     printf("the nalu size is following:\n");
-    for(int i = 0; i < (FRAME_GOP*GOP_NUM+5); i++) {
+    for(int i = 0; i < (FRAME_GOP+10)*GOP_NUM; i++) {
         printf("%d  ", nalu[id_region][i]._size);
     }
     printf("\n");
@@ -377,6 +372,7 @@ int hevc_parser(string &p, int id_region, Video_Reader *video_reader){
 
 
 #ifdef ENABLE_DEBUG_PARSER
+/*
 int main() {
     int flag_video = 0;
 //    std::string _input;
@@ -384,8 +380,9 @@ int main() {
     std::string inString;
 
 //    File.open("../../../video_test/machu_picchu_a_s111_non_B.265", std::ios::in);
-    File.open("../../../video_test/diving_with_shark_8k/diving_w_s_8k__01_01_to_01_02.265", std::ios::in);
-//    File.open("input_non_b.265", std::ios::in);
+//    File.open("../../../machu_picchu_8k_a_s111.265", std::ios::in);
+    File.open("input_non_b.265", std::ios::in);
+
 
     inString = slurp(File);
 
@@ -397,5 +394,27 @@ int main() {
 
     return 0;    
 }
+*/
 
+int main() {
+    int flag_video = 0;
+//    std::string _input;
+    std::ifstream File;
+    std::string inString;
+
+//    File.open("../../../video_test/machu_picchu_a_s111_non_B.265", std::ios::in);
+    File.open("../../../machu_picchu_8k_a_s111.265", std::ios::in);
+//    File.open("input_non_b.265", std::ios::in);
+
+
+    inString = slurp(File);
+
+ //   inString.find()
+    flag_video = hevc_parser(inString, 1);
+
+//    printf("\nflag_video is %d\n", flag_video);
+//  std::cout << inString;
+
+    return 0;    
+}
 #endif

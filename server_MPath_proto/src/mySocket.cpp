@@ -13,19 +13,22 @@
 #define CONTROL 2
 
 
-Transmitter::~Transmitter() {
+Transmitter::
+~Transmitter() {
 	if(sock_id > 0)
 		close(sock_id);
 }
 
-void Transmitter::Socket_for_udp() {
+void Transmitter::
+	 Socket_for_udp() {
 	if((sock_id = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
 		perror("Create socket falied\n");
 		exit(0);
 	}
 }
 
-void Transmitter::Setsockopt(int sock_id, int level, int option_name,
+void Transmitter::
+	 Setsockopt(int sock_id, int level, int option_name,
                void *option_value, int option_len) {
     if(-1 == setsockopt(sock_id, level, 
     	option_name, option_value, option_len)) {
@@ -34,7 +37,8 @@ void Transmitter::Setsockopt(int sock_id, int level, int option_name,
     }
 }
 
-void Transmitter::Bind(int sock_id, SA *addr_self, int len) const 
+void Transmitter::
+	 Bind(int sock_id, SA *addr_self, int len) const 
 {
 	if(bind(sock_id, addr_self, len)) {
 		perror("bind failed!!!");
@@ -51,9 +55,10 @@ void Transmitter::Bind(int sock_id, SA *addr_self, int len) const
 //  }
 //}
 //
-
-void Transmitter::transmitter_new(char *addr_self, char *port_self, 
-	                               char *addr_dst, char *port_dst) {
+/*
+void Transmitter::
+	 transmitter_new(char *addr_self, char *port_self, 
+	                 char *addr_dst,  char *port_dst) {
 	memset(&(server_addr), 0, sizeof(server_addr));
 	memset(&(client_addr), 0, sizeof(client_addr));
 	
@@ -77,8 +82,37 @@ void Transmitter::transmitter_new(char *addr_self, char *port_self,
 //  udp needn't establish any connection!!!
 //	Connect(sock_id, (struct sockaddr *)&server_addr, sizeof(struct sockaddr));  
 }
+*/
+void Transmitter::
+	 transmitter_new(char *addr_self, char *port_self, 
+	                 char *addr_dst,  char *port_dst) {
+	memset(&(server_addr), 0, sizeof(server_addr));
+	memset(&(client_addr), 0, sizeof(client_addr));
+	
+	Socket_for_udp();
 
-int Transmitter::Send_udp(char *data, int len) {
+//enable fastly recover the port which have being used. 
+	int state_reuseAddr              = ON_REUSEADDR;
+//	
+	Setsockopt(sock_id, SOL_SOCKET, SO_REUSEADDR, 
+		       &state_reuseAddr, sizeof(state_reuseAddr));
+
+	client_addr.sin_family  = AF_INET;
+	client_addr.sin_port    = htons(atoi(port_dst));
+	inet_pton(AF_INET, addr_dst, &(client_addr.sin_addr));
+
+	server_addr.sin_family = AF_INET;
+	server_addr.sin_port   = htons(atoi(port_self));
+	inet_pton(AF_INET, addr_self, &(server_addr.sin_addr));
+
+	Bind(sock_id, (struct sockaddr *)&server_addr, sizeof(server_addr));
+//  udp needn't establish any connection!!!
+//	Connect(sock_id, (struct sockaddr *)&server_addr, sizeof(struct sockaddr));  
+}
+
+
+int Transmitter::
+	Send_udp(char *data, int len) {
 	int num_sent = 0;
 
 	if((num_sent = sendto(sock_id, data, len, 0, 
@@ -89,7 +123,8 @@ int Transmitter::Send_udp(char *data, int len) {
 	return num_sent;
 }
 
-int Transmitter::Recv_udp(char *buf_dst, int len) {
+int Transmitter::
+	Recv_udp(char *buf_dst, int len) {
 	int num_recv = 0;
 	socklen_t len_server_addr;
 
@@ -110,7 +145,8 @@ int Transmitter::Recv_udp(char *buf_dst, int len) {
 //			   argv[]
 //             param_encd
 //==========================================================================
-void Transmitter::send_td_func(int id_path, Data_Manager &data_manager) {
+void Transmitter::
+	 send_td_func(int id_path, Data_Manager &data_manager) {
 	Encoder encoder;
 	VData_Type packet[1000 + LEN_CONTRL_MSG];
 
@@ -135,8 +171,9 @@ void Transmitter::send_td_func(int id_path, Data_Manager &data_manager) {
 	}
 }	
 
-void Transmitter::encaps_packet(VData_Type *packet, int num, VData_Type *data_src, 
-								shared_ptr <struct Elem_Data> data_elem) {
+void Transmitter::
+	 encaps_packet(VData_Type *packet, int num, VData_Type *data_src, 
+				   shared_ptr <struct Elem_Data> data_elem) {
 	packet[0] = DATA;
 	packet[1] = data_elem->id_path;
 	packet[2] = data_elem->id_seg;
