@@ -16,7 +16,6 @@
 
 using namespace std;
 
-
 #ifdef  ENABLE_DEBUG_READER
 #include "../include/utility.h"
 #include "../include/bitrate_select.h"
@@ -135,6 +134,7 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str, int id_seg,
 
 		int s_fec = S_FEC[id_region][i%FRAME_GOP];
 		int k_fec = K_FEC[id_region][i%FRAME_GOP];
+		int m_fec = M_FEC[id_region][i%FRAME_GOP];
 
 //remainder number 
 		int len_remaining = (nalu[id_region][i]._size) % (s_fec*k_fec);
@@ -216,7 +216,7 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str, int id_seg,
 				elem_data->id_seg = id_seg;
 
 				assign_attribute(elem_data, path_decs[id_region][i], s_fec,
-				 				 k_fec, i, location, p_str, data_manager);
+				 				 k_fec, m_fec, i, location, p_str, data_manager);
 				location += s_fec*k_fec;
 			}
 		}
@@ -225,8 +225,8 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str, int id_seg,
 //==========================================================================
 
 
-void Video_Reader::assign_attribute(shared_ptr<struct Elem_Data> elem_data,
-									int path, int s_fec, int k_fec, 
+void Video_Reader::assign_attributes(shared_ptr<struct Elem_Data> elem_data,
+									int path, int s_fec, int k_fec, int m_fec, 
 									int id_nalu, int _addr, VData_Type *p_str,
 									Data_Manager &data_manager) {
 	if(0 == (id_nalu % FRAME_GOP)) {
@@ -239,6 +239,7 @@ void Video_Reader::assign_attribute(shared_ptr<struct Elem_Data> elem_data,
 	elem_data->id_nalu = id_nalu;
 	elem_data->S_FEC   = s_fec;
 	elem_data->K_FEC   = k_fec;
+	elem_data->M_FEC   = m_fec;
 
 	data_manager.data_save(elem_data, elem_data->id_path);
 }

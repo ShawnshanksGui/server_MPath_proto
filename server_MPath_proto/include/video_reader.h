@@ -30,7 +30,8 @@ public:
 class Video_Reader {
 public:
 	int S_FEC[REGION_NUM][FRAME_GOP];
-	int K_FEC[REGION_NUM][FRAME_GOP];	
+	int K_FEC[REGION_NUM][FRAME_GOP];
+	int M_FEC[REGION_NUM][FRAME_GOP];	
 
 	struct Nalu_Elem nalu[REGION_NUM][FRAME_GOP*GOP_NUM];
 
@@ -69,8 +70,8 @@ private:
 
 	void partition_nalu(int id_region, VData_Type *p_str, int id_seg, 
 						Data_Manager &data_manager);
-	void assign_attribute(shared_ptr<struct Elem_Data> elem_data, int path,
-						  int s_fec, int k_fec, int id_nalu,
+	void assign_attributes(shared_ptr<struct Elem_Data> elem_data, int path,
+						  int s_fec, int k_fec, int m_fec, int id_nalu,
 						  int _addr, VData_Type *p_str,
 						  Data_Manager &data_manager);
 };

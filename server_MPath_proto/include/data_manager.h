@@ -1,7 +1,6 @@
 #ifndef _DATA_MANAGER_H_
 #define _DATA_MANAGER_H_
 
-
 #include <memory>
 #include <queue>
 #include <mutex>
@@ -39,7 +38,7 @@ typedef char VData_Type;
 
 
 //the bytes of control message bytes  in one packet 
-#define LEN_CONTRL_MSG 7
+#define LEN_CONTRL_MSG 10
 
 
 using namespace std;
@@ -52,7 +51,7 @@ struct Param_Reader {
 
 //for a block 
 struct Elem_Data{
-//an order of S*K bytes data
+//an magnitude order S*K of bytes data
 	VData_Type *data;
 	int size;
 	int id_path;
@@ -64,6 +63,7 @@ struct Elem_Data{
 	int type_nalu;
 	int S_FEC;
 	int K_FEC;
+	int M_FEC;
 //	int id_segment; 
 };
 
@@ -108,9 +108,6 @@ private:
 };
 
 #endif
-
-
-
 
 
 

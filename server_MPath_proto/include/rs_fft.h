@@ -22,8 +22,8 @@ struct Param_Decd {
 void init();
 void init_dec();
 
-void *encode(char *data_src, int S, int K);
-void *decode(struct Data_Remain data_remain, int S, int K);
+void *fft_encode(char *data_src, int S, int K);
+void *fft_decode(char *data_recv, char *erasure, int S, int K);
 void *encode_FFT_RS(char    * data_src, struct Param_Encd param_encd); 
 void *decode_FFT_RS(struct Data_Remain, struct Param_Decd param_decd); 
 

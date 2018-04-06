@@ -316,7 +316,7 @@ void *decode_FFT_RS(struct Data_Remain data_remain,
 }
 //==========================================================================
 
-void *encode(char *data_src, int S, int K){
+void *fft_encode(char *data_src, int S, int K){
 	struct Param_Encd param_encd;
 
 	param_encd.S = S;
@@ -324,13 +324,36 @@ void *encode(char *data_src, int S, int K){
 
 	return encode_FFT_RS(data_src, param_encd);
 }
-
-void *decode(struct Data_Remain data_remain, int S, int K){
+/*
+void *fft_decode(struct Data_Remain data_remain, int S, int K){
 	struct Param_Decd param_decd;
 
 	param_decd.S = S;
 	param_decd.K = K;
 
+	return decode_FFT_RS(data_remain, param_decd);
+}
+*/
+
+void *fft_decode(char **recv_data, char *erasure, int S, int K){
+	struct Param_Decd param_decd;
+	struct Data_Remain data_remain;
+
+	param_decd.S = S;
+	param_decd.K = K;
+
+	for(int i = 0; i < Size; i++) {
+		data_remain.erasure[i] = LOST; //LOST = 0
+	}
+
+	for(int i = 0, int k = 0; i < Size; i++) {
+		if(GET == erasure[i]) {
+			data_remain.erasure[i] = GET;  //GET = 1
+			memcpy(data_remain.data[i], recv_data[k], S);
+			k++;
+		}
+	}
+	
 	return decode_FFT_RS(data_remain, param_decd);
 }
 
