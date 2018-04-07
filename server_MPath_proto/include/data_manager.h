@@ -37,10 +37,6 @@ typedef char VData_Type;
 #define END_FOR_END_NALU     9
 
 
-//the bytes of control message bytes  in one packet 
-#define LEN_CONTRL_MSG 10
-
-
 using namespace std;
 
 
@@ -53,10 +49,12 @@ struct Param_Reader {
 struct Elem_Data{
 //an magnitude order S*K of bytes data
 	VData_Type *data;
+//the data block size except from the number of zero padding 
 	int size;
 	int id_path;
 	int id_nalu;
 	int id_seg;
+	int id_region;
 //specify sequence of nalus in a video segment,
 //the first, mid or the last nalu?
 	int type_location;

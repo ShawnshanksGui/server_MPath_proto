@@ -9,7 +9,7 @@ public:
 	~Encoder() {}
 
 	void encoder_init();
-	void *encode(char *data_src, int S, int K, int M);
+	void *encode(VData_Type *data_src, int S, int K, int M);
 //	void encoder_td_func(Data_Manager &data_manager);
 
 //	void partition_nalu(std::string &inString,

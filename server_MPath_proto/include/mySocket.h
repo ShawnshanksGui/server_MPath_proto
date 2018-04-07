@@ -44,8 +44,8 @@ public:
 		                 char *addr_dst,  char *port_dst); 
 	
 	void send_td_func(int id_path, Data_Manager &data_manager);
-	void encaps_packet(VData_Type *packet, int num, VData_Type *data_src, 
-					   shared_ptr <struct Elem_Data> data_elem);
+	void encaps_packet(VData_Type *packet, int block_id, int num,
+					   VData_Type *data_src, shared_ptr <struct Elem_Data> data_elem);
 
 	int Send_udp(char *data, int len);
 	int Recv_udp(char *buf_dst, int len);

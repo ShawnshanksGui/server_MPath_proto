@@ -43,13 +43,13 @@ int main(int argc, char **argv) {
 	int startFlag_one_timeSlice = 0;
 
 	Timer t;
-	Data_Manager data_manager;
+
 
 
 	FEC_Param_Adjuster fec_param_adj;
 	Bitrate_Selector bitrate_selector(_bitrate);
 	Path_Selector path_selector;
-	Video_Reader video_reader;
+//	Video_Reader video_reader;
 
 	vector<Encoder> encoder(NUM_PATH);
 	vector<Transmitter> server(NUM_PATH);
@@ -69,11 +69,16 @@ int main(int argc, char **argv) {
 //		video_reader.reader_init();
 //		Data_Manager data_manager;
 
-		if(terminalFlag > 0) {break;}
-		if(startFlag_one_timeSlice > 0) {
+//		if(terminalFlag > 0) {break;}
+//		if(startFlag_one_timeSlice > 0) {
+
 			//process the next video segment
 			id_VSegment++;
-			
+
+//reset the corresponding classes
+			Data_Manager data_manager;
+			Video_Reader video_reader;
+
 			fec_param_adj.setFEC_params(chan_inf, bitrate_selector, video_reader);
 			bitrate_selector.setBitrate(tile_num, chan_inf, video_reader);
 			path_selector.select_Path(chan_inf, video_reader);
@@ -94,10 +99,10 @@ int main(int argc, char **argv) {
 //				encoder_worker[i].join();
 				sender_worker[i].join();
 			}	
-		}	
+//		}	
 	}
 
-	setTimer_worker.join();
-	return 0;
+//	setTimer_worker.join();
 
+	return 0;
 }	

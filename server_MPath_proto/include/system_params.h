@@ -16,7 +16,7 @@
 //#define 
 
 //define the number of GOP in a video segment(how much seconds) 
-#define GOP_NUM 3 
+#define GOP_NUM 1 
 
 //define the number of frames in one GOP
 #define FRAME_GOP 30
@@ -29,16 +29,19 @@
 //FEC default parameter
 #define SYMBOL_FEC 1000
 
+//the bytes of control message bytes  in one packet 
+#define LEN_CONTRL_MSG 18
+
 //specify the vailable number of video tile's quality    
 #define BITRATE_TYPE_NUM 3
 
 
-//for setFEC_params
+//for seting FEC_params
 #define STEP_VALUE 0.005
-
 
 //running time for program 
 #define NUM_TIMESLICE 1
 #define LEN_TIMESLICE 1
+
 
 #endif

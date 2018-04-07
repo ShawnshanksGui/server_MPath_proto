@@ -18,7 +18,7 @@ void Encoder::encoder_init()  {
 }
 
 void *Encoder::encode(char *data_src, int S, int K, int M) {
-	fft_encode(data_src, S, K);
+	return fft_encode(data_src, S, K);
 }	
 
 
@@ -33,7 +33,7 @@ void Encoder::encoder_init()  {
 }
 
 void *Encoder::encode(char *data_src, int S, int K, int M) {
-	rs_encode(data_src, S, K, M);
+	return rs_encode(data_src, S, K, M);
 }	
 #endif
 

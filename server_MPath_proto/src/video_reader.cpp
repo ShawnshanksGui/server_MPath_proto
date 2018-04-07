@@ -60,12 +60,16 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 
 	printf("entering video_reader_td_func\n");
 //	for(int i = 0; i < REGION_NUM; i++) {
-	for(int i = 0; i < 1; i++) {    
+	for(int i = 0; i < 3; i++) {    
 		std::string inputVideo_Path;	
 //		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
 //		             "_" + std::to_string(id_VSegment) + ".265";
 //		inputVideo_Path = "../../../video_test/machu_picchu_a_s111_non_B.265";
-		inputVideo_Path = "input_non_b.265";
+//		inputVideo_Path = "input_non_b.265";
+		inputVideo_Path = /*"v_1_" + */"seg_" \
+						  + to_string(id_VSegment) + "_region_"\
+						  + to_string(i) + "_bRate_level" \
+						  + to_string(this->bitrate_decs[i]) + ".265";
 //==========================================================================
    		File.open(inputVideo_Path, std::ios::in);
    		inString = slurp(File);
@@ -175,8 +179,8 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str, int id_seg,
 				elem_data->size = s_fec*k_fec;
 				elem_data->id_seg = id_seg;
 
-				assign_attribute(elem_data, path_decs[id_region][i], s_fec,
-				 k_fec, i, location, p_str, data_manager);
+				assign_attributes(elem_data, path_decs[id_region][i], s_fec,
+								  k_fec, m_fec, i, location, p_str, data_manager);
 				location += s_fec*k_fec;
 			}
 		}
@@ -215,8 +219,8 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str, int id_seg,
 				else {elem_data->size = s_fec*k_fec;}
 				elem_data->id_seg = id_seg;
 
-				assign_attribute(elem_data, path_decs[id_region][i], s_fec,
-				 				 k_fec, m_fec, i, location, p_str, data_manager);
+				assign_attributes(elem_data, path_decs[id_region][i], s_fec,
+				 				  k_fec, m_fec, i, location, p_str, data_manager);
 				location += s_fec*k_fec;
 			}
 		}

@@ -13,8 +13,56 @@ Bitrate_Selector::Bitrate_Selector(double _bitrate[BITRATE_TYPE_NUM]) {
 	}
 }
 
+//modified by shawnshanks_fei, in 20180407.pm 
+//select bitrate types for each region of a video segment
+void Bitrate_Selector::setBitrate(int tile_num[REGION_NUM], 
+								  Channel_Inf chan_inf[NUM_PATH], 
+								  Video_Reader &video_reader) {
+	double bw_residual;
+	int level[3] = {0, 1, 2};
+
+	for(int k = 0; k < REGION_NUM; k++) {
+		video_reader.bitrate_decs[k] = level[2];	
+//		video_reader.bitrate_decs[k] = bitrate[LOWEST];	
+	}
+	printf("\nThe bitrate is as following:\n");
+	for(int i = 0; i < REGION_NUM; i++) {
+		printf("%lf ", bitrate[video_reader.bitrate_decs[i]]);
+	}
+
+	bw_residual = chan_inf[0].avail_bw*(1-chan_inf[0].plr) + 
+				  chan_inf[1].avail_bw*(1-chan_inf[1].plr) - 
+				  bitrate[LOWEST];
+//	if(bw_residual < (bitrate[MEDIAN]/TILE_NUM_TOTAL*tile_num[HIGHEST])) {
+//		return;
+//	}
+//start from the FOV region, which features highest priority to outmostregion
+	for(int i = 0; i < REGION_NUM; i++){
+//start selecting from the highest quality
+		bw_residual += bitrate[video_reader.bitrate_decs[i]];
+		for(int k = 0; k < BITRATE_TYPE_NUM-1; k++) {
+			if(bw_residual > (bitrate[k] / TILE_NUM_TOTAL * tile_num[i])) {
+				video_reader.bitrate_decs[i] = level[k];
+				break;
+			}
+		}
+		bw_residual -= bitrate[video_reader.bitrate_decs[i]];
+	}
+
+#ifdef DEBUG_BITRATE_SELECTOR
+	printf("\nThe bitrate is as following:\n");
+	for(int i = 0; i < REGION_NUM; i++) {
+		printf("%lf ", bitrate[video_reader.bitrate_decs[i]]);
+	}
+	printf("\n");
+#endif
+}
+
+
+
 //modified by shawnshanks_fei, in 20180316.am 
 //select bitrate types for each region of a video segment
+/*
 void Bitrate_Selector::setBitrate(int tile_num[REGION_NUM], 
 								  Channel_Inf chan_inf[NUM_PATH], 
 								  Video_Reader &video_reader) {
@@ -54,3 +102,4 @@ void Bitrate_Selector::setBitrate(int tile_num[REGION_NUM],
 	printf("\n");
 #endif
 }
+*/

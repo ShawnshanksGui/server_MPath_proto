@@ -307,8 +307,9 @@ void *decode_FFT_RS(struct Data_Remain data_remain,
 			}
 		}		
 	}
-
+	
 //#ifdef ENABLE_DEBUG_RS_FFT
+//	printf("remaining encoding data is:\n%s\n\n", data_remain.data);
 	printf("recovery data is:\n%s\n\n", data_dst);
 //#endif
 
@@ -346,7 +347,7 @@ void *fft_decode(char **recv_data, char *erasure, int S, int K){
 		data_remain.erasure[i] = LOST; //LOST = 0
 	}
 
-	for(int i = 0, int k = 0; i < Size; i++) {
+	for(int i = 0, k = 0; i < Size; i++) {
 		if(GET == erasure[i]) {
 			data_remain.erasure[i] = GET;  //GET = 1
 			memcpy(data_remain.data[i], recv_data[k], S);
@@ -385,7 +386,12 @@ int main() {
 	printf("\n\n");
 
 	data_encd = encode_FFT_RS(data_src, param_encd);
-//	printf("%s\n\n", data_encd);
+
+	printf("\nthis is encoding block, as following:\n");
+	for(int i = 0; i < 256*10; i++) {
+		printf("%c", data_encd[i]);
+	}
+	printf("\n");
 
 //simulate erasure
 	srand(time(NULL));
