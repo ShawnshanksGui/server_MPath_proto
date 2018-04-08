@@ -25,13 +25,13 @@
 using namespace std;
 
 //two channels' realtime infomation
-Channel_Inf chan_inf[NUM_PATH] = {{0.03, 50.0, 50.0}, {0.05, 90.0, 25.0}};
+Channel_Inf chan_inf[NUM_PATH] = {{0.01, 50.0, 30.0}, {0.03, 90.0, 10.0}};
 //Tile_Num tile_num{TILE_NUM, FOV_TILE_NUM, 
 //	              CUSHION_TILE_NUM, OUTMOST_TILE_NUM};
 int tile_num[REGION_NUM] = {FOV_TILE_NUM, CUSHION_TILE_NUM, 
 							 OUTMOST_TILE_NUM};
 //the unit is Mb/s
-double _bitrate[BITRATE_TYPE_NUM] = {50.0, 25.0, 10.0};
+double _bitrate[BITRATE_TYPE_NUM] = {100.0, 25.0, 6.0};
 
 
 int main(int argc, char **argv) {
@@ -43,8 +43,6 @@ int main(int argc, char **argv) {
 	int startFlag_one_timeSlice = 0;
 
 	Timer t;
-
-
 
 	FEC_Param_Adjuster fec_param_adj;
 	Bitrate_Selector bitrate_selector(_bitrate);

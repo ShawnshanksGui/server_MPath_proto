@@ -44,6 +44,7 @@ void FEC_Param_Adjuster::setFEC_params(Channel_Inf chan_inf[NUM_PATH],
 	for(int i = 0; i < LEVEL_NUM; i++) {
 		if(plr_estimated <= (256.0-avail_K[i])/(double)256.0) {
 			video_reader.K_FEC[REGION_NUM-1][FRAME_GOP-1] = avail_K[i];
+			video_reader.M_FEC[REGION_NUM-1][FRAME_GOP-1] = 256 - avail_K[i];
 			indicator = i;
 			break;
 		}
@@ -51,6 +52,8 @@ void FEC_Param_Adjuster::setFEC_params(Channel_Inf chan_inf[NUM_PATH],
 		if(LEVEL_NUM-1 == i) {
 			video_reader.K_FEC[REGION_NUM-1][FRAME_GOP-1] = 
 										avail_K[LEVEL_NUM-1];
+			video_reader.M_FEC[REGION_NUM-1][FRAME_GOP-1] = 
+										256 - avail_K[LEVEL_NUM-1];			
 			indicator = LEVEL_NUM-1;
 		}
 	}
@@ -62,10 +65,12 @@ void FEC_Param_Adjuster::setFEC_params(Channel_Inf chan_inf[NUM_PATH],
 			if(((indicator+(FRAME_GOP-1-i)/STEP_RATE) + (REGION_NUM-1-k)) < LEVEL_NUM) { 		
 				video_reader.K_FEC[k][i]=avail_K[indicator+(FRAME_GOP-1-i)/STEP_RATE +
 										 (REGION_NUM-1-k)];
+				video_reader.M_FEC[k][i]=256 - video_reader.K_FEC[k][i];				
 			}
 			else {
 //if expected redundancy rate exceeds the available range of rate.
-				video_reader.K_FEC[k][i]=avail_K[LEVEL_NUM-1];
+				video_reader.K_FEC[k][i] = avail_K[LEVEL_NUM-1];
+				video_reader.M_FEC[k][i] = 256 - avail_K[LEVEL_NUM-1];
 			}
 /*
 			else if((indicator+REGION_NUM-1-k) > 6) {
@@ -82,18 +87,26 @@ void FEC_Param_Adjuster::setFEC_params(Channel_Inf chan_inf[NUM_PATH],
 			video_reader.S_FEC[i][k] = SYMBOL_FEC;
 		}
 
+
 #ifdef ENABLE_DEBUG_FEC_ADJUSTOR
-	printf("\nThe k_value is as following:\n");
+	printf("\nThe available value of K is as following:\n");
 	for(int i = 0; i < LEVEL_NUM; i++) {
 		printf("%d ", avail_K[i]);
 	}
 
-	printf("\nThe FEC parameters are as following:\n");
+	printf("\nThe K of FEC parameters are as following:\n");
+	printf("***the K***:\n");
 	for(int i = 0; i < REGION_NUM; i++) {
 		for(int k = 0; k < FRAME_GOP; k++) {
 			printf("%d ", video_reader.K_FEC[i][k]);
 		}
 	}
+	printf("\n***the M***:\n");
+	for(int i = 0; i < REGION_NUM; i++) {
+		for(int k = 0; k < FRAME_GOP; k++) {
+			printf("%d ", video_reader.M_FEC[i][k]);
+		}
+	}	
 #endif
 }
 //==========================================================================

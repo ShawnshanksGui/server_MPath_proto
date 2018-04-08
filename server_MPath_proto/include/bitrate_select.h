@@ -14,7 +14,7 @@ public:
 	int S_FEC;
 	int K_FEC;
 	
-	char bitrate[BITRATE_TYPE_NUM];
+	double bitrate[BITRATE_TYPE_NUM];
 
 	Bitrate_Selector() {}
 	Bitrate_Selector(double _bitrate[BITRATE_TYPE_NUM]);
