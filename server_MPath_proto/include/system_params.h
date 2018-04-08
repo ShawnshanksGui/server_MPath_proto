@@ -35,6 +35,8 @@
 //specify the vailable number of video tile's quality    
 #define BITRATE_TYPE_NUM 3
 
+//it work when encoding really. 
+#define RATE 5
 
 //for seting FEC_params
 #define STEP_VALUE 0.005
@@ -42,6 +44,10 @@
 //running time for program 
 #define NUM_TIMESLICE 1
 #define LEN_TIMESLICE 1
+
+
+//specidies whether FFT_RS or RS
+#define ENABLE_FFT_RS
 
 
 #endif

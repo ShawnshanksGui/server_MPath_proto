@@ -7,12 +7,12 @@
 #include "../include/common.h"
 #include "../include/video_reader.h"
 #include "../include/data_manager.h"
-#include "../include/system_params.h"
 #include "../include/path_selector.h"
 #include "../include/codeStreaming_parser.h"
+#include "../include/system_params.h"
 
 //for debugging
-#define ENABLE_DEBUG_READER
+//#define ENABLE_DEBUG_READER
 
 using namespace std;
 
@@ -72,12 +72,8 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 //	for(int i = 0; i < REGION_NUM; i++) {
 	for(int i = 0; i < 1; i++) {    
 		std::string inputVideo_Path;	
-//		inputVideo_Path = "video_????" + std::to_string(bitrate_decs[i]) +
-//		             "_" + std::to_string(id_VSegment) + ".265";
-//		inputVideo_Path = "../../../video_test/machu_picchu_a_s111_non_B.265";
-//		inputVideo_Path = "input_non_b.265";
 
-		printf("\nin video_reader_td_func, %d\n", this->bitrate_decs[i]);
+		printf("\n**in video_reader_td_func**, %d\n", this->bitrate_decs[i]);
 
 //		inputVideo_Path = /*"v_1_" + */"/home/guifei/video_test/360video/v"\
 //						  + to_string(id_video) + "/" + to_string(len_seg) \
@@ -115,16 +111,19 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 //==========================================================================
 void Video_Reader::partition_nalu(int id_region, VData_Type *p_str, int id_seg,
 			 					  Data_Manager &data_manager) {
-	int prev_k_fec = 1000;
-	int prev_m_fec = 1000;
+ 	int prev_k_fec = VAL_FOR_INIT;
+	int prev_m_fec = VAL_FOR_INIT;
 
-	int cnt_bundle = 0;
+	int cnt_bundle = -1;
 	int bundle_arr[FRAME_GOP*GOP_NUM] = {0};
 
+#ifdef ENABLE_FFT_RS
+//==========================================================================	
 	for(int i = 0; i < FRAME_GOP*GOP_NUM; i++) {
 		if(0 == (i % FRAME_GOP)) {
+			cnt_bundle++;
 			bundle_arr[cnt_bundle] = 1;
-//			cnt_bundle++;
+
 			continue;
 		}
 		
@@ -140,6 +139,20 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str, int id_seg,
 		}
 	}
 	cnt_bundle++;
+//==========================================================================
+
+#else
+//==========================================================================
+//make a bundle for every RATE frames
+	for(int i = 0; i < FRAME_GOP*GOP_NUM; i++) {
+		if(0 == (i%RATE)) {
+			bundle_arr[i/RATE] = RATE;
+		}
+	}
+	cnt_bundle = FRAME_GOP*GOP_NUM/RATE;
+//==========================================================================
+#endif	
+
 //for debugging
 	printf("this is the bundle_array, the number of total bundle is %d, \
 			as following:\n", cnt_bundle);
@@ -254,6 +267,8 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str, int id_seg,
 //==========================================================================
 
 
+//attention: the id_nalu is actually equal to the cnt_frame(the 
+//starting frame of a frame bundle)
 void Video_Reader::assign_attributes(shared_ptr<struct Elem_Data> elem_data,
 									int path, int s_fec, int k_fec, int m_fec, 
 									int id_nalu, int _addr, VData_Type *p_str,
@@ -265,7 +280,7 @@ void Video_Reader::assign_attributes(shared_ptr<struct Elem_Data> elem_data,
 
 	elem_data->data    = p_str + _addr;
 	elem_data->id_path = path;
-//	elem_data->id_nalu = id_nalu;
+	elem_data->id_nalu = id_nalu;
 	elem_data->S_FEC   = s_fec;
 	elem_data->K_FEC   = k_fec;
 	elem_data->M_FEC   = m_fec;

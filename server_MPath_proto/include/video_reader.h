@@ -8,6 +8,8 @@
 #include "data_manager.h"
 //#include "codeStreaming_parser.h"
 
+#define VAL_FOR_INIT 2000
+
 //the intra pridicted frame 
 #define I_FRAME 1
 //the forward predicted frame

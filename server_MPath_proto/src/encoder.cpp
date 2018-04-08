@@ -1,13 +1,11 @@
 #include <string>
 #include <memory>
 
+#include "../include/system_params.h"
 #include "../include/data_manager.h"
 #include "../include/encoder.h"
 
-//specidies whether FFT_RS or RS
-#define ENABLE_FFT_RS
-
-#ifdef ENABLE_FFT_RS 
+#ifdef ENABLE_FFT_RS
 extern "C"
 {
 	#include "../include/rs_fft.h"
@@ -22,7 +20,7 @@ void *Encoder::encode(char *data_src, int S, int K, int M) {
 }	
 
 
-#elif
+#else
 extern "C"
 {
 	#include "../include/rs.h"
