@@ -23,7 +23,7 @@
 #include "../include/fec_param_adjustor.h"
 
 using namespace std;
-
+/*
 //two channels' realtime infomation
 Channel_Inf chan_inf[NUM_PATH] = {{0.01, 50.0, 30.0}, {0.03, 90.0, 10.0}};
 //Tile_Num tile_num{TILE_NUM, FOV_TILE_NUM, 
@@ -55,8 +55,8 @@ int main(int argc, char **argv) {
 //	vector<thread> encoder_worker(NUM_PATH);
 	vector<thread> sender_worker(NUM_PATH);
 
-	server[0].transmitter_new(argv[1], argv[2], argv[3], argv[4]);
-	server[1].transmitter_new(argv[5], argv[6], argv[7], argv[8]);
+	server[0].transmitter_new_udp(argv[1], argv[2], argv[3], argv[4]);
+	server[1].transmitter_new_udp(argv[5], argv[6], argv[7], argv[8]);
 	thread setTimer_worker(&Timer::setTimer_td_func, &t, 
 		                   ref(startFlag_one_timeSlice), 
 		                   ref(terminalFlag));	
@@ -104,3 +104,22 @@ int main(int argc, char **argv) {
 
 	return 0;
 }	
+*/
+int main(int argc, char **argv) {
+	Transmitter server;
+	server.transmitter_new_tcp(argv[1], argv[2]);
+
+	char *data[4] = {"33333344444","55555566666","77777788888","88888899999"}; 
+	char packet[11] = {'\0'};
+
+	for(int i = 0; i < 4; i++) {
+		server.Send_tcp(data[i], 11);
+		printf("\nthe sent packet is %s\n", data[i]);
+		server.Recv_tcp(packet, 11);
+		printf("\nthe recv packet is %s\n", packet);
+	}
+//	packet[0]
+	server.Send_tcp("\0", 1);
+
+	return 0;
+}

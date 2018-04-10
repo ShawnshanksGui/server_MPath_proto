@@ -249,7 +249,7 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str, int id_seg,
 				}
 
 				if(k == num) {
-					printf("the size = %d, the location = %d", size, location);
+					printf("\nthe size = %d, the location = %d\n", size, location);
 					elem_data->size = len_remaining;
 				}
 				else {elem_data->size = s_fec*k_fec;}

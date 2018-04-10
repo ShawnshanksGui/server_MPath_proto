@@ -105,7 +105,7 @@ Push(shared_ptr<struct Elem_Data> data_src, ID_PATH id_path) {
 		data_video[id_path].push(data_src);
 		buf_size[id_path] += 1;
 //debug
-		cout << "Push one time:" << buf_size[id_path] << endl;
+		cout << "\nPush one time, the buf_size = " << buf_size[id_path] << endl;
 //		printf("%s\n\n", data_video.back());
 		return SUCS_PUSH;
 	}
@@ -122,7 +122,7 @@ Pop(ID_PATH id_path) {
 		data_video[id_path].pop();
 		buf_size[id_path] -= 1;
 //debug
-		cout << "pop one time " << buf_size[id_path] << endl;
+		cout << "\npop one time, remain buf_size = " << buf_size[id_path] << endl;
 //		printf("%s\n", data_dst);
 		return data_dst;
 	}

@@ -47,9 +47,9 @@ struct Param_Reader {
 
 //for a block 
 struct Elem_Data{
-//an magnitude order S*K of bytes data
+//a pointer ,point to the addr of orifin block data, an magnitude order S*K of bytes data
 	VData_Type *data;
-//the data block size except from the number of zero padding 
+//the length of origin data block except from the number of zero padding 
 	int size;
 	int id_path;
 	int id_nalu;
