@@ -50,19 +50,21 @@ int tile_num[REGION_NUM] = {FOV_TILE_NUM, CUSHION_TILE_NUM,
 //the unit is Mb/s
 double _bitrate[BITRATE_TYPE_NUM] = {100.0, 25.0, 6.0};
 
-/*
+
 int main(int argc, char **argv) {
+	srand((unsigned int)time(NULL)); 
 //specify which one is the current video segmentation 
 	int Num_VSegment = 1;
 
 //the one control subflow	
-//	Transmitter server_ctrlSubflow;
-//	server_ctrlSubflow.transmitter_new_tcp(argv[9], argv[10]);
+	Transmitter server_ctrlSubflow;
+	server_ctrlSubflow.transmitter_new_tcp(argv[9], argv[10]);
 
 	for(int id_seg = 0; id_seg < Num_VSegment; id_seg++) {
 
 		char pkt_recv[10] = {'\0'};
-		server_ctrlSubflow.Recv_tcp_fixed_len(pkt_recv, 10);
+		server_ctrlSubflow.Recv_tcp(pkt_recv, 10);
+//		server_ctrlSubflow.Recv_tcp_fixed_len(pkt_recv, 10);
 		if(pkt_recv[0] == REQUEST) {
 			printf("recv a video request packet\n");
 			char pkt_ctrl[10] = {'\0'};	
@@ -81,10 +83,11 @@ int main(int argc, char **argv) {
 
 //			vector<Encoder> encoder(NUM_PATH);
 //the two data subflows!!!
+
 			vector<Transmitter> server_dataSubflow(NUM_PATH);
 
-			server_dataSubflow[0].transmitter_new_tcp_non_b(argv[1],argv[2]);
-			server_dataSubflow[1].transmitter_new_tcp_non_b(argv[5],argv[6]);	
+			server_dataSubflow[0].transmitter_new_tcp(argv[1],argv[2]);
+//			server_dataSubflow[1].transmitter_new_tcp(argv[5],argv[6]);	
 //================================================================================
 //reset the corresponding classes
 			Data_Manager data_manager;
@@ -103,7 +106,8 @@ int main(int argc, char **argv) {
 //			vector<thread> encoder_worker(NUM_PATH);
 			vector<thread> sender_worker(NUM_PATH);
 
-			for(int i = 0; i < NUM_PATH; i++) {
+			for(int i = 0; i < 1; i++) {
+//			for(int i = 0; i < NUM_PATH; i++) {
 //				encoder_worker[i] = thread(&Encoder::encoder_td_func,
 //								 		   &(encoder[i]), ref(data_manager));			
 				sender_worker[i]  = thread(&Transmitter::send_td_func,
@@ -111,18 +115,21 @@ int main(int argc, char **argv) {
 			}
 //reap or recycle the threads created.
 			readVideo_worker.join();
-			for(int i = 0; i < NUM_PATH; i++) {
+
+			for(int i = 0; i < 1; i++) {
+//			for(int i = 0; i < NUM_PATH; i++) {
 //				encoder_worker[i].join();
 				sender_worker[i].join();
 			}
 			setTimer_worker.join();
-//		}			
+		}			
 	}
 
 	return 0;
 }	
-*/
 
+
+/*
 int main(int argc, char **argv) {
 	Transmitter server;
 //	server.transmitter_new_tcp_non_b(argv[1], argv[2]);
@@ -180,3 +187,5 @@ int main(int argc, char **argv) {
 
 	return 0;
 }
+
+*/

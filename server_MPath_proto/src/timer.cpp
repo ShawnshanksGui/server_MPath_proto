@@ -29,7 +29,7 @@ Timer::Timer() {
 //             the processes; 
 //==========================================================================
 void Timer::setTimer_td_func() {
-	usleep(num_timeSlice*len_timeSlice*1000000);
+	usleep((long int)(num_timeSlice*len_timeSlice*1000000.0));
 	Terminal_AllThds = YES;
 }
 //==========================================================================

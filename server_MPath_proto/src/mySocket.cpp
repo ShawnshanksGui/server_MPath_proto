@@ -22,6 +22,10 @@ extern int Terminal_AllThds;
 extern int Terminal_SendThds;
 
 
+
+double PLR_SET[NUM_PATH] = {0.01, 0.05};
+
+
 Transmitter::
 ~Transmitter() {
 	if(sock_id > 0) {
@@ -349,6 +353,7 @@ Sendto_tcp(char *data, int len) {
 	}
 	return len_sent;
 }
+
 int Transmitter::
 Recvfrom_tcp(char *data_dst, int len) {
 	int len_recv;
@@ -383,7 +388,6 @@ send_td_func(int id_path, Data_Manager &data_manager) {
 
 	affinity_set(id_path);
 //
-	int cnt_packet = 0;
 
 	int cnt_block;
 	int prev_id_seg = 100000;
@@ -401,6 +405,10 @@ send_td_func(int id_path, Data_Manager &data_manager) {
 				break;
 			}		
 		}
+//
+		if(data_elem != nullptr) {Print_DataElem(data_elem);}
+//
+
 		if(Terminal_AllThds || Terminal_SendThds) {
 			break;
 		}
@@ -432,16 +440,23 @@ send_td_func(int id_path, Data_Manager &data_manager) {
 			exit(0);
 		}
 //		data_manager.data_video[id_path].pop();
-		for(int i = 0; i < data_elem->K_FEC; i++) {
+		int cnt_pkts = 0;
+		for(int i = 0; i < (data_elem->K_FEC + data_elem->M_FEC); i++) {
 			if(data_elem->S_FEC != SYMBOL_FEC) {printf("the S of data_elem error!\n");}
 			memset(packet, 0, data_elem->S_FEC + LEN_CONTRL_MSG);
 			encaps_packet(packet, cnt_block, i, \
 						  &(data_tmp[i*data_elem->S_FEC]), data_elem);
 
-			int num_sent = Send_tcp_non_b(packet, data_elem->S_FEC + LEN_CONTRL_MSG);
-			printf("sent a pkt with %d bytes\n", num_sent);
-			printf("This is the %d-th  packet\n", ++cnt_packet);
+//			int num_sent = Send_tcp_non_b(packet, data_elem->S_FEC + LEN_CONTRL_MSG);
+			if(((double)(rand()%100)/(double)100) <= PLR_SET[id_path]) {continue;}
+
+			int num_sent = Send_tcp(packet, data_elem->S_FEC + LEN_CONTRL_MSG);
+			cnt_pkts++;
+//			printf("sent a pkt with %d bytes\n", num_sent);
+//			printf("This is the %d-th  packet\n", ++cnt_packet);
 		}
+		printf("succesfully send a encoding block(through lossy channel) \
+			 	with %d remaining encoding symbols", cnt_pkts);
 //		usleep(100);
 		SAFE_FREE(data_tmp);
 
@@ -478,3 +493,12 @@ encaps_packet(VData_Type *packet, int block_id, int symbol_id,
 */
 }
 //==========================================================================
+
+
+void Transmitter::
+Print_DataElem(shared_ptr<struct Elem_Data> Data) {
+    printf("The data_elem is as following:\n");
+    printf("DataElem(id_seg = %d, id_region = %d, S_FEC = %d, K_FEC = %d, M_FEC = %d, \
+            originBlk_size = %d\n", Data->id_seg, Data->id_region, \
+            Data->S_FEC, Data->K_FEC, Data->M_FEC, Data->size);
+}
