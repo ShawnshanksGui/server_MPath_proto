@@ -207,7 +207,7 @@ int hevc_parser(string &p, int id_region) {
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>
                     (endTime - startTime ).count();
 
-  
+/*  
     printf("the time cost is %ld us\n", duration);
 
     printf("the number of vps,sps,pps,I_frame,P_frame is %d,%d,%d,%d,%d,respectively\n\n",
@@ -224,7 +224,7 @@ int hevc_parser(string &p, int id_region) {
         printf("%d  ", nalu[id_region][i]._size);
     }
     printf("\n");
-
+*/
     return 0;
 }
 

@@ -22,6 +22,10 @@ using namespace std;
 #include "../include/fec_param_adjustor.h"
 #endif
 
+extern int Terminal_AllThds;
+extern int Terminal_ReaderThds;
+
+
 Video_Reader::Video_Reader() {
 	gop_num      = GOP_NUM;
 	gopFrame_num = FRAME_GOP;
@@ -70,10 +74,14 @@ void Video_Reader::video_reader_td_func(Data_Manager &data_manager,
 
 	printf("entering video_reader_td_func\n");
 //	for(int i = 0; i < REGION_NUM; i++) {
-	for(int i = 0; i < 1; i++) {    
-		std::string inputVideo_Path;	
+	for(int i = 0; i < 1; i++) {
+		if(Terminal_AllThds || Terminal_ReaderThds) {
+			break;
+		}
 
-		printf("\n**in video_reader_td_func**, %d\n", this->bitrate_decs[i]);
+		std::string inputVideo_Path;
+
+//		printf("\n**in video_reader_td_func**, %d\n", this->bitrate_decs[i]);
 
 //		inputVideo_Path = /*"v_1_" + */"/home/guifei/video_test/360video/v"\
 //						  + to_string(id_video) + "/" + to_string(len_seg) \
@@ -293,10 +301,12 @@ void Video_Reader::assign_attributes(shared_ptr<struct Elem_Data> elem_data,
 //		   data_manager.data_video[path].front()->id_seg, data_manager.data_video[path].front()->id_region, \
 //		   data_manager.data_video[path].front()->type_nalu, data_manager.data_video[path].front()->S_FEC, \
 //		   data_manager.data_video[path].front()->K_FEC, data_manager.data_video[path].front()->M_FEC);
+
 	printf("id_nalu = %d , id_seg = %d, id_region = %d, type_nalu = %d, \
 		   S_FEC = %d, K_FEC = %d, M_FEC = %d, size = %d\n\n", elem_data->id_nalu,\
 		   elem_data->id_seg, elem_data->id_region, elem_data->type_nalu, \
 		   elem_data->S_FEC, elem_data->K_FEC, elem_data->M_FEC, elem_data->size);
+
 }
 
 

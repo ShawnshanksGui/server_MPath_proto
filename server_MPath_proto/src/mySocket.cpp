@@ -17,6 +17,11 @@
 
 typedef unsigned char uchar;
 
+
+extern int Terminal_AllThds;
+extern int Terminal_SendThds;
+
+
 Transmitter::
 ~Transmitter() {
 	if(sock_id > 0) {
@@ -56,16 +61,15 @@ Setsockopt(int sock, int level, int option_name,
 void Transmitter::
 Bind(int sock, SA *addr_self, int len) const 
 {
-	if(bind(sock, addr_self, len)) {
+	if(-1 == bind(sock, addr_self, len)) {
 		perror("bind failed!!!");
 		exit(0);
 	}
 }
 
-
 void Transmitter::
 Listen() {
-	if(listen(listen_sock_fd, LISTENQ) == -1) {
+	if(-1 == listen(listen_sock_fd, LISTENQ)) {
 		perror("\nlisten error happened!\n");
 		exit(0);
 	}
@@ -73,8 +77,8 @@ Listen() {
 
 void Transmitter::
 Accept() {
-	if((sock_id = accept(listen_sock_fd, (SA *)&client_addr,
-						 &client_addr_len)) < 0) {
+	if(-1 == (sock_id = accept(listen_sock_fd, (SA *)&client_addr,
+						 &client_addr_len))) {
 		perror("\nAccept failed!\n");
 		exit(0);
 	}
@@ -138,6 +142,36 @@ transmitter_new_tcp(char *addr_self, char *port_self) {
 	Accept();
 }
 
+void Transmitter::
+transmitter_new_tcp_non_b(char *addr_self, char *port_self) {
+	memset(&(server_addr), 0, sizeof(server_addr));
+//	memset(&(client_addr), 0, sizeof(client_addr));
+
+	Socket_for_tcp_listen();
+
+//enable fastly recover the port which just has been occupied. 
+	int state_reuseAddr = ON_REUSEADDR;
+	Setsockopt(listen_sock_fd, SOL_SOCKET, SO_REUSEADDR, 
+		       &state_reuseAddr, sizeof(state_reuseAddr));
+//set the size of recv buffer
+	int recv_buf_size = 1*1024*1024*1024;
+	Setsockopt(listen_sock_fd, SOL_SOCKET, SO_RCVBUF, 
+			   (char *)&recv_buf_size, sizeof(int));
+
+	server_addr.sin_family = AF_INET;
+	server_addr.sin_port   = htons(atoi(port_self));
+	inet_pton(AF_INET, addr_self, &(server_addr.sin_addr));
+
+	Bind(listen_sock_fd, (SA *)&server_addr, sizeof(server_addr));
+
+	Listen();
+	Accept();
+
+//set non-blocking mode
+    int flags = fcntl(sock_id, F_GETFL, 0);
+    fcntl(sock_id, F_SETFL, flags|O_NONBLOCK);
+}
+
 
 int Transmitter::
 Send_udp(char *data_src, int len) {
@@ -164,9 +198,145 @@ Recv_udp(char *data_dst, int len) {
 	return num_recv;
 }
 
-
+//==========================================================================
 int Transmitter::
 Send_tcp(char *data, int len) {
+	int len_sent = 0;
+	len_sent = send(sock_id, data, len, 0);
+	if(-1 == len_sent) {
+		perror("send failed");
+		exit(0);
+	}
+	else if(len_sent != len) {
+		printf("\nOnly send %dbytes data\n", len_sent);
+	}
+	return len_sent;
+}
+
+//set non-blocking mode
+int Transmitter::
+Send_tcp_non_b(char *buf, int buf_len) {
+	size_t tmp = 0;
+	size_t total = buf_len;
+	char *p = buf;
+//	len_sent = send(sock_id, data, len, MSG_DONTWAIT);
+
+	while(1) {
+/*
+        if(Terminal_AllThds || Terminal_SendThds) {
+            return 0;
+        }
+*/	
+		if(total<=0)return buf_len;
+//		printf("start entering the send func in Send_tcp_non_b func\n");
+//		tmp = send(sock_id, p, total, MSG_DONTWAIT);
+		tmp = send(sock_id, p, total, 0);
+
+//		printf("send    \n");
+		if(tmp < 0) {
+			if(errno == EAGAIN) {
+				usleep(20);
+				continue;
+			}
+			else {
+				perror("send failed in sende_tcp_non_b!\n");
+				exit(0);
+			}
+		}
+		else if(tmp == total) { //send successfully!
+				return buf_len;
+		}
+		total -= tmp;
+		p += tmp;
+	}
+}
+
+//default blocking mode
+int Transmitter::
+Recv_tcp(char *data_dst, int len) {
+	int len_recv;
+	len_recv = recv(sock_id, data_dst, len, 0);
+	if(-1 == len_recv) {
+		perror("\nrecv failed\n");
+		exit(0);
+	}
+	else if(len_recv != len) {
+		printf("\nOnly recv %dbytes data\n", len_recv);
+//		exit(0);
+	}
+	return len_recv;
+}
+
+//set non-blocking mode
+int Transmitter::
+Recv_tcp_non_b(char *data_dst, int len) {
+	int len_recv;
+	len_recv = recv(sock_id, data_dst, len, MSG_DONTWAIT);
+
+	while(-1 == len_recv && EAGAIN != errno) {
+    	if(Terminal_AllThds || Terminal_SendThds) {
+    		return 0;
+    	}		
+    	len_recv = recv(sock_id, data_dst, len, MSG_DONTWAIT);
+	}
+
+	return len_recv;
+}
+
+int Transmitter::
+Recv_tcp_fixed_len(char *data_dst, int len) {
+    int tmp = 0;
+    char *loc = data_dst;
+    int len_specified = len;
+
+    while(1) {
+        if(Terminal_AllThds || Terminal_SendThds) {
+            break;
+        }
+        tmp = Recv_tcp(loc, len_specified);
+        if(tmp < len_specified) {
+            len_specified -= tmp;
+            loc += tmp;
+        }
+        else {break;}
+    }
+
+    return len;
+}
+
+
+int Transmitter::
+Recv_tcp_non_b_fixed_len(char *data_dst, int len) {
+    int tmp = 0;
+    char *loc = data_dst;
+    int len_specified = len;
+
+    while(1) {
+//      printf("already enter the Recv_tcp_non_b_fixed_len while\n");
+
+        if(Terminal_AllThds || Terminal_SendThds) {
+            break;
+        }
+
+//      printf("start entering  Recv_tcp_non_b\n");
+        tmp = Recv_tcp_non_b(loc, len_specified);
+//      printf("leave the Recv_tcp_non_b\n");
+
+        if(tmp < len_specified) {
+            len_specified -= tmp;
+            loc += tmp;
+        }
+        else {break;}
+    }
+    printf("recv %d bytes\n", len);
+
+    return len;
+}
+
+
+
+int Transmitter::
+Sendto_tcp(char *data, int len) {
 	int len_sent = 0;
 	len_sent = sendto(sock_id, data, len, 0, (SA *)&client_addr,
 					  client_addr_len);
@@ -179,9 +349,8 @@ Send_tcp(char *data, int len) {
 	}
 	return len_sent;
 }
-
 int Transmitter::
-Recv_tcp(char *data_dst, int len) {
+Recvfrom_tcp(char *data_dst, int len) {
 	int len_recv;
 	len_recv = recvfrom(sock_id, data_dst, len, 0, (SA *)&client_addr, 
 						&client_addr_len);
@@ -195,6 +364,8 @@ Recv_tcp(char *data_dst, int len) {
 	}
 	return len_recv;
 }
+//==========================================================================
+
 
 //==========================================================================
 //==========================================================================
@@ -224,7 +395,15 @@ send_td_func(int id_path, Data_Manager &data_manager) {
 	while(1) {
 //fetch the data from send_Q, queue buffer.
 		shared_ptr<struct Elem_Data> data_elem;
-		while(nullptr == (data_elem = data_manager.data_fetch(id_path)));
+
+		while(nullptr == (data_elem = data_manager.data_fetch(id_path))) {
+			if(Terminal_AllThds || Terminal_SendThds) {
+				break;
+			}		
+		}
+		if(Terminal_AllThds || Terminal_SendThds) {
+			break;
+		}
 
 		if(data_elem->id_seg != prev_id_seg) {
 			cnt_block = 0;
@@ -259,11 +438,11 @@ send_td_func(int id_path, Data_Manager &data_manager) {
 			encaps_packet(packet, cnt_block, i, \
 						  &(data_tmp[i*data_elem->S_FEC]), data_elem);
 
-			int num_sent = Send_udp(packet, data_elem->S_FEC + LEN_CONTRL_MSG);
-//			printf("sent a pkt with %d bytes\n", num_sent);
+			int num_sent = Send_tcp_non_b(packet, data_elem->S_FEC + LEN_CONTRL_MSG);
+			printf("sent a pkt with %d bytes\n", num_sent);
 			printf("This is the %d-th  packet\n", ++cnt_packet);
 		}
-		usleep(100);
+//		usleep(100);
 		SAFE_FREE(data_tmp);
 
 		cnt_block++;
@@ -286,6 +465,7 @@ encaps_packet(VData_Type *packet, int block_id, int symbol_id,
 	packet[11] = (uchar)data_elem->M_FEC;	
 
 	memcpy(&(packet[LEN_CONTRL_MSG]), data_src, data_elem->S_FEC);
+/*
 	if(0 == symbol_id) {	
 		printf("This is the imposed information, as following:\n");
         printf("id_seg = %d, id_region = %d, originBlk_size = %d, block_id = %d, symbol_id = %d, s_level = %d, k_fec = %d, m_fec = %d\n", \
@@ -295,5 +475,6 @@ encaps_packet(VData_Type *packet, int block_id, int symbol_id,
         printf("id_seg = %d, id_region = %d, originBlk_size = %d, block_id = %d, symbol_id = %d, s_level = %d, k_fec = %d, m_fec = %d\n", \
         		(uchar)packet[1],(uchar)packet[2],*(int *)(&packet[3]),(uchar)packet[7],(uchar)packet[8],(uchar)packet[9],(uchar)packet[10],(uchar)packet[11]);
 	}
+*/
 }
 //==========================================================================

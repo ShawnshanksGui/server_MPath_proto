@@ -9,6 +9,10 @@
 
 #define YES   1
 
+extern int Terminal_AllThds;
+extern int Terminal_SendThds;
+//int Terminal_EncdThds = 0;
+extern int Terminal_ReaderThds;
 
 Timer::Timer() {
 	num_timeSlice = NUM_TIMESLICE;
@@ -24,16 +28,8 @@ Timer::Timer() {
 //             startFlag_one_timeSlice directly control the switch of all 
 //             the processes; 
 //==========================================================================
-void Timer::setTimer_td_func(int &terminalFlag, 
-							 int &startFlag_one_timeSlice) {
-	while(num_timeSlice--) {
-		startFlag_one_timeSlice = START;
-		usleep(len_timeSlice*1000000);
-		startFlag_one_timeSlice = STOP;
-		usleep(len_timeSlice*1000000);		
-	}
-//equal to YES
-	terminalFlag =  YES;
-
+void Timer::setTimer_td_func() {
+	usleep(num_timeSlice*len_timeSlice*1000000);
+	Terminal_AllThds = YES;
 }
 //==========================================================================

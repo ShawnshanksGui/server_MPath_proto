@@ -9,7 +9,6 @@
 #include "../include/myUtility.h"
 
 
-
 using namespace std;
 
 //for debugging
