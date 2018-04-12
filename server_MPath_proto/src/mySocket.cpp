@@ -12,6 +12,8 @@
 #define DATA 1
 #define CONTROL 2
 
+#define SEG_STOP 0;
+
 //
 #define LISTENQ 100
 
@@ -388,9 +390,14 @@ send_td_func(int id_path, Data_Manager &data_manager) {
 
 	affinity_set(id_path);
 //
+//+++++++++++++++++++++++++++++++++++++++++++++++
+	int debug_data_cnt = 0;
+//+++++++++++++++++++++++++++++++++++++++++++++++
 
-	int cnt_block;
+	int cnt_blks = 0;
 	int prev_id_seg = 100000;
+
+	int erasure[256] = {0};
 
 	VData_Type *data_tmp = nullptr;
 	VData_Type *scapegoat = nullptr;
@@ -405,16 +412,32 @@ send_td_func(int id_path, Data_Manager &data_manager) {
 				break;
 			}		
 		}
-//
-		if(data_elem != nullptr) {Print_DataElem(data_elem);}
-//
 
 		if(Terminal_AllThds || Terminal_SendThds) {
 			break;
 		}
+//
+		if(data_elem->IsEnd) {
+//send the VSegment-terminal packet
+			memset(packet, 0, SYMBOL_FEC + LEN_CONTRL_MSG);
+			packet[0] = SEG_STOP;
+			Send_tcp(packet, SYMBOL_FEC + LEN_CONTRL_MSG);
+			printf("already send the Vsegment terminal packet!\n");
+			break;
+		}
+
+		if(data_elem != nullptr) {
+			Print_DataElem(cnt_blks, data_elem);
+/*
+			printf("this is the block data(elem):\n");
+			for(int i = 0; i < data_elem->size; i++) {
+				printf("%c", data_elem->data[i]);
+			}
+*/
+		}
 
 		if(data_elem->id_seg != prev_id_seg) {
-			cnt_block = 0;
+			cnt_blks = 0;
 			prev_id_seg = data_elem->id_seg;
 		}
 		if(data_elem->size < (data_elem->S_FEC*data_elem->K_FEC)) {
@@ -423,13 +446,40 @@ send_td_func(int id_path, Data_Manager &data_manager) {
 //zero padding for the block, which length is short than S*K
 			memset(&(scapegoat[data_elem->size]), 0, \
 				   data_elem->S_FEC*data_elem->K_FEC - data_elem->size);
+			/*
 			data_tmp = (VData_Type *)encoder.encode(scapegoat, \
 							  				 data_elem->S_FEC, data_elem->K_FEC, \
 											 data_elem->M_FEC);
+			*/
+			printf("the %d-th origin block data is as following:\n", debug_data_cnt);
+			VData_Type debug_data[data_elem->S_FEC*data_elem->K_FEC];
+			for(int i = 0; i < data_elem->S_FEC*data_elem->K_FEC; i++) {
+				debug_data[i] = (debug_data_cnt+65+i)%20 + 65;
+				printf("%c", debug_data[i]);
+			}
+			printf("\n\n");
+			debug_data_cnt++;
+			data_tmp = (VData_Type *)encoder.encode(debug_data, \
+							  				 data_elem->S_FEC, data_elem->K_FEC, \
+											 data_elem->M_FEC);							 
+
 			SAFE_FREE(scapegoat);
 		}
 		else if((data_elem->S_FEC*data_elem->K_FEC) == data_elem->size){
+			/*
 			data_tmp = (VData_Type *)encoder.encode(data_elem->data, \
+									  		 data_elem->S_FEC, data_elem->K_FEC, \
+										     data_elem->M_FEC);
+			*/
+			printf("the %d-th origin block data is as following:\n", debug_data_cnt);
+			VData_Type debug_data[data_elem->S_FEC*data_elem->K_FEC];
+			for(int i = 0; i < data_elem->S_FEC*data_elem->K_FEC; i++) {
+				debug_data[i] = (debug_data_cnt+65+i)%20 + 65;
+				printf("%c", debug_data[i]);
+			}
+			printf("\n\n");
+			debug_data_cnt++;
+			data_tmp = (VData_Type *)encoder.encode(debug_data, \
 									  		 data_elem->S_FEC, data_elem->K_FEC, \
 										     data_elem->M_FEC);
 		}
@@ -440,27 +490,39 @@ send_td_func(int id_path, Data_Manager &data_manager) {
 			exit(0);
 		}
 //		data_manager.data_video[id_path].pop();
+		for(int k = 0; k < (data_elem->K_FEC + data_elem->M_FEC); k++) {
+			if(((double)(rand()%100)/(double)100) <= PLR_SET[id_path]) {
+				erasure[k] = YES;
+			}
+			else {erasure[k] = NOT;}
+		}	
+
 		int cnt_pkts = 0;
 		for(int i = 0; i < (data_elem->K_FEC + data_elem->M_FEC); i++) {
 			if(data_elem->S_FEC != SYMBOL_FEC) {printf("the S of data_elem error!\n");}
 			memset(packet, 0, data_elem->S_FEC + LEN_CONTRL_MSG);
-			encaps_packet(packet, cnt_block, i, \
+			encaps_packet(packet, cnt_blks, i, \
 						  &(data_tmp[i*data_elem->S_FEC]), data_elem);
 
 //			int num_sent = Send_tcp_non_b(packet, data_elem->S_FEC + LEN_CONTRL_MSG);
-			if(((double)(rand()%100)/(double)100) <= PLR_SET[id_path]) {continue;}
-
-			int num_sent = Send_tcp(packet, data_elem->S_FEC + LEN_CONTRL_MSG);
+			if(!erasure[i]) {
+				int num_sent = Send_tcp(packet, data_elem->S_FEC + LEN_CONTRL_MSG);
+			}
 			cnt_pkts++;
 //			printf("sent a pkt with %d bytes\n", num_sent);
 //			printf("This is the %d-th  packet\n", ++cnt_packet);
 		}
-		printf("succesfully send a encoding block(through lossy channel) \
-			 	with %d remaining encoding symbols", cnt_pkts);
+
+		printf("succesfully send a encoding block(through lossy channel)\
+				with %d remaining encoding symbols\n", cnt_pkts);
+		printf("And the erasure array is as following:\n");
+		for(int i = 0; i < (data_elem->K_FEC + data_elem->M_FEC); i++) {
+			printf("%d ", erasure[i]);
+		}
 //		usleep(100);
 		SAFE_FREE(data_tmp);
 
-		cnt_block++;
+		cnt_blks++;
 	}
 }
 
@@ -496,9 +558,9 @@ encaps_packet(VData_Type *packet, int block_id, int symbol_id,
 
 
 void Transmitter::
-Print_DataElem(shared_ptr<struct Elem_Data> Data) {
-    printf("The data_elem is as following:\n");
-    printf("DataElem(id_seg = %d, id_region = %d, S_FEC = %d, K_FEC = %d, M_FEC = %d, \
-            originBlk_size = %d\n", Data->id_seg, Data->id_region, \
+Print_DataElem(int id_blk, shared_ptr<struct Elem_Data> Data) {
+    printf("The is the %d block(Elem_data), as following:\n", id_blk);
+    printf("DataElem(id_seg = %d, id_region = %d, S_FEC = %d, K_FEC = %d,\
+    		M_FEC = %d,originBlk_size = %d\n",Data->id_seg,Data->id_region,\
             Data->S_FEC, Data->K_FEC, Data->M_FEC, Data->size);
 }

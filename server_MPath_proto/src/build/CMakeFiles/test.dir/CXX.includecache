@@ -74,6 +74,10 @@ mutex
 system_params.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
 
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/encoder.h
+data_manager.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/data_manager.h
+
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/fec_param_adjustor.h
 common.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
@@ -83,6 +87,16 @@ bitrate_select.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/bitrate_select.h
 system_params.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
+
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/mySocket.h
+fcntl.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/fcntl.h
+sys/types.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/sys/types.h
+sys/socket.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/sys/socket.h
+data_manager.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/data_manager.h
 
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/myUtility.h
 
@@ -94,9 +108,19 @@ video_reader.h
 system_params.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
 
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/rs.h
+encoder.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/encoder.h
+decoder.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/decoder.h
+
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/rs_fft.h
+
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
 
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/thread_core_affinity_set.h
+
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/timer.h
 
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/video_reader.h
 string
@@ -148,6 +172,22 @@ memory
 ../include/myUtility.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/myUtility.h
 
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/encoder.cpp
+string
+-
+memory
+-
+../include/system_params.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
+../include/data_manager.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/data_manager.h
+../include/encoder.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/encoder.h
+../include/rs_fft.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/rs_fft.h
+../include/rs.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/rs.h
+
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/fec_param_adjustor.cpp
 ../include/fec_param_adjustor.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/fec_param_adjustor.h
@@ -162,21 +202,7 @@ memory
 math.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/math.h
 
-/home/guifei/server_Mpath_proto/server_MPath_proto/src/myUtility.cpp
-../include/common.h
-/home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
-
-/home/guifei/server_Mpath_proto/server_MPath_proto/src/path_selector.cpp
-../include/common.h
-/home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
-../include/system_params.h
-/home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
-../include/path_selector.h
-/home/guifei/server_Mpath_proto/server_MPath_proto/include/path_selector.h
-../include/video_reader.h
-/home/guifei/server_Mpath_proto/server_MPath_proto/include/video_reader.h
-
-/home/guifei/server_Mpath_proto/server_MPath_proto/src/test_videoReader.cpp
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/main.cpp
 chrono
 -
 string
@@ -193,8 +219,14 @@ iostream
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/iostream
 ios
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/ios
+../include/timer.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/timer.h
 ../include/common.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
+../include/mySocket.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/mySocket.h
+../include/encoder.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/encoder.h
 ../include/video_reader.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/video_reader.h
 ../include/data_manager.h
@@ -211,6 +243,54 @@ ios
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/bitrate_select.h
 ../include/fec_param_adjustor.h
 /home/guifei/server_Mpath_proto/server_MPath_proto/include/fec_param_adjustor.h
+
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/mySocket.cpp
+../include/thread_core_affinity_set.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/thread_core_affinity_set.h
+../include/encoder.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/encoder.h
+../include/common.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
+../include/mySocket.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/mySocket.h
+../include/data_manager.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/data_manager.h
+
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/myUtility.cpp
+../include/common.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
+
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/path_selector.cpp
+../include/common.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
+../include/system_params.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
+../include/path_selector.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/path_selector.h
+../include/video_reader.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/video_reader.h
+
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/thread_core_affinity_set.cpp
+sched.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/sched.h
+pthread.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/pthread.h
+unistd.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/unistd.h
+sys/types.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/sys/types.h
+sys/syscall.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/sys/syscall.h
+../include/common.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/common.h
+
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/timer.cpp
+unistd.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/unistd.h
+../include/timer.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/timer.h
+../include/system_params.h
+/home/guifei/server_Mpath_proto/server_MPath_proto/include/system_params.h
 
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/video_reader.cpp
 chrono

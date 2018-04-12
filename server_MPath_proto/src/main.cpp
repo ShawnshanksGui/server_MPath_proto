@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
 			server_ctrlSubflow.Send_tcp(pkt_ctrl, 10);
 			printf("send a ctrl *START* packet\n");
 			//inform all the threads of starting
-			Terminal_AllThds = NO;
+			Terminal_AllThds = NOT;
 
 //===============================================================================
 //class arguments!!!			
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
 			Video_Reader video_reader;
 
 			fec_param_adj.setFEC_params(chan_inf, bitrate_selector, video_reader);
-			bitrate_selector.setBitrate(tile_num, chan_inf, video_reader);
+			bitrate_selector.setBitrate(tile_num, chan_inf, video_reader);	
 			path_selector.select_Path(chan_inf, video_reader);
 //================================================================================
 //create corresponding threads!!!

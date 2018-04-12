@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test_reader
+# Target rules for targets named test
 
 # Build rule for target.
-test_reader: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test_reader
-.PHONY : test_reader
+test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test
+.PHONY : test
 
 # fast build rule for target.
-test_reader/fast:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/build
-.PHONY : test_reader/fast
+test/fast:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
+.PHONY : test/fast
 
 #=============================================================================
 # Target rules for targets named RS_FFT
@@ -142,7 +142,7 @@ bitrate_select.o: bitrate_select.cpp.o
 
 # target to build an object file
 bitrate_select.cpp.o:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/bitrate_select.cpp.o
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/bitrate_select.cpp.o
 .PHONY : bitrate_select.cpp.o
 
 bitrate_select.i: bitrate_select.cpp.i
@@ -151,7 +151,7 @@ bitrate_select.i: bitrate_select.cpp.i
 
 # target to preprocess a source file
 bitrate_select.cpp.i:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/bitrate_select.cpp.i
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/bitrate_select.cpp.i
 .PHONY : bitrate_select.cpp.i
 
 bitrate_select.s: bitrate_select.cpp.s
@@ -160,7 +160,7 @@ bitrate_select.s: bitrate_select.cpp.s
 
 # target to generate assembly for a file
 bitrate_select.cpp.s:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/bitrate_select.cpp.s
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/bitrate_select.cpp.s
 .PHONY : bitrate_select.cpp.s
 
 codeStreaming_parser.o: codeStreaming_parser.cpp.o
@@ -169,7 +169,7 @@ codeStreaming_parser.o: codeStreaming_parser.cpp.o
 
 # target to build an object file
 codeStreaming_parser.cpp.o:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/codeStreaming_parser.cpp.o
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/codeStreaming_parser.cpp.o
 .PHONY : codeStreaming_parser.cpp.o
 
 codeStreaming_parser.i: codeStreaming_parser.cpp.i
@@ -178,7 +178,7 @@ codeStreaming_parser.i: codeStreaming_parser.cpp.i
 
 # target to preprocess a source file
 codeStreaming_parser.cpp.i:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/codeStreaming_parser.cpp.i
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/codeStreaming_parser.cpp.i
 .PHONY : codeStreaming_parser.cpp.i
 
 codeStreaming_parser.s: codeStreaming_parser.cpp.s
@@ -187,7 +187,7 @@ codeStreaming_parser.s: codeStreaming_parser.cpp.s
 
 # target to generate assembly for a file
 codeStreaming_parser.cpp.s:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/codeStreaming_parser.cpp.s
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/codeStreaming_parser.cpp.s
 .PHONY : codeStreaming_parser.cpp.s
 
 data_manager.o: data_manager.cpp.o
@@ -196,7 +196,7 @@ data_manager.o: data_manager.cpp.o
 
 # target to build an object file
 data_manager.cpp.o:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/data_manager.cpp.o
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/data_manager.cpp.o
 .PHONY : data_manager.cpp.o
 
 data_manager.i: data_manager.cpp.i
@@ -205,7 +205,7 @@ data_manager.i: data_manager.cpp.i
 
 # target to preprocess a source file
 data_manager.cpp.i:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/data_manager.cpp.i
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/data_manager.cpp.i
 .PHONY : data_manager.cpp.i
 
 data_manager.s: data_manager.cpp.s
@@ -214,8 +214,35 @@ data_manager.s: data_manager.cpp.s
 
 # target to generate assembly for a file
 data_manager.cpp.s:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/data_manager.cpp.s
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/data_manager.cpp.s
 .PHONY : data_manager.cpp.s
+
+encoder.o: encoder.cpp.o
+
+.PHONY : encoder.o
+
+# target to build an object file
+encoder.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/encoder.cpp.o
+.PHONY : encoder.cpp.o
+
+encoder.i: encoder.cpp.i
+
+.PHONY : encoder.i
+
+# target to preprocess a source file
+encoder.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/encoder.cpp.i
+.PHONY : encoder.cpp.i
+
+encoder.s: encoder.cpp.s
+
+.PHONY : encoder.s
+
+# target to generate assembly for a file
+encoder.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/encoder.cpp.s
+.PHONY : encoder.cpp.s
 
 fec_param_adjustor.o: fec_param_adjustor.cpp.o
 
@@ -223,7 +250,7 @@ fec_param_adjustor.o: fec_param_adjustor.cpp.o
 
 # target to build an object file
 fec_param_adjustor.cpp.o:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.o
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/fec_param_adjustor.cpp.o
 .PHONY : fec_param_adjustor.cpp.o
 
 fec_param_adjustor.i: fec_param_adjustor.cpp.i
@@ -232,7 +259,7 @@ fec_param_adjustor.i: fec_param_adjustor.cpp.i
 
 # target to preprocess a source file
 fec_param_adjustor.cpp.i:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.i
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/fec_param_adjustor.cpp.i
 .PHONY : fec_param_adjustor.cpp.i
 
 fec_param_adjustor.s: fec_param_adjustor.cpp.s
@@ -241,8 +268,62 @@ fec_param_adjustor.s: fec_param_adjustor.cpp.s
 
 # target to generate assembly for a file
 fec_param_adjustor.cpp.s:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/fec_param_adjustor.cpp.s
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/fec_param_adjustor.cpp.s
 .PHONY : fec_param_adjustor.cpp.s
+
+main.o: main.cpp.o
+
+.PHONY : main.o
+
+# target to build an object file
+main.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main.cpp.o
+.PHONY : main.cpp.o
+
+main.i: main.cpp.i
+
+.PHONY : main.i
+
+# target to preprocess a source file
+main.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main.cpp.i
+.PHONY : main.cpp.i
+
+main.s: main.cpp.s
+
+.PHONY : main.s
+
+# target to generate assembly for a file
+main.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/main.cpp.s
+.PHONY : main.cpp.s
+
+mySocket.o: mySocket.cpp.o
+
+.PHONY : mySocket.o
+
+# target to build an object file
+mySocket.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/mySocket.cpp.o
+.PHONY : mySocket.cpp.o
+
+mySocket.i: mySocket.cpp.i
+
+.PHONY : mySocket.i
+
+# target to preprocess a source file
+mySocket.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/mySocket.cpp.i
+.PHONY : mySocket.cpp.i
+
+mySocket.s: mySocket.cpp.s
+
+.PHONY : mySocket.s
+
+# target to generate assembly for a file
+mySocket.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/mySocket.cpp.s
+.PHONY : mySocket.cpp.s
 
 myUtility.o: myUtility.cpp.o
 
@@ -250,7 +331,7 @@ myUtility.o: myUtility.cpp.o
 
 # target to build an object file
 myUtility.cpp.o:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/myUtility.cpp.o
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/myUtility.cpp.o
 .PHONY : myUtility.cpp.o
 
 myUtility.i: myUtility.cpp.i
@@ -259,7 +340,7 @@ myUtility.i: myUtility.cpp.i
 
 # target to preprocess a source file
 myUtility.cpp.i:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/myUtility.cpp.i
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/myUtility.cpp.i
 .PHONY : myUtility.cpp.i
 
 myUtility.s: myUtility.cpp.s
@@ -268,7 +349,7 @@ myUtility.s: myUtility.cpp.s
 
 # target to generate assembly for a file
 myUtility.cpp.s:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/myUtility.cpp.s
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/myUtility.cpp.s
 .PHONY : myUtility.cpp.s
 
 path_selector.o: path_selector.cpp.o
@@ -277,7 +358,7 @@ path_selector.o: path_selector.cpp.o
 
 # target to build an object file
 path_selector.cpp.o:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/path_selector.cpp.o
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/path_selector.cpp.o
 .PHONY : path_selector.cpp.o
 
 path_selector.i: path_selector.cpp.i
@@ -286,7 +367,7 @@ path_selector.i: path_selector.cpp.i
 
 # target to preprocess a source file
 path_selector.cpp.i:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/path_selector.cpp.i
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/path_selector.cpp.i
 .PHONY : path_selector.cpp.i
 
 path_selector.s: path_selector.cpp.s
@@ -295,35 +376,62 @@ path_selector.s: path_selector.cpp.s
 
 # target to generate assembly for a file
 path_selector.cpp.s:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/path_selector.cpp.s
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/path_selector.cpp.s
 .PHONY : path_selector.cpp.s
 
-test_videoReader.o: test_videoReader.cpp.o
+thread_core_affinity_set.o: thread_core_affinity_set.cpp.o
 
-.PHONY : test_videoReader.o
+.PHONY : thread_core_affinity_set.o
 
 # target to build an object file
-test_videoReader.cpp.o:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/test_videoReader.cpp.o
-.PHONY : test_videoReader.cpp.o
+thread_core_affinity_set.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/thread_core_affinity_set.cpp.o
+.PHONY : thread_core_affinity_set.cpp.o
 
-test_videoReader.i: test_videoReader.cpp.i
+thread_core_affinity_set.i: thread_core_affinity_set.cpp.i
 
-.PHONY : test_videoReader.i
+.PHONY : thread_core_affinity_set.i
 
 # target to preprocess a source file
-test_videoReader.cpp.i:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/test_videoReader.cpp.i
-.PHONY : test_videoReader.cpp.i
+thread_core_affinity_set.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/thread_core_affinity_set.cpp.i
+.PHONY : thread_core_affinity_set.cpp.i
 
-test_videoReader.s: test_videoReader.cpp.s
+thread_core_affinity_set.s: thread_core_affinity_set.cpp.s
 
-.PHONY : test_videoReader.s
+.PHONY : thread_core_affinity_set.s
 
 # target to generate assembly for a file
-test_videoReader.cpp.s:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/test_videoReader.cpp.s
-.PHONY : test_videoReader.cpp.s
+thread_core_affinity_set.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/thread_core_affinity_set.cpp.s
+.PHONY : thread_core_affinity_set.cpp.s
+
+timer.o: timer.cpp.o
+
+.PHONY : timer.o
+
+# target to build an object file
+timer.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/timer.cpp.o
+.PHONY : timer.cpp.o
+
+timer.i: timer.cpp.i
+
+.PHONY : timer.i
+
+# target to preprocess a source file
+timer.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/timer.cpp.i
+.PHONY : timer.cpp.i
+
+timer.s: timer.cpp.s
+
+.PHONY : timer.s
+
+# target to generate assembly for a file
+timer.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/timer.cpp.s
+.PHONY : timer.cpp.s
 
 video_reader.o: video_reader.cpp.o
 
@@ -331,7 +439,7 @@ video_reader.o: video_reader.cpp.o
 
 # target to build an object file
 video_reader.cpp.o:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/video_reader.cpp.o
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/video_reader.cpp.o
 .PHONY : video_reader.cpp.o
 
 video_reader.i: video_reader.cpp.i
@@ -340,7 +448,7 @@ video_reader.i: video_reader.cpp.i
 
 # target to preprocess a source file
 video_reader.cpp.i:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/video_reader.cpp.i
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/video_reader.cpp.i
 .PHONY : video_reader.cpp.i
 
 video_reader.s: video_reader.cpp.s
@@ -349,7 +457,7 @@ video_reader.s: video_reader.cpp.s
 
 # target to generate assembly for a file
 video_reader.cpp.s:
-	$(MAKE) -f CMakeFiles/test_reader.dir/build.make CMakeFiles/test_reader.dir/video_reader.cpp.s
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/video_reader.cpp.s
 .PHONY : video_reader.cpp.s
 
 # Help Target
@@ -359,7 +467,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... test_reader"
+	@echo "... test"
 	@echo "... edit_cache"
 	@echo "... RS_FFT"
 	@echo "... bitrate_select.o"
@@ -371,18 +479,30 @@ help:
 	@echo "... data_manager.o"
 	@echo "... data_manager.i"
 	@echo "... data_manager.s"
+	@echo "... encoder.o"
+	@echo "... encoder.i"
+	@echo "... encoder.s"
 	@echo "... fec_param_adjustor.o"
 	@echo "... fec_param_adjustor.i"
 	@echo "... fec_param_adjustor.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
+	@echo "... mySocket.o"
+	@echo "... mySocket.i"
+	@echo "... mySocket.s"
 	@echo "... myUtility.o"
 	@echo "... myUtility.i"
 	@echo "... myUtility.s"
 	@echo "... path_selector.o"
 	@echo "... path_selector.i"
 	@echo "... path_selector.s"
-	@echo "... test_videoReader.o"
-	@echo "... test_videoReader.i"
-	@echo "... test_videoReader.s"
+	@echo "... thread_core_affinity_set.o"
+	@echo "... thread_core_affinity_set.i"
+	@echo "... thread_core_affinity_set.s"
+	@echo "... timer.o"
+	@echo "... timer.i"
+	@echo "... timer.s"
 	@echo "... video_reader.o"
 	@echo "... video_reader.i"
 	@echo "... video_reader.s"

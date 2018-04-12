@@ -1,5 +1,5 @@
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/rebuild_cache.dir
-/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/test_reader.dir
+/home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/test.dir
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/build/CMakeFiles/edit_cache.dir
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/build/rs_fft/CMakeFiles/rebuild_cache.dir
 /home/guifei/server_Mpath_proto/server_MPath_proto/src/build/rs_fft/CMakeFiles/RS_FFT.dir

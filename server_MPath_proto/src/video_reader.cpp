@@ -125,6 +125,8 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str, int id_seg,
 	int cnt_bundle = -1;
 	int bundle_arr[FRAME_GOP*GOP_NUM] = {0};
 
+	int cnt_blk = 0;
+
 #ifdef ENABLE_FFT_RS
 //==========================================================================	
 	for(int i = 0; i < FRAME_GOP*GOP_NUM; i++) {
@@ -221,9 +223,11 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str, int id_seg,
 				elem_data->size = s_fec*k_fec;
 				elem_data->id_seg = id_seg;
 //here, i is nonsense, temporarily
-				assign_attributes(elem_data, path_decs[id_region][cnt_frame], s_fec,
-								  k_fec, m_fec, cnt_frame, location, p_str, data_manager);
+				assign_attributes(cnt_blk, elem_data,path_decs[id_region][cnt_frame],s_fec,
+								  k_fec,m_fec,cnt_frame,location,p_str,data_manager);
 				location += s_fec*k_fec;
+
+				cnt_blk++;
 			}
 		}
 //when the length of nalu is not divisible, (num == k)
@@ -263,29 +267,39 @@ void Video_Reader::partition_nalu(int id_region, VData_Type *p_str, int id_seg,
 				else {elem_data->size = s_fec*k_fec;}
 				elem_data->id_seg = id_seg;
 //here, i is nonsense, temporarily
-				assign_attributes(elem_data, path_decs[id_region][cnt_frame], s_fec,
-				 				  k_fec, m_fec, cnt_frame, location, p_str, data_manager);
+				assign_attributes(cnt_blk,elem_data,path_decs[id_region][cnt_frame],s_fec,
+				 				  k_fec,m_fec,cnt_frame,location,p_str,data_manager);
 				location += s_fec*k_fec;
+				cnt_blk++;
 			}
 		}
 
 		cnt_frame += bundle_arr[id_bundle];
 	}
+	for(int i = 0; i < 1; i++) {
+		shared_ptr<struct Elem_Data> elem_data = (shared_ptr<struct \
+									Elem_Data>)new(struct Elem_Data);
+		elem_data->IsEnd = YES;
+		data_manager.data_save(elem_data, i);
+	}
+
 }
 //==========================================================================
 
 
 //attention: the id_nalu is actually equal to the cnt_frame(the 
 //starting frame of a frame bundle)
-void Video_Reader::assign_attributes(shared_ptr<struct Elem_Data> elem_data,
-									int path, int s_fec, int k_fec, int m_fec, 
-									int id_nalu, int _addr, VData_Type *p_str,
-									Data_Manager &data_manager) {
+void Video_Reader::
+assign_attributes(int cnt_blk, shared_ptr<struct Elem_Data> elem_data,
+				  int path, int s_fec, int k_fec, int m_fec, 
+				  int id_nalu, int _addr, VData_Type *p_str,
+				  Data_Manager &data_manager) {
 	if(0 == (id_nalu % FRAME_GOP)) {
 		elem_data->type_nalu = I_FRAME;
 	}
 	else {elem_data->type_nalu = P_FRAME;}
 
+	elem_data->IsEnd     = NOT;
 	elem_data->data    = p_str + _addr;
 	elem_data->id_path = path;
 	elem_data->id_nalu = id_nalu;
@@ -295,7 +309,7 @@ void Video_Reader::assign_attributes(shared_ptr<struct Elem_Data> elem_data,
 
 	data_manager.data_save(elem_data, elem_data->id_path);
 
-	printf("this is result of video reader, as follwong:\n");
+	printf("this is the %d-th block of video reader, as follwong:\n", cnt_blk);
 //	printf("id_nalu = %d , id_seg = %d, id_region = %d, type_nalu = %d, \
 //		   S_FEC = %d, K_FEC = %d, M_FEC = %d\n\n", data_manager.data_video[path].front()->id_nalu, \
 //		   data_manager.data_video[path].front()->id_seg, data_manager.data_video[path].front()->id_region, \
