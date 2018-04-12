@@ -42,8 +42,9 @@
 #define STEP_VALUE 0.005
 
 //running time for program 
-#define NUM_TIMESLICE 1
+#define NUM_TIMESLICE 2
 #define LEN_TIMESLICE 1
+
 
 
 //specidies whether FFT_RS or RS

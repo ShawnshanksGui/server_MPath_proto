@@ -73,10 +73,9 @@ private:
 
 	void partition_nalu(int id_region, VData_Type *p_str, int id_seg, 
 						Data_Manager &data_manager);
-	void assign_attributes(shared_ptr<struct Elem_Data> elem_data, int path,
-						  int s_fec, int k_fec, int m_fec, int id_nalu,
-						  int _addr, VData_Type *p_str,
-						  Data_Manager &data_manager);
+	void assign_attributes(int cnt_blk, shared_ptr<struct Elem_Data> elem_data,
+						   int path, int s_fec, int k_fec, int m_fec, int id_nalu,
+						   int _addr, VData_Type *p_str, Data_Manager &data_manager);
 };
 
 #endif

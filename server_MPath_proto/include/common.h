@@ -21,6 +21,9 @@
 #define  STOP                  0
 #define READY                  1
 
+#define NOT                    0
+#define YES                    1
+
 //the amount of command parameters required 
 #define NUM_PARA               6
  

@@ -6,7 +6,7 @@ typedef unsigned char Indicator_Type;
 struct Data_Remain{
 //	_Bool erasure[256]; //erasure[N]
 	Indicator_Type erasure[256];
-	char data[256][10]; //data[N][S]
+	char data[256][10000]; //data[N][S]
 };
 
 struct Param_Encd {

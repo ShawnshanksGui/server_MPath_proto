@@ -1,15 +1,14 @@
 
 class Timer {
 public:
-	int num_timeSlice;
-	int len_timeSlice;
+	double num_timeSlice;
+	double len_timeSlice;
 
 	Timer();
 
 	~Timer() {}
 
-	void setTimer_td_func(int &terminalFlag, 
-					 	  int &startFlag_one_timeSlice);
+	void setTimer_td_func();
 private:
 
 };
